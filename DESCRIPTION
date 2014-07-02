@@ -1,0 +1,11 @@
+Package: benchmarkR
+Title: benchmarkR.
+Version: 0.0-1
+Date: 2014-30-06
+Depends:
+Imports: ROCR, gplots, methods
+Author: Xiaobei Zhou and Mark D. Robinson
+Description: Tools in R for benchmarking methods (generally on a genome-scale)
+Maintainer: Xiaobei zhou <xiaobei.zhou@uzh.ch>
+License: GPL (>= 2)
+

@@ -1,0 +1,10 @@
+
+exportPattern("^[^\\.]")
+import(methods)
+import(gplots)
+importFrom("graphics", plot)
+importClassesFrom(ROCR, performance, prediction)
+importFrom(ROCR, performance, prediction)
+exportMethods(plot)
+importFrom(ROCR,.select.args, .slice.run, .sarg, .performance.plot.no.avg, .plot.performance, .downsample, .get.arglist, .performance.true.positive.rate, .performance.false.positive.rate, .define.environments, .combine.performance.objects, .compute.unnormalized.roc.curve)
+export(.select.args, .slice.run, .sarg, .performance.plot.no.avg, .plot.performance, .downsample, .get.arglist, .performance.true.positive.rate, .performance.false.positive.rate, .define.environments, .combine.performance.objects, .compute.unnormalized.roc.curve)

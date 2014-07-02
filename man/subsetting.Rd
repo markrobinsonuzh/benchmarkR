@@ -1,0 +1,30 @@
+\docType{methods}
+\name{subsetting}
+\alias{[,SimResults-method}
+
+\title{Subset SimResults Object}
+\description{
+Extract a subset of a \code{SimResults}.}
+\usage{
+\S4method{[}{SimResults}(x, i, j)
+}
+\arguments{
+\item{x}{object of class \code{SimResults}.}
+\item{i,j}{elements to extract. \code{i} subsets the tags or genes while \code{j} subsets the libraries.}
+}
+\details{
+\code{i,j} may take any values acceptable for the matrix components of \code{object} of class \code{SimResults}.
+
+}
+\value{
+An object of class \code{SimResults}, holding data from the specified subset of tags/genes and libraries.
+}
+\author{Xiaobei Zhou}
+\seealso{
+  \code{SimResults} in benchmarkR package.
+}
+\examples{
+re <- SimResults(pval=matrix(rnorm(1000), 250, 4), padj=matrix(rnorm(1000), 250, 4),  labels=sample(0:1, 250, replace=TRUE))
+res <- re[1:100, 2]
+}
+\keyword{\code{SimResults}}
