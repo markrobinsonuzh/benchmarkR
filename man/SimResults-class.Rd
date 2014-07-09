@@ -25,7 +25,7 @@
 
 \item{labels}{A vector containing the true class labels. It must be numeric only containing '0' or '1'. '1' is positive and '0' is negative.}
 
-\item{stratifyBy}{Optional arguments.}
+\item{stratify}{Optional arguments.}
 
 }
 
@@ -38,7 +38,7 @@
 \seealso{ \code{\link{SimResults}} }
 
 
-\author{Robinson Group. First created by Xiaobei Zhou and Mark D. Robinson.}
+\author{Xiaobei Zhou and Mark D. Robinson.}
 
 
 \keyword{SimResults}

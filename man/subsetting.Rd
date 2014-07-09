@@ -19,7 +19,7 @@ Extract a subset of a \code{SimResults}.}
 \value{
 An object of class \code{SimResults}, holding data from the specified subset of tags/genes and libraries.
 }
-\author{Xiaobei Zhou}
+\author{Xiaobei Zhou and Mark D. Robinson}
 \seealso{
   \code{SimResults} in benchmarkR package.
 }

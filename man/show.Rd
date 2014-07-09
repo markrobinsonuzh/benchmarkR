@@ -26,5 +26,5 @@ The \code{show} method of rocX is defined to use function \code{str} to 'summary
 
 
 \author{
-Xiaobei Zhou
+Xiaobei Zhou and Mark D. Robinson
 }

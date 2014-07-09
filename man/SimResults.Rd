@@ -11,18 +11,18 @@
 }
 
 \usage{
-SimResults(pval=new("matrix"), padj=new("matrix"), labels=new("numeric"), stratifyBy=new("data.frame"), \ldots)
+SimResults(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NULL, \ldots)
 }
 
 \arguments{
 
-\item{pval}{A vector, matrix containing the Pvalue. if 'pval' is a vector, it would be transferred to a matrix.}
+\item{pval}{A vector, matrix or NULL containing the Pvalue. if 'pval' is a vector, it would be transferred to a matrix.}
 
-\item{padj}{A vector, matrix containing the P adjusted value (optional). If 'padj' is missing, its P adjusted value would be calculated by 'BH' method. if 'padj' is a vector, it would be transferred to a matrix.}
+\item{padj}{A vector, matrix or NULL containing the P adjusted value (optional). If 'padj' is missing, its P adjusted value would be calculated by 'BH' method. if 'padj' is a vector, it would be transferred to a matrix.}
 
 \item{labels}{A vector containing the true class labels. It must be numeric only containing '0' or '1'. '1' is positive and '0' is negative.}
 
-\item{stratifyBy}{Optional arguments.}
+\item{stratify}{A data.frame (optional arguments).}
 
 \item{\ldots}{not used}
 
@@ -34,7 +34,7 @@ SimResults(pval=new("matrix"), padj=new("matrix"), labels=new("numeric"), strati
 }
 
 
-\author{Robinson Group. First created by Xiaobei Zhou and Mark D. Robinson.}
+\author{Xiaobei Zhou and Mark D. Robinson.}
 
 \examples{
 library(benchmarkR)
