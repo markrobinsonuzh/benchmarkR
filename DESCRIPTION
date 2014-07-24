@@ -5,7 +5,7 @@ Date: 2014-02-07
 Depends:
 Imports: ROCR, gplots, methods, limma, edgeR
 Author: Xiaobei Zhou and Mark D. Robinson
-Description: Tools in R for benchmarking methods (generally on a genome-scale)
+Description: Tools in R for benchmarking methods (generally those that operate on a genome-scale)
 Maintainer: Xiaobei zhou <xiaobei.zhou@uzh.ch>, Mark D. Robinson <mark.robinson@imls.uzh.ch>
 License: GPL (>= 2)
 
