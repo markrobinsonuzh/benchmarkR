@@ -1,5 +1,9 @@
 setClass("rocX", slots=c(rocXelement="list"))
-setClass("rocXList", contains="list")
+setClass("rocXList",
+         prototype = prototype(elementType = "rocX"),
+         contains = "list")
+
+
 ##Define rocX
 ##Xiaobei Zhou
 ##June 2014.  Last modified 26 June 2014.
@@ -12,12 +16,42 @@ function(object)
 ##June 2014.  Last modified 26 June 2014.
 {
     cat("An object of class \"",class(object),"\n",sep="")
-    cat("..................", "\n")
+    cat("..............", "\n")
     cat(slotNames(object), ":", "\n")
     str(object@rocXelement, max.level = 1)
 })
 
 
+
+setMethod("show","rocXList",
+function(object) 
+##Define show of rocX
+##Xiaobei Zhou
+##June 2014.  Last modified 10 July 2014.
+{
+    cat("An object of class \"",class(object),"\n",sep="")
+    cat("+++++++++++++++++++++", "\n")
+    l <- length(object)
+    if(is.null(names(object)))
+         nms <- seq_len(l) 
+    else nms <- names(object)  
+    defnms <- paste0("[[", nms, "]]")
+    for (i in seq_len(l))
+    {
+        cat(defnms[i], "\n")
+        show(object[[i]])
+    }
+
+})
+
+rocXList <- function(...)
+{
+    x <- list(...)
+    if(length(x) == 1L & !class(x) == "rocX")
+        new("rocXList", x[[1L]])
+    else 
+        new("rocXList", x)
+}
 
 rocX <- function(object, thresholdX=0.05, plot=TRUE, ...)
 ##Define rocX
@@ -69,11 +103,11 @@ setMethod(
 ##June 2014.  Last modified 26 June 2014.
     ".rocX",
     signature(object="SimResults", stratify="factor"),
-    function(object, stratify, thresholdX=0.05, plot=TRUE, add=FALSE, addFun=NULL, addFunLocation=NULL, ...)
+    function(object, stratify, thresholdX=0.05, plot=TRUE, add=FALSE, addFun=NULL, addFunLocation=NULL, legend=list(), ...)
     {
         l <- levels(stratify)
         ll <- length(l)
-        out <- new("rocXList")
+        out <- list()
         j <- 1 
         for(i in l)
         {
@@ -83,8 +117,10 @@ setMethod(
             out[[j]] <- rocX(objecti, plot=FALSE)
             j <- j+1
         }
+        names(out) <- paste0("Level:",l)
+        out <- rocXList(out)
         if(plot)
-            plot(out, thresholdX=thresholdX, add=add, addFun=addFun, addFunLocation=addFunLocation, ...) 
+            plot(out, thresholdX=thresholdX, add=add, addFun=addFun, addFunLocation=addFunLocation, legend=legend, ...) 
         out 
     } 
 )
@@ -117,25 +153,30 @@ setMethod(
 ##June 2014.  Last modified 1 July 2014.
     "plot",
     signature(x="rocX", y="ANY"),
-    function(x, y, add=FALSE, ...)
+    function(x, y, add=FALSE, legend=list(), ...)
     {
          arglist <- list(...)
          object <- x
          l <- length(object@rocXelement)
          if(l > 10) stop("the number of method cannot be larger than 10")
-         pre.col <- c("black", "blue", "purple", "gray", "tan3", "red", "green", "powderblue", "chartreuse4", "yellow")	
-         if(is.null(arglist[["col"]])) col <- pre.col[1:l]
-         else col <- arglist[["col"]]
+         col <- .preCols(arglist, l)
          argSpecial <- list(fprCutoff = 0.4, colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add=add)
-         argSpecial <- lapply(argSpecial, rep, l)
+         argSpecial <- lapply(argSpecial, .repArgs, len=l)
          argSpecial <- append(.select.args(arglist, names(argSpecial), complement = F), .select.args(argSpecial, names(arglist), complement = T))
          argSpecial$add[-1L] <- TRUE
          argPlot <- append(list(...), argSpecial) 
          for (i in 1:l)
          {
-             argPloti <- lapply(argPlot, .getSub, id = i)
+             argPloti <- lapply(argPlot, .getSub2, id = i)
              argPloti <- .sarg(argPloti, object = object@rocXelement[[i]], col = col[i])  
              do.call(".rocXPlot", argPloti)
+
+         }
+         if(!is.null(legend))
+         {
+             preLegend <- list("bottomright", col=col, legend=names(object@rocXelement), lty=argPlot$lty, pch=argPlot$pch, lwd=argPlot$lwd)
+             legend <- .replaceLegend(preLegend, legend)
+             do.call("legend", legend)
          } 
     }
 )
@@ -148,21 +189,40 @@ setMethod(
 ##June 2014.  Last modified 1 July 2014.
     "plot",
     signature(x="rocXList", y="ANY"),
-    function(x, y, add=FALSE, addFun=NULL, addFunLocation=NULL, ...)
+    function(x, y, add=FALSE, addFun=NULL, addFunLocation=NULL, legend=list(), ...)
     {    
          object <- x
          l <- length(object)
          add <- rep(add, l)
          arglist <- list(...)
-         arglist <- lapply(arglist, rep, l)
+         arglist <- lapply(arglist, .repArgs, len=l)
+         if(is.null(legend$location) & !is.null(legend))
+             legend$location <- rep(1, l) 
          for(i in seq(1:l))
          {
-              argPloti <- lapply(arglist, .getSub, id = i)
+              argPloti <- lapply(arglist, .getSub2, id = i)
+              maini <- argPloti$main
+              if(is.null(maini))
+                  maini <- names(object)[i]
               objecti <- object[[i]]
-              argPloti <- .sarg(argPloti, x = objecti, add=add[i]) 
+              if(is.null(legend))
+                  legendi <- NULL
+              else
+              {
+                  if(legend$location[i] == 0)
+                      legendi <- NULL  
+                  else
+                  {    
+                      legendi <- legend
+                      legendi$location <- NULL
+                  } 
+              }
+              legendList <- list(legend=legendi)                     
+              argPloti <- .sarg(argPloti, x = objecti, add=add[i], main=maini)
+              argPloti <- append(argPloti, legendList)
               do.call("plot", argPloti)
               if(!is.null(addFun))
-              .evalFunLocation(addFun, addFunLocation, l, i) 
+                 .evalFunLocation(addFun, addFunLocation, l, i) 
          }
    }
 )
@@ -242,7 +302,7 @@ setMethod(
             cexX <- .getArgX("cexX", "cex", arglist, oldPar)+1
         else 
             cexX <- arglist[["cexX"]] 
-	arglistX <- .sarg(.slice.run(.getArgList("points", arglist)), x = object$threshold["fprX"], 
+	 arglistX <- .sarg(.slice.run(.getArgList("points", arglist)), x = object$threshold["fprX"], 
                                      y = object$threshold["tprX"], col = colX, 
                                      cex = cexX, pch = pchX, lwd = lwdX)
 	do.call("points", arglistX)
@@ -259,6 +319,17 @@ setMethod(
       x
    else
       x[id]
+}
+
+.getSub2 <- function(x, id)
+##this function for plot.roc
+##Xiaobei Zhou
+##June 2014.  Last modified 26 June 2014.
+{
+   if(length(x) == 1)
+      x
+   else
+      x[[id]]
 }
 
 .getArgList <- function(fname, arglist) 
@@ -290,7 +361,33 @@ setMethod(
     out             
 }
 
+.repArgs <- function(x, len)
+{
+   if(is.null(x))
+       NULL
+   else
+   {
+       if(!is.list(x))
+           x <- list(x)
+       rep(x, length.out=len)
+   }     
+
+}
  
+
+.preCols <- function(x, len)
+{
+    pre.col <- c("black", "blue", "purple", "gray", "tan3", "red", "green", "powderblue", "chartreuse4", "yellow")	
+    if(is.null(x[["col"]])) 
+        col <- pre.col[1:len]
+    else 
+        col <- x[["col"]]
+
+}
+
+
+ 
+
 .evalFunLocation <- function(addFun, addFunLocation=NULL, len, iter)
 {
     if(is.null(addFunLocation))
@@ -305,3 +402,36 @@ setMethod(
     lapply(addFun, function(x) eval(parse(text=x)))
 
 }
+
+
+
+
+
+.replaceLegend <- function(x1, x2)
+{
+   x0 <- c("bottomright", "bottom", "bottomleft","left", "topleft", "top", "topright", "right", "center")
+   if(is.null(names(x2)))
+       names(x2) <- rep("", length(x2))
+   id1 <- x1 %in% x0
+   id2 <- x2 %in% x0
+   if(any(id2))
+       out <- append(x1[!id1], x2[id2], after=(which(id1)-1))
+   else
+       out <- x1
+   id3 <- names(x1) == "legend"
+   id4 <- names(x2) == "" & !id2
+   if(any(id4))
+       {
+        out <- append(out[!id3], x2[id4], after=(which(id3)-1))
+        names(out)[which(id3)] <- "legend"
+       }
+   id5 <- names(out) %in% names(x2) & !names(out) == ""
+   id6 <- !names(x2) == ""
+   out <- append(out[!id5], x2[id6]) 
+   out           
+}
+
+
+
+
+

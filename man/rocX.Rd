@@ -52,6 +52,8 @@ roc1 <- rocX(re, plot=TRUE)
 roc2 <- rocX(re, plot = TRUE, lty = 1:2,col = 1:2, lwd = 2, main = "roc", cex.lab = 2, cex.main = 3, colX = 2:3, pchX = 2:3, lwdX =5:6, fprCutoff = 0.6)
 ###you can also re-plot it###
 plot(roc1, lwd = 3)
+###you can also do not add legends
+plot(roc1, lwd = 3, legend=NULL)
 ######example2###############################################################################
 f <- as.factor(sample(0:3, nrow(pval), replace=TRUE))
 ref <- SimResults(pval=pval, padj=padj, labels=labels, stratify=f)
@@ -59,20 +61,35 @@ par(mfrow=c(2,2))
 roc3 <- rocX(ref, plot=TRUE)
 plot(roc3)
 plot(roc3, add=c(FALSE, TRUE, TRUE, TRUE))
-fun1 <- 'legend("bottomright", col=c(1,4), c("edgeR", "limma"), lty=1, pch=1)' 
+fun1 <- 'abline(0,1, col=2)' 
 par(mfrow=c(2,2))
 plot(roc3, addFun=fun1)
 loca1 <- c(1,0,1,0)
 plot(roc3, addFun=fun1, addFunLocation=loca1)
-fun2 <- 'abline(0,1)'
+fun2 <- 'abline(0,1, col=3)'
 loca2 <- c(0,1,0,1)
 plot(roc3, addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2))
-plot(roc3, addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2), main = c("a", "b", "c", "d"), lwd = 1:4)
+plot(roc3, addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2), main = list("a", "b", "c", "d"), lwd = 1:4, col=c(1,3))
+plot(roc3, legend=list(location=c(1,0,0,1)),addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2), main = list("a", "b", "c", "d"), lwd = 1:4, col=c(1,3))
+
 ######example3###############################################################################
 n <- rnorm(nrow(pval), 0, 10)
 ren <- SimResults(pval=pval, padj=padj, labels=labels, stratify=n)
 roc4 <- rocX(ren, plot=TRUE)
 roc5 <- rocX(ren, plot=TRUE, numGroups=3)
+
+######example4###############################################################################
+res1 <- re[1:250,] 
+res2 <- re[251:500,]
+res3 <- re[501:750,] 
+res4 <- re[751:100,] 
+r1 <- rocX(res1, plot=FALSE)
+r2 <- rocX(res2, plot=FALSE)
+r3 <- rocX(res3, plot=FALSE)
+r4 <- rocX(res4, plot=FALSE) 
+roc6 <- rocXList(r1=r1, r2=r2, r3=r3, r4=r4)
+par(mfrow=c(2,2))
+plot(roc6)
 dev.off()
 }  
 
