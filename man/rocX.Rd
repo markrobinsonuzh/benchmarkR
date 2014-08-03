@@ -54,6 +54,7 @@ roc2 <- rocX(re, plot = TRUE, lty = 1:2,col = 1:2, lwd = 2, main = "roc", cex.la
 plot(roc1, lwd = 3)
 ###you can also do not add legends
 plot(roc1, lwd = 3, legend=NULL)
+plot(roc1, lwd = 3, legend=list("center", c("edgeR", "voom"), lwd=3, pch=1, lty=2))
 ######example2###############################################################################
 f <- as.factor(sample(0:3, nrow(pval), replace=TRUE))
 ref <- SimResults(pval=pval, padj=padj, labels=labels, stratify=f)
