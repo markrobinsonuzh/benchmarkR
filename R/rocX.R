@@ -168,13 +168,14 @@ setMethod(
          for (i in 1:l)
          {
              argPloti <- lapply(argPlot, .getSub2, id = i)
-             argPloti <- .sarg(argPloti, object = object@rocXelement[[i]], col = col[i])  
+             argPloti <- .sarg(argPloti, object = object@rocXelement[[i]], col = col[i]) 
              do.call(".rocXPlot", argPloti)
 
          }
-         if(!is.null(legend))
+         nms <- names(object@rocXelement) 
+         if(!is.null(legend) & !is.null(nms))
          {
-             preLegend <- list("bottomright", col=col, legend=names(object@rocXelement), lty=argPlot$lty, pch=argPlot$pch, lwd=argPlot$lwd)
+             preLegend <- list("bottomright", col=col, legend=nms, lty=argPlot$lty, pch=argPlot$pch, lwd=argPlot$lwd)
              legend <- .replaceLegend(preLegend, legend)
              do.call("legend", legend)
          } 
@@ -315,7 +316,7 @@ setMethod(
 ##Xiaobei Zhou
 ##June 2014.  Last modified 26 June 2014.
 {
-   if(length(x) == 1)
+   if(is.null(x))
       x
    else
       x[id]
@@ -326,7 +327,7 @@ setMethod(
 ##Xiaobei Zhou
 ##June 2014.  Last modified 26 June 2014.
 {
-   if(length(x) == 1)
+   if(is.null(x))
       x
    else
       x[[id]]
