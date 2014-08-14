@@ -167,7 +167,6 @@ setMethod(
          argPlot <- append(list(...), argSpecial) 
          for (i in 1:l)
          {
-             print(i)
              argPloti <- lapply(argPlot, .getSub2, id = i)
              argPloti <- .sarg(argPloti, object = object@rocXelement[[i]], col = col[i]) 
              do.call(".rocXPlot", argPloti)
@@ -203,7 +202,6 @@ setMethod(
          for(i in seq(1:l))
          {
               argPloti <- lapply(arglist, .getSub2, id = i)
-              print(argPloti)
               maini <- argPloti$main
               if(is.null(maini))
                   maini <- names(object)[i]
