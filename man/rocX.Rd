@@ -6,14 +6,17 @@
 \description{Produce an object of 'rocX' and a simple ROC plot with threshold X (fdr) using the features of ROCR}
 
 \usage{
-rocX(object, thresholdX=0.05, plot=TRUE, \ldots)
+rocX(object, thresholdX=0.05, transformation="1-x", plot=TRUE, \ldots)
 }
 
 \arguments{
 
 \item{object}{An object of 'SimResults'.}
 
-\item{thresholdX}{The threshold of score (score.X). Note that if score is 1 - P_adjust_value, "threshold.X" can be set at 0.95 (FDR = 0.05).} 
+\item{thresholdX}{The threshold of score (score.X). Note that if score is P_adjust_value, "threshold.X" can be set at 0.05 (FDR = 0.05).}
+
+\item{transformation}{The transformation of score (score.X). The default setting "1-x" means "1-pval(padj, thresholdX)". Note that another useful transformation is "-log10(x)".} 
+ 
 
 \item{plot}{logical, if 'plot' is TRUE, an ROC plot would be produced when 'rocX' or 'rocXList' object is created ('cexX', 'pchX', 'colX', 'pchX' are special parameters of threshold X for plot. 'fprCutoff' is the cutoff of fpr to domaine 'xlim' of the plot.). 'addFun' and 'addFunLocation' See details below.}
 

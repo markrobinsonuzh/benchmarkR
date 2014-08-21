@@ -53,13 +53,13 @@ rocXList <- function(...)
         new("rocXList", x)
 }
 
-rocX <- function(object, thresholdX=0.05, plot=TRUE, ...)
+rocX <- function(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
 ##Define rocX
 ##Xiaobei Zhou
 ##June 2014.  Last modified 7 July 2014. 
         {
             stratify=object@stratify[[1L]]
-            .rocX(object, stratify=stratify, thresholdX=thresholdX, plot=plot, ...)
+            .rocX(object, stratify=stratify, thresholdX=thresholdX, transformation = transformation, plot=plot, ...)
         }
 
 setGeneric(
@@ -81,7 +81,7 @@ setMethod(
 ##June 2014.  Last modified 26 June 2014.
     ".rocX",
     signature(object="SimResults", stratify="NULL"),
-    function(object, stratify, thresholdX=0.05, plot=TRUE, ...)
+    function(object, stratify, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
     {
         arglist <- c(lapply( as.list(environment()), eval ), list(...) )
         l <- ncol(object@pval)
@@ -89,7 +89,7 @@ setMethod(
         out <- new("rocX")
         for (i in 1:l)
             out@rocXelement[[i]] <- .rocXfun(pval=object@pval[, i], labels=object@labels,
-                        padj=object@padj[, i], thresholdX=thresholdX) 
+                        padj=object@padj[, i], thresholdX=thresholdX, transformation = transformation) 
             names(out@rocXelement) <- colnames(object@pval)
             if(plot)
                 plot(out, ...) 
@@ -103,7 +103,7 @@ setMethod(
 ##June 2014.  Last modified 26 June 2014.
     ".rocX",
     signature(object="SimResults", stratify="factor"),
-    function(object, stratify, thresholdX=0.05, plot=TRUE, add=FALSE, addFun=NULL, addFunLocation=NULL, legend=list(), ...)
+    function(object, stratify, thresholdX=0.05, transformation = "1-x", plot=TRUE, add=FALSE, addFun=NULL, addFunLocation=NULL, legend=list(), ...)
     {
         l <- levels(stratify)
         ll <- length(l)
@@ -114,13 +114,13 @@ setMethod(
             id <- stratify == i 
             objecti <- object[id,]
             object1 <- initialize(objecti, stratify=NULL)
-            out[[j]] <- rocX(objecti, plot=FALSE)
+            out[[j]] <- rocX(objecti, plot=FALSE, thresholdX=thresholdX, transformation = transformation)
             j <- j+1
         }
         names(out) <- paste0("Level:",l)
         out <- rocXList(out)
         if(plot)
-            plot(out, thresholdX=thresholdX, add=add, addFun=addFun, addFunLocation=addFunLocation, legend=legend, ...) 
+            plot(out, add=add, addFun=addFun, addFunLocation=addFunLocation, legend=legend, ...) 
         out 
     } 
 )
@@ -133,13 +133,13 @@ setMethod(
 ##June 2014.  Last modified 26 June 2014.
     ".rocX",
     signature(object="SimResults", stratify="numeric"),
-    function(object, stratify, numGroups=4, thresholdX=0.05, plot=TRUE, add=FALSE, addFun=NULL, addFunLocation=NULL, ...)
+    function(object, stratify, numGroups=4, thresholdX=0.05, transformation = "1-x", plot=TRUE, add=FALSE, addFun=NULL, addFunLocation=NULL, ...)
     {
         stratify <- cut(stratify, numGroups)
         object1 <- initialize(object, stratify=as.data.frame(stratify))
-        out <- rocX(object1, plot=FALSE)
+        out <- rocX(object1, plot=FALSE, thresholdX=thresholdX, transformation = transformation)
         if(plot)
-            plot(out, thresholdX=thresholdX, add=add, addFun=addFun, addFunLocation=addFunLocation, ...) 
+            plot(out, add=add, addFun=addFun, addFunLocation=addFunLocation, ...) 
         out 
     } 
 )
@@ -255,34 +255,31 @@ setMethod(
 
 
 
-
-
-
-
-.rocXfun <- function(pval, labels, thresholdX = NULL, padj = NULL)
+.rocXfun <- function(pval, labels, thresholdX = NULL, padj = NULL, transformation = "1-x")
 ##Define built-in function of rocX
 ##Xiaobei Zhou
 ##June 2014.  Last modified 26 June 2014.
 {   
-    score <- 1 - pval
-    thresholdX <- 1 - thresholdX
+    tf <- function(x) eval(parse(text=transformation))
+    pval <- pval+(1e-20)
+    score <- tf(pval)
     pred <- prediction(score, labels)
     perf <- performance(pred, "tpr", "fpr")
     #calculate the threshold of tpr and for
-    if(!is.null(padj))
+    if(!is.null(padj) & !is.null(thresholdX))
     {
-        scoreX <- 1 - padj
+        thresholdX <- thresholdX+(1e-20)
+        thresholdX <- tf(thresholdX)
+        padj <- padj+(1e-20)
+        scoreX <- tf(padj)
 	thresholdX <- quantile(score, probs = mean(scoreX <= thresholdX), names = FALSE)
-    }
-    if(!is.null(thresholdX))
-    {
-	fprX <- approx(y = perf@x.values[[1]], x = perf@alpha.values[[1]], xout = thresholdX)$y
+        fprX <- approx(y = perf@x.values[[1]], x = perf@alpha.values[[1]], xout = thresholdX)$y
 	tprX <- approx(y = perf@y.values[[1]], x = perf@x.values[[1]], xout = fprX)$y
 	threshold = c(fprX = fprX, tprX = tprX)
     }
-        else threshold <- NULL
-        out <- list(performance = perf, threshold = threshold)
-    }
+    else threshold <- NULL
+    out <- list(performance = perf, threshold = threshold)
+}
 
 .rocXPlot <- function(object, ...)
 ##Define built-in function of rocXPlot
