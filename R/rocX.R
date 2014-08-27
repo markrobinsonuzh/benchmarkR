@@ -83,7 +83,7 @@ setMethod(
     signature(object="SimResults", stratify="NULL"),
     function(object, stratify, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
     {
-        arglist <- c(lapply( as.list(environment()), eval ), list(...) )
+        #arglist <- c(lapply( as.list(environment()), eval ), list(...) )
         l <- ncol(object@pval)
         if(l > 10) stop("the number of method cannot be larger than 10")    
         out <- new("rocX")
@@ -160,11 +160,12 @@ setMethod(
          l <- length(object@rocXelement)
          if(l > 10) stop("the number of method cannot be larger than 10")
          col <- .preCols(arglist, l)
+         col <- rep(col, length.out=l)
          argSpecial <- list(fprCutoff = 0.4, colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add=add)
          argSpecial <- lapply(argSpecial, .repArgs, len=l)
          argSpecial <- append(.select.args(arglist, names(argSpecial), complement = F), .select.args(argSpecial, names(arglist), complement = T))
          argSpecial$add[-1L] <- TRUE
-         argPlot <- append(list(...), argSpecial) 
+         argPlot <- append(arglist, argSpecial) 
          for (i in 1:l)
          {
              argPloti <- lapply(argPlot, .getSub2, id = i)
