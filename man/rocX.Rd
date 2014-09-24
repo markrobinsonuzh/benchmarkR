@@ -18,7 +18,7 @@ rocX(object, thresholdX=0.05, transformation="1-x", plot=TRUE, \ldots)
 \item{transformation}{The transformation of score (score.X). The default setting "1-x" means "1-pval(padj, thresholdX)". Note that another useful transformation is "-log10(x)".} 
  
 
-\item{plot}{logical, if 'plot' is TRUE, an ROC plot would be produced when 'rocX' or 'rocXList' object is created ('cexX', 'pchX', 'colX', 'pchX' are special parameters of threshold X for plot. 'fprCutoff' is the cutoff of fpr to domaine 'xlim' of the plot.). 'addFun' and 'addFunLocation' See details below.}
+\item{plot}{logical, if 'plot' is TRUE, an ROC plot would be produced when 'rocX' or 'rocXList' object is created ('cexX', 'pchX', 'colX', 'pchX' are special parameters of threshold X for plot.). 'addFun' and 'addFunLocation' See details below.}
 
 \item{\ldots}{Optional arguments from 'plot'.}
 }
@@ -36,7 +36,7 @@ To increase the flexibility of plots, you can use argument 'add'. If 'add'=TRUE,
 \value{An S4 object of class "rocX" or "rocXList". 
 }
 
-\seealso{ \code{\link{SimResults}}
+\seealso{ \code{\link{SimResults}}, \code{\link{powerFDR}}
 }
 
 \author{Xiaobei Zhou and Mark D. Robinson}
@@ -52,7 +52,7 @@ re <- SimResults(pval=pval, padj=padj, labels=labels)
 ######example1###############################################################################
 roc1 <- rocX(re, plot=TRUE)
 ###rocX can use all the args of par() and special args (i.e., pchX, colX, cexX, lwdX) ###
-roc2 <- rocX(re, plot = TRUE, lty = 1:2,col = 1:2, lwd = 2, main = "roc", cex.lab = 2, cex.main = 3, colX = 2:3, pchX = 2:3, lwdX =5:6, fprCutoff = 0.6)
+roc2 <- rocX(re, plot = TRUE, xlim=c(0,0.6), lty = 1:2,col = 1:2, lwd = 2, main = "roc", cex.lab = 2, cex.main = 3, colX = 2:3, pchX = 2:3, lwdX =5:6)
 ###you can also re-plot it###
 plot(roc1, lwd = 3)
 ###you can also do not add legends

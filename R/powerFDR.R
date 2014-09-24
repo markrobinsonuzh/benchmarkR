@@ -1,5 +1,5 @@
 setClass("powerFDR", contains="BenchMetric")
-setClass("powerFDRList", contains="BenchMetricList")
+#setClass("powerFDRList", contains="BenchMetricList")
 
 setMethod("show","powerFDR",
 function(object) 
@@ -140,38 +140,31 @@ setMethod(
          arglist <- list(...)
          object <- x
          l <- length(object@element)
-         if(l > 10) stop("the number of method cannot be larger than 10")
-         if(is.null(arglist$xlim))
-             xlim <- c(0,0.5)
-         else 
-             xlim <- arglist$xlim
-         if(is.null(arglist$ylim))
-             ylim <- c(0,1)
-         else 
-             ylim <- arglist$ylim  
-         colX <- .preColX(arglist, length(thresholdX))
-         pchX <- as.list(.prePchX(arglist, l))
-         argSpecial <- list(colX=colX, pchX=pchX, cexX=NULL, lwdX=NULL, ltyX=3, add=add)
-         argSpecial <- append(.select.args(arglist, names(argSpecial), complement = F), .select.args(argSpecial, names(arglist), complement = T))
+         if(l > 10) stop("the number of method cannot be larger than 10") 
+         colX <- .preColX(arglist, length(arglist$thresholdX))
+         pchX <- .prePchX(arglist, l)
+         arglist$pchX <- as.list(pchX)
+         argSpecial <- list(xlim=c(0,0.5), ylim=c(0,1), colX=colX, pchX=pchX, cexX=NULL, lwdX=NULL, ltyX=3, add=add)
+         argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
          #argSpecial <- lapply(argSpecial, .repArgs, len=l)
          #argSpecial$add[-1L] <- TRUE
          argPlot <- append(arglist, argSpecial)
          argPlot <- lapply(argPlot, .repArgs, len=l)
          argPlot$add[-1L] <- TRUE
-         print(argPlot)          
+         #print(argPlot)          
          for (i in 1:l)
          {
              fdr <- object@element[[i]][, "fdr"]
              tpr <- object@element[[i]][, "tpr"] 
              argPloti <- lapply(argPlot, .getSub2, id = i)
-             argPloti <- .sarg(argPloti, fdr=fdr, tpr=tpr, xlim=xlim, ylim=ylim) 
+             argPloti <- .sarg(argPloti, fdr=fdr, tpr=tpr) 
              do.call(".powerFDRplot", argPloti)
 
          }
          nms <- names(object@element) 
          if(!is.null(legend) & !is.null(nms))
          {
-             preLegend <- list("bottomright", col=colX, legend=nms, pch=unlist(pchX), lwd=argPlot$lwd[[1]], lty=NA, pt.bg=colX)
+             preLegend <- list("bottomright", col="black", legend=nms, pch=pchX, lwd=argPloti$lwd, lty=NA)
              legend <- .replaceLegend(preLegend, legend)
              do.call("legend", legend)
          } 

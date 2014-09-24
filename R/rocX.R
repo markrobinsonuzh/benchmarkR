@@ -1,57 +1,7 @@
-setClass("rocX", slots=c(rocXelement="list"))
-setClass("rocXList",
-         prototype = prototype(elementType = "rocX"),
-         contains = "list")
+setClass("rocX", contains="BenchMetric")
 
+setClass("rocXList", contains="BenchMetricList")
 
-##Define rocX
-##Xiaobei Zhou
-##June 2014.  Last modified 26 June 2014.
-
-
-setMethod("show","rocX",
-function(object) 
-##Define show of rocX
-##Xiaobei Zhou
-##June 2014.  Last modified 26 June 2014.
-{
-    cat("An object of class \"",class(object),"\n",sep="")
-    cat("..............", "\n")
-    cat(slotNames(object), ":", "\n")
-    str(object@rocXelement, max.level = 1)
-})
-
-
-
-setMethod("show","rocXList",
-function(object) 
-##Define show of rocX
-##Xiaobei Zhou
-##June 2014.  Last modified 10 July 2014.
-{
-    cat("An object of class \"",class(object),"\n",sep="")
-    cat("+++++++++++++++++++++", "\n")
-    l <- length(object)
-    if(is.null(names(object)))
-         nms <- seq_len(l) 
-    else nms <- names(object)  
-    defnms <- paste0("[[", nms, "]]")
-    for (i in seq_len(l))
-    {
-        cat(defnms[i], "\n")
-        show(object[[i]])
-    }
-
-})
-
-rocXList <- function(...)
-{
-    x <- list(...)
-    if(length(x) == 1L & !class(x) == "rocX")
-        new("rocXList", x[[1L]])
-    else 
-        new("rocXList", x)
-}
 
 rocX <- function(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
 ##Define rocX
@@ -61,6 +11,15 @@ rocX <- function(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...
             stratify=object@stratify[[1L]]
             .rocX(object, stratify=stratify, thresholdX=thresholdX, transformation = transformation, plot=plot, ...)
         }
+
+rocXList <- function(...)
+{
+    x <- list(...)
+    if(length(x) == 1L & !class(x) == "rocX")
+        new("rocXList", x[[1L]])
+    else 
+        new("rocXList", x)
+}
 
 setGeneric(
 ##Define genetric of .rocX
@@ -88,9 +47,9 @@ setMethod(
         if(l > 10) stop("the number of method cannot be larger than 10")    
         out <- new("rocX")
         for (i in 1:l)
-            out@rocXelement[[i]] <- .rocXfun(pval=object@pval[, i], labels=object@labels,
+            out@element[[i]] <- .rocXfun(pval=object@pval[, i], labels=object@labels,
                         padj=object@padj[, i], thresholdX=thresholdX, transformation = transformation) 
-            names(out@rocXelement) <- colnames(object@pval)
+            names(out@element) <- colnames(object@pval)
             if(plot)
                 plot(out, ...) 
          out
@@ -157,26 +116,28 @@ setMethod(
     {
          arglist <- list(...)
          object <- x
-         l <- length(object@rocXelement)
+         l <- length(object@element)
          if(l > 10) stop("the number of method cannot be larger than 10")
-         col <- .preCols(arglist, l)
+         col <- .preCol(arglist, l)
          col <- rep(col, length.out=l)
-         argSpecial <- list(fprCutoff = 0.4, colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add=add)
-         argSpecial <- lapply(argSpecial, .repArgs, len=l)
-         argSpecial <- append(.select.args(arglist, names(argSpecial), complement = F), .select.args(argSpecial, names(arglist), complement = T))
-         argSpecial$add[-1L] <- TRUE
-         argPlot <- append(arglist, argSpecial) 
+         argSpecial <- list(xlim = c(0,0.4), colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add=add)
+         #argSpecial <- lapply(argSpecial, .repArgs, len=l)
+         argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
+         #argSpecial$add[-1L] <- TRUE
+         argPlot <- append(arglist, argSpecial)
+         argPlot <- lapply(argPlot, .repArgs, len=l)
+         argPlot$add[-1L] <- TRUE  
          for (i in 1:l)
          {
              argPloti <- lapply(argPlot, .getSub2, id = i)
-             argPloti <- .sarg(argPloti, object = object@rocXelement[[i]], col = col[i]) 
+             argPloti <- .sarg(argPloti, object = object@element[[i]], col = col[i]) 
              do.call(".rocXPlot", argPloti)
 
          }
-         nms <- names(object@rocXelement) 
+         nms <- names(object@element) 
          if(!is.null(legend) & !is.null(nms))
          {
-             preLegend <- list("bottomright", col=col, legend=nms, lty=argPlot$lty, pch=argPlot$pch, lwd=argPlot$lwd)
+             preLegend <- list("bottomright", col=col, legend=nms, lty=argPloti$lty, pch=argPloti$pch, lwd=argPloti$lwd)
              legend <- .replaceLegend(preLegend, legend)
              do.call("legend", legend)
          } 
@@ -289,8 +250,9 @@ setMethod(
 {        
     oldPar <- par()
     arglist <- c(lapply( as.list(environment()), eval ), list(...) )
+    #xlim <- c(0, arglist$fprCutoff)
     arglistPar <- .sarg(.slice.run(.getArgList("plot", arglist)), 
-                        xlim = c(0, arglist$fprCutoff), x=object$performance, add = arglist$add)
+                   x=object$performance, add = arglist$add)
     do.call("plot", arglistPar)
     if(!is.null(object$threshold))
     { 
@@ -307,133 +269,6 @@ setMethod(
 	do.call("points", arglistX)
     }    
 } 
-
-
-.getSub <- function(x, id)
-##this function for plot.roc
-##Xiaobei Zhou
-##June 2014.  Last modified 26 June 2014.
-{
-   if(is.null(x))
-      x
-   else if(length(x) == 1)
-      .subset(x, 1L)
-   else
-      .subset(x, id)
-   
-}
-
-.getSub2 <- function(x, id)
-##this function for plot.roc
-##Xiaobei Zhou
-##June 2014.  Last modified 26 June 2014.
-{
-   if(is.null(x))
-      x    
-   else if(length(x) == 1)
-      .subset2(x, 1L)
-   else
-      .subset2(x, id)
-}
-
-.getArgList <- function(fname, arglist) 
-##this function borrows some ideas from ROCR
-##Define built-in function of get arguments 
-##Xiaobei Zhou
-##June 2014.  Last modified 26 June 2014.
-{
-    if (fname=='plot')
-    return(.select.args(arglist, union(names(formals(plot.default)), names(par()))))
-    else if (fname=='points')
-    return(.select.args(arglist,union(names(formals(points.default)), names(par()))))
-    else return( .select.args(arglist, names(formals(fname))))
-}
-
-
-
-.getArgX <- function(argX, arg, from, elseFrom=par())
-
-{
-    argXF <- from[[argX]]
-    argF <- from[[arg]]      
-    if(is.null(argXF) & is.null(argF))
-        out <- elseFrom[[arg]] 
-    else if(is.null(argXF) & !is.null(argF)) 
-        out <- argF
-    else
-        out <- argXF
-    out             
-}
-
-.repArgs <- function(x, len)
-{
-   if(is.null(x))
-       NULL
-   else
-   {
-       if(!is.list(x))
-           x <- list(x)
-       rep(x, length.out=len)
-   }     
-
-}
- 
-
-.preCols <- function(x, len)
-{
-    pre.col <- c("black", "blue", "purple", "gray", "tan3", "red", "green", "powderblue", "chartreuse4", "yellow")	
-    if(is.null(x[["col"]])) 
-        col <- pre.col[1:len]
-    else 
-        col <- x[["col"]]
-
-}
-
-
- 
-
-.evalFunLocation <- function(addFun, addFunLocation=NULL, len, iter)
-{
-    if(is.null(addFunLocation))
-         addFunLocation <- rep(1, len)
-    if(!is.list(addFunLocation))
-         addFunLocation <- list(addFunLocation)
-    if(!is.list(addFun))       
-         addFun <- list(addFun)
-    ll <- lapply(addFunLocation, function(y) y[iter])
-    ids <- which(ll == 1) 
-    addFun <- addFun[ids]
-    lapply(addFun, function(x) eval(parse(text=x)))
-
-}
-
-
-
-
-
-.replaceLegend <- function(x1, x2)
-{
-   x0 <- c("bottomright", "bottom", "bottomleft","left", "topleft", "top", "topright", "right", "center")
-   if(is.null(names(x2)))
-       names(x2) <- rep("", length(x2))
-   id1 <- x1 %in% x0
-   id2 <- x2 %in% x0
-   if(any(id2))
-       out <- append(x1[!id1], x2[id2], after=(which(id1)-1))
-   else
-       out <- x1
-   id3 <- names(x1) == "legend"
-   id4 <- names(x2) == "" & !id2
-   if(any(id4))
-       {
-        out <- append(out[!id3], x2[id4], after=(which(id3)-1))
-        names(out)[which(id3)] <- "legend"
-       }
-   id5 <- names(out) %in% names(x2) & !names(out) == ""
-   id6 <- !names(x2) == ""
-   out <- append(out[!id5], x2[id6]) 
-   out           
-}
 
 
 
