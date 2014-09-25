@@ -146,10 +146,9 @@ setMethod(
          arglist$pchX <- as.list(pchX)
          argSpecial <- list(xlim=c(0,0.5), ylim=c(0,1), colX=colX, pchX=pchX, cexX=NULL, lwdX=NULL, ltyX=3, add=add)
          argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
-         #argSpecial <- lapply(argSpecial, .repArgs, len=l)
-         #argSpecial$add[-1L] <- TRUE
          argPlot <- append(arglist, argSpecial)
          argPlot <- lapply(argPlot, .repArgs, len=l)
+         #argPlot <- .expandListArgs(argPlot, len=l)
          argPlot$add[-1L] <- TRUE
          #print(argPlot)          
          for (i in 1:l)

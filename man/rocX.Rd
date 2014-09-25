@@ -74,7 +74,7 @@ fun2 <- 'abline(0,1, col=3)'
 loca2 <- c(0,1,0,1)
 plot(roc3, addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2))
 plot(roc3, addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2), main = list("a", "b", "c", "d"), lwd = 1:4, col=c(1,3))
-plot(roc3, legend=list(location=c(1,0,0,1)),addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2), main = list("a", "b", "c", "d"), lwd = 1:4, col=c(1,3))
+plot(roc3, legend=list(location=c(1,0,0,1)),addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2), main = list("a", "b", "c", "d"), lwd = c(1,3), col=c(1,2))
 
 ######example3###############################################################################
 n <- rnorm(nrow(pval), 0, 10)

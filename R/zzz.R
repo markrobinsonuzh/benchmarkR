@@ -58,18 +58,51 @@
 
 
 
-.repArgs <- function(x, len)
+.repArgs <- function(x, len, list=TRUE)
 {
    if(is.null(x))
        NULL
    else
    {
        if(!is.list(x))
-           x <- list(x)
+       {
+           if(list)
+               x <- list(x)
+       }
        rep(x, length.out=len)
    }     
 
 }
+
+
+.expandListArgs <- function(x, len)
+{
+
+   s <- c("col","cex","pch","cex","lwd","pch","bg")
+   s <- paste0(s, collapse="|")  
+   id <- grep(s, names(x))
+   l <- length(id) 
+   if(l>0 & l < length(x))
+   {     
+       x1 <- x[id]
+       x1 <- lapply(x1, .repArgs, len=len, list=FALSE)
+       x2 <- x[-id]
+       x2 <- lapply(x2, .repArgs, len=len)
+       out <- append(x1, x2)
+   } 
+   if(l==0) 
+   {
+       out <- lapply(x, .repArgs, len=len)   
+   } 
+   if(l==length(x)) 
+       out <- lapply(x, .repArgs, len=len, list=FALSE)
+   out
+}
+
+
+
+
+
  
 
 .preCol <- function(x, len)

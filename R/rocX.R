@@ -125,7 +125,7 @@ setMethod(
          argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
          #argSpecial$add[-1L] <- TRUE
          argPlot <- append(arglist, argSpecial)
-         argPlot <- lapply(argPlot, .repArgs, len=l)
+         argPlot <- .expandListArgs(argPlot, len=l)
          argPlot$add[-1L] <- TRUE  
          for (i in 1:l)
          {
@@ -137,7 +137,7 @@ setMethod(
          nms <- names(object@element) 
          if(!is.null(legend) & !is.null(nms))
          {
-             preLegend <- list("bottomright", col=col, legend=nms, lty=argPloti$lty, pch=argPloti$pch, lwd=argPloti$lwd)
+             preLegend <- list("bottomright", col=col, legend=nms, lty=argPloti$lty, pch=argPloti$pchX, lwd=argPloti$lwd)
              legend <- .replaceLegend(preLegend, legend)
              do.call("legend", legend)
          } 
@@ -159,6 +159,7 @@ setMethod(
          add <- rep(add, l)
          arglist <- list(...)
          arglist <- lapply(arglist, .repArgs, len=l)
+         #arglist <- .expandListArgs(arglist, len=l)
          if(is.null(legend$location) & !is.null(legend))
              legend$location <- rep(1, l) 
          for(i in seq(1:l))
