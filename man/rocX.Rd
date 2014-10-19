@@ -73,7 +73,7 @@ plot(roc3, addFun=fun1, addFunLocation=loca1)
 fun2 <- 'abline(0,1, col=3)'
 loca2 <- c(0,1,0,1)
 plot(roc3, addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2))
-plot(roc3, addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2), main = list("a", "b", "c", "d"), lwd = 1:4, col=c(1,3))
+plot(roc3, addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2), main = list("a", "b", "c", "d"), lwd = 1:2, col=c(1,3))
 plot(roc3, legend=list(location=c(1,0,0,1)),addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2), main = list("a", "b", "c", "d"), lwd = c(1,3), col=c(1,2))
 
 ######example3###############################################################################
@@ -93,7 +93,7 @@ r3 <- rocX(res3, plot=FALSE)
 r4 <- rocX(res4, plot=FALSE) 
 roc6 <- rocXList(r1=r1, r2=r2, r3=r3, r4=r4)
 par(mfrow=c(2,2))
-plot(roc6)
+plot(roc6, lwd=list(1,2,3,4))
 dev.off()
 }  
 

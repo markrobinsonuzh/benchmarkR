@@ -115,24 +115,16 @@
 
 }
 
-.preColX <- function(x, len)
-{
-    pre.col <- c("black", "blue", "purple", "gray", "tan3", "red", "green", "powderblue", "chartreuse4", "yellow")	
-    if(is.null(x[["colX"]])) 
-        pre.col[1:len]
-    else 
-        x[["colX"]]
-
-}
 
 
-.prePchX <- function(x, len)
+
+.prePch <- function(x, len)
 {
     pre.pch <- c(21:25,21:25)	
-    if(is.null(x[["pchX"]])) 
+    if(is.null(x[["pch"]])) 
         pre.pch[1:len]
     else 
-        x[["pchX"]]
+        x[["pch"]]
 
 }
  
