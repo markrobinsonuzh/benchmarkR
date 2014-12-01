@@ -35,6 +35,8 @@
     return(.select.args(arglist, union(names(formals(plot.default)), names(par()))))
     else if (fname=='points')
     return(.select.args(arglist,union(names(formals(points.default)), names(par()))))
+    else if (fname=='lines')
+    return(.select.args(arglist,union(names(formals(lines.default)), names(par())))) 
     else if (fname=='axis')
     return(.select.args(arglist,union(names(formals(axis)), names(par()))))
     else return( .select.args(arglist, names(formals(fname))))

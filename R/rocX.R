@@ -120,7 +120,7 @@ setMethod(
          if(l > 10) stop("the number of method cannot be larger than 10")
          col <- .preCol(arglist, l)
          col <- rep(col, length.out=l)
-         argSpecial <- list(xlim = c(0,0.4), colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add=add)
+         argSpecial <- list(xlim = c(0,0.4), xlab="fpr", ylab="tpr", colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add=add)
          #argSpecial <- lapply(argSpecial, .repArgs, len=l)
          argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
          #argSpecial$add[-1L] <- TRUE
@@ -250,11 +250,20 @@ setMethod(
 ##June 2014.  Last modified 26 June 2014.
 {        
     oldPar <- par()
-    arglist <- c(lapply( as.list(environment()), eval ), list(...) )
+    arglist <- c(lapply( as.list(environment()), eval), list(...) )
     #xlim <- c(0, arglist$fprCutoff)
-    arglistPar <- .sarg(.slice.run(.getArgList("plot", arglist)), 
-                   x=object$performance, add = arglist$add)
-    do.call("plot", arglistPar)
+    if(!arglist$add)
+    {
+        arglistPar <- .sarg(.slice.run(.getArgList("plot", arglist)), 
+                   x=object$performance@x.values[[1]], y=object$performance@y.values[[1]], type="l")
+        do.call("plot", arglistPar)
+    }
+    else
+    {
+        arglistPar <- .sarg(.slice.run(.getArgList("lines", arglist)), 
+                   x=object$performance@x.values[[1]], y=object$performance@y.values[[1]])
+        do.call("lines", arglistPar)
+    } 
     if(!is.null(object$threshold))
     { 
         colX <- .getArgX("colX", "col", arglist, oldPar)
