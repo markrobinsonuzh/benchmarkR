@@ -120,7 +120,7 @@ setMethod(
          if(l > 10) stop("the number of method cannot be larger than 10")
          col <- .preCol(arglist, l)
          col <- rep(col, length.out=l)
-         argSpecial <- list(xlim = c(0,0.4), xlab="fpr", ylab="tpr", colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add=add)
+         argSpecial <- list(xlim = c(0,0.4), xlab="FPR", ylab="TPR", colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add=add)
          #argSpecial <- lapply(argSpecial, .repArgs, len=l)
          argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
          #argSpecial$add[-1L] <- TRUE
