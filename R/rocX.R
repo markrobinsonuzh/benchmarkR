@@ -235,7 +235,7 @@ setMethod(
         thresholdX <- tf(thresholdX)
         padj <- padj+(1e-20)
         scoreX <- tf(padj)
-	thresholdX <- quantile(score, probs = mean(scoreX <= thresholdX), names = FALSE)
+	thresholdX <- quantile(score, probs = mean(scoreX <= thresholdX, na.rm=TRUE), names = FALSE)
         fprX <- approx(y = perf@x.values[[1]], x = perf@alpha.values[[1]], xout = thresholdX)$y
 	tprX <- approx(y = perf@y.values[[1]], x = perf@x.values[[1]], xout = fprX)$y
 	threshold = c(fprX = fprX, tprX = tprX)
