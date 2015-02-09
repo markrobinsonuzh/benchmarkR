@@ -41,7 +41,18 @@ SimResults <- function(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NUL
             if(!nrow(stratify) == length(labels))
                  stop("stratify and labels must have the same dimension!") 
         }
-        .SimResults(pval = pval, padj = padj, labels = labels, stratify = stratify)   
+        if(is.na(pval))
+        {
+            message("pval has NA values, any NA value is replaced by 1.")
+            pval[is.na(pval)] <- 1
+        }
+        if(is.na(padj))
+        {
+            message("padj has NA values, any NA value is replaced by 1.")
+            padj[is.na(padj)] <- 1
+        }
+
+        .SimResults(pval = pval, padj = padj, labels = labels, stratify = stratify)
     }
 }
 
