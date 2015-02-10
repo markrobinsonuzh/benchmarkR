@@ -43,11 +43,11 @@ To increase the flexibility of plots, you can use argument 'add'. If 'add'=TRUE,
 
 \examples{
 library(benchmarkR)
-data(rocX)
-pval <- do.call("cbind", dat_rocX$pval)
-padj <- do.call("cbind", dat_rocX$padj)
+data(Pickrell)
+pval <- do.call("cbind", Pickrell$pval)
+padj <- do.call("cbind", Pickrell$padj)
 labels <- rep(0, nrow(pval))
-labels[dat_rocX$indDE] <- 1
+labels[Pickrell$indDE] <- 1
 re <- SimResults(pval=pval, padj=padj, labels=labels)
 ######example1###############################################################################
 roc1 <- rocX(re, plot=TRUE)
@@ -83,10 +83,10 @@ roc4 <- rocX(ren, plot=TRUE)
 roc5 <- rocX(ren, plot=TRUE, numGroups=3)
 
 ######example4###############################################################################
-res1 <- re[1:250,] 
-res2 <- re[251:500,]
-res3 <- re[501:750,] 
-res4 <- re[751:100,] 
+res1 <- re[1:1000,] 
+res2 <- re[1001:2000,]
+res3 <- re[2001:3000,] 
+res4 <- re[3001:4000,] 
 r1 <- rocX(res1, plot=FALSE)
 r2 <- rocX(res2, plot=FALSE)
 r3 <- rocX(res3, plot=FALSE)

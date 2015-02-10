@@ -45,11 +45,11 @@ An S4 object of class "powerFDR" containing  the threshold value(s) assessed, an
 \examples{
 library(benchmarkR)
 ######example1, object="SimResults"###############################
-data(rocX)
-pval <- do.call("cbind", dat_rocX$pval)
-padj <- do.call("cbind", dat_rocX$padj)
+data(Pickrell)
+pval <- do.call("cbind", Pickrell$pval)
+padj <- do.call("cbind", Pickrell$padj)
 labels <- rep(0, nrow(pval))
-labels[dat_rocX$indDE] <- 1
+labels[Pickrell$indDE] <- 1
 re <- SimResults(pval=pval, padj=padj, labels=labels)
 p <- powerFDR(re, plot=TRUE)
 plot(p, cex=2, pch=c(23,25), col=1:3, main="powerFDR plot", 

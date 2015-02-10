@@ -192,7 +192,7 @@ setMethod(
                  cex <- 1
              else
                  cex <- 0.6*argPloti$cex  
-             preLegend <- list("bottomright", col="black", legend=nms, cex=cex,pch=pch, lwd=argPloti$lwd, lty=NA)
+             preLegend <- list("bottomright", col="gray50", legend=nms, cex=cex,pch=pch, lwd=argPloti$lwd, lty=NA)
              legend <- .replaceLegend(preLegend, legend)
              do.call("legend", legend)
          } 

@@ -1,12 +1,12 @@
 \docType{data}
-\name{dat_rocX}
-\alias{dat_rocX}
+\name{Pickrell}
+\alias{Pickrell}
 
-\title{A count-base simulation as an example dataset to test \code{rocX}.}
+\title{A count-base simulation as an example dataset to test \code{rocX}, \code{fdX} and other functions.}
 \description{
-  A count-base simulation from Pickrell (HapMap-YRI), 1000 tags, 10 samples (5 control versus 5 treatment) 
+  A count-base simulation from Pickrell (HapMap-YRI), 4000 tags, 10 samples (5 control versus 5 treatment). DE analysis results contain "edgeR", "limma-voom" and "DESeq2". 
 }
-\usage{data(rocX)
+\usage{data(Pickrell)
 }
 
 \source{

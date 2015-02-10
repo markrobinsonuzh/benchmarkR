@@ -35,11 +35,11 @@ fdX(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, \ldots)
 
 \examples{
 library(benchmarkR)
-data(rocX)
-pval <- do.call("cbind", dat_rocX$pval)
-padj <- do.call("cbind", dat_rocX$padj)
+data(Pickrell)
+pval <- do.call("cbind", Pickrell$pval)
+padj <- do.call("cbind", Pickrell$padj)
 labels <- rep(0, nrow(pval))
-labels[dat_rocX$indDE] <- 1
+labels[Pickrell$indDE] <- 1
 re <- SimResults(pval=pval, padj=padj, labels=labels)
 fdX(re)
 legend("topleft", col=c(1,4), c("edgeR", "limma"), lty=1, pch=1)
