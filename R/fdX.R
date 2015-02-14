@@ -79,7 +79,7 @@ setMethod(
          if(l > 10) stop("the number of method cannot be larger than 10")
          col <- .preCol(arglist, l)
          col <- rep(col, length.out=l)
-         argSpecial <- list(xlab="Number of genes selected", ylab = "Number of false discoveries", colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add=add)
+         argSpecial <- list(xlab="Number of selected outcome positive", ylab = "Number of false discoveries", colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add=add)
          #argSpecial <- lapply(argSpecial, .repArgs, len=l)
          argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
          #argSpecial$add[-1L] <- TRUE

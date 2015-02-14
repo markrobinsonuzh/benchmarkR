@@ -11,7 +11,7 @@
 }
 
 \usage{
-SimResults(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NULL, \ldots)
+SimResults(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NULL,  padjMethod="BH", \ldots)
 }
 
 \arguments{
@@ -23,6 +23,8 @@ SimResults(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NULL, \ldots)
 \item{labels}{A vector containing the true class labels. It must be numeric only containing '0' or '1'. '1' is positive and '0' is negative.}
 
 \item{stratify}{A data.frame (optional arguments).}
+
+\item{padjMethod}{The method to use for adjusting pValue, if "padj" is NULL.}
 
 \item{\ldots}{not used}
 

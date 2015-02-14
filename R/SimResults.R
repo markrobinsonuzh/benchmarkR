@@ -9,7 +9,7 @@ setClassUnion("stratify", c("data.frame", "NULL"))
 ##Xiaobei Zhou
 ##June 2014.  Last modified 26 June 2014.
 
-SimResults <- function(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NULL, ...)
+SimResults <- function(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NULL, padjMethod="BH", ...)
 ##Define SimResults constructor
 ##Xiaobei Zhou
 ##June 2014.  Last modified 26 June 2014.
@@ -21,8 +21,10 @@ SimResults <- function(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NUL
         pval <- as.matrix(pval) 
         if(is.null(padj))
         {
-            message("padj is missing, 'BH' method is used to generate padj.")
-            padj <- apply(pval, 2, p.adjust, method = "BH")  
+            ms <- paste0("padj is missing, selected method (", padjMethod,
+                       ") is used to generate padj.")
+            message(ms)
+            padj <- apply(pval, 2, p.adjust, method = padjMethod)
         }
         padj <- as.matrix(padj)
         if(is.null(labels)) 
