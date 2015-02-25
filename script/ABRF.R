@@ -3,8 +3,16 @@
 
 
 ##############preprocessing data#############
-load("/home/xizhou/ABRF/abrf.read.counts.rda")
-load("/home/xizhou/ABRF/taqman.rda")
+load("abrf.read.counts.rda")
+tq <- read.table("TaqmanPCR.txt",header=TRUE)
+du <- duplicated(tq[,1])
+tq <- tq[!du,]
+tmp <- tq
+tq <- tq[,-1]
+row.names(tq) <- tmp[,1]
+tq <- as.matrix(tq)
+
+
 g <- as.factor(rep(0:3, each=4))
 levels(g) <- c("A", "B", "C", "D")
 mm <- model.matrix(~0+g)
@@ -76,7 +84,7 @@ padjAB <- cbind(edgeR=padjAB_edgeR, DESeq2=padjAB_DESeq2, voom=padjAB_voom)[id,]
 labelAB <- rep(0, length(id))
 labelAB[padjAB_tq[mt]<0.1] <- 1
 
-save(pvalAB,padjAB,labelAB, file="ABRF-AvsB.rda")
+save(pvalAB,padjAB,labelAB, file="ABRF.rda")
 
 library(benchmarkR)
 scAB <- SimResults(pval=pvalAB, padj=padjAB, labels=labelAB)
