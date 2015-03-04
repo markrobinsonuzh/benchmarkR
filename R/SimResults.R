@@ -14,7 +14,25 @@ SimResults <- function(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NUL
 ##Xiaobei Zhou
 ##June 2014.  Last modified 26 June 2014.
 {
-    if(is.null(pval))
+    arglist <- list(...)
+    id <- unlist(lapply(arglist, function(x) class(x)=="SimResults"))
+    if(any(id))
+    {
+        object <- arglist[[which(id)]]
+        pval <- object@pval
+        padj <- object@padj
+        labels <- object@labels
+        if(!is.null(stratify))
+        {
+            stratify <- as.data.frame(stratify)
+            if(!nrow(stratify) == length(labels)) 
+                 stop("stratify and labels must have the same dimension!") 
+        } 
+        else 
+            stratify <- object@stratify
+        .SimResults(pval=pval, padj=padj, labels=labels, stratify=stratify)               
+    } 
+    else if(is.null(pval))
         .SimResults(pval=NULL, padj=NULL, labels=NULL, stratify=NULL)
     else
     {
@@ -37,6 +55,9 @@ SimResults <- function(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NUL
             stop("padj and padj must have the same dimension!")
         if(!all(labels == 0|1))
             stop("labels must only contain 0 or 1!")
+        if(!identical(colnames(pval), colnames(padj)))
+            stop("padj and padj must have the same name!")
+
         if(!is.null(stratify))
         {
             stratify <- as.data.frame(stratify)
@@ -57,6 +78,8 @@ SimResults <- function(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NUL
         .SimResults(pval = pval, padj = padj, labels = labels, stratify = stratify)
     }
 }
+
+
 
 
 setMethod("[", c("SimResults", "ANY", "ANY"),

@@ -1,11 +1,14 @@
 setClass("fdX", contains="BenchMetric")
 
-fdX <- function(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
+fdX <- function(object=NULL, stratify=NULL, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
 ##Define fdX
 ##Xiaobei Zhou
 ##December 2014.  Last modified 16 December 2014. 
         {
+            object <- SimResults(object=object, stratify=stratify, ...)
             stratify=object@stratify[[1L]]
+            if(!is.null(stratify))
+                stop("Currently, 'benchmarkR' only supports 'stratify=NULL'!") 
             .fdX(object, stratify=stratify, thresholdX=thresholdX, plot=plot, ...)
         }
 
@@ -79,7 +82,13 @@ setMethod(
          if(l > 10) stop("the number of method cannot be larger than 10")
          col <- .preCol(arglist, l)
          col <- rep(col, length.out=l)
-         argSpecial <- list(xlab="Number of selected outcome positive", ylab = "Number of false discoveries", colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add=add)
+         xlim <- .preXlim(arglist, object)
+         ylim <- .preYlim(arglist, object)
+         argSpecial <- list(xlim=xlim, ylim=ylim,
+                            xlab="Top rank feature", 
+                            ylab = "Number of false discoveries", 
+                            colX = NULL, cexX = NULL, pchX = 3, 
+                            lwdX = NULL,cex=2.5,lwd=3, add=add)
          #argSpecial <- lapply(argSpecial, .repArgs, len=l)
          argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
          #argSpecial$add[-1L] <- TRUE

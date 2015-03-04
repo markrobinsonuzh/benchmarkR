@@ -1,29 +1,31 @@
 \docType{methods}
 \name{fdX}
 \alias{fdX}
-\title{false discovery plot.}
+\title{False discovery plot.}
 
-\description{Plot false discoveries versus the number of selected positive value of object 'SimResults' with threshold X (fdr). }
+\description{Plot false discoveries versus the number of top rank feature with a cutoff when false discovery rate (FDR) are under certain control. }
 
 \usage{
-fdX(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, \ldots)
+fdX(object=NULL, stratify=NULL, thresholdX=0.05, transformation = "1-x", plot=TRUE, \ldots)
 }
 
 \arguments{
 
 \item{object}{An object of 'SimResults'.}
 
-\item{thresholdX}{The threshold of score (score.X). Note that if score is P_adjust_value, "threshold.X" can be set at 0.05 (FDR = 0.05).}
+\item{stratify}{A stratify factor (Optional arguments. Currently not available).}
+
+\item{thresholdX}{Numeric value of the p-value threshold (cutoff). \code{threshold.X=0.05}(FDR = 0.05).}
 
 \item{transformation}{The transformation of score (score.X). The default setting "1-x" means "1-pval(padj, thresholdX)". Note that another useful transformation is "-log10(x)".} 
  
 
-\item{plot}{logical, if 'plot' is TRUE, an ROC plot would be produced when 'rocX' or 'rocXList' object is created ('cexX', 'pchX', 'colX', 'pchX' are special parameters of threshold X for plot.). 'addFun' and 'addFunLocation' See details below.}
+\item{plot}{Logical, whether plot or not.}
 
-\item{\ldots}{Optional arguments from 'plot'.}
+\item{\ldots}{Optional arguments from 'plot'. Note that logical parameter 'add', should power-fdr value(s) be added to current plot. Graphical parameters from \code{par} such as 'col', 'cex' can be used for the figure. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point on the figure(See details below.).}
 }
 
-\details{false discoveries is calculated by 'padj' and 'labels' of object of 'SimResults'.   
+\details{false discoveries is calculated by \code{padj} and \code{labels} of object of \code{SimResults}. X point in \code{fdX} displays the actual false discoveries number versus number of top rank feature given a threshold (e.g., FDR=0.05).  
 }
 
 
@@ -40,9 +42,9 @@ pval <- do.call("cbind", Pickrell$pval)
 padj <- do.call("cbind", Pickrell$padj)
 labels <- rep(0, nrow(pval))
 labels[Pickrell$indDE] <- 1
-re <- SimResults(pval=pval, padj=padj, labels=labels)
+re <- SimResults(pval=pval, padj=padj, 
+         labels=labels)
 fdX(re)
-legend("topleft", col=c(1,4), c("edgeR", "limma"), lty=1, pch=1)
 }  
 
 \keyword{fdX, SimResults}

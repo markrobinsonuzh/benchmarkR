@@ -1,7 +1,11 @@
-benchmarkR <- function(object, ..., cex.panel=1.5)
+benchmarkR <- function(object=NULL, stratify=NULL, name.panel=c("a", "b", "c"), ..., cex.panel=1.5)
 {
     l <- 3
     arglist <- list(...)
+    object <- SimResults(object=object, stratify=stratify, ...)
+            stratify=object@stratify[[1L]]
+    if(!is.null(stratify))
+        stop("Currently, 'benchmarkR' only supports 'stratify=NULL'!") 
     if(is.null(arglist$legend))
         arglist$legend <- list("bottomright", "topleft", "bottomright")
     arglist <- lapply(arglist, .repArgs, len=l)
@@ -18,9 +22,9 @@ benchmarkR <- function(object, ..., cex.panel=1.5)
     on.exit(par(old.par))
     layout(matrix(c(1,3, 2,3), 2, 2 , byrow = TRUE), widths = c(0.6, 1, 1))
     do.call("rocX", argPloti[[1]])
-    mtext("(a)", side=3, adj=-.13, padj=-.5, cex=cex.panel)
+    mtext(name.panel[1], side=3, adj=-.13, padj=-.5, cex=cex.panel)
     do.call("fdX", argPloti[[2]])
-    mtext("(b)", side=3, adj=-.13, padj=-.5, cex=cex.panel)
+    mtext(name.panel[2], side=3, adj=-.13, padj=-.5, cex=cex.panel)
     do.call("powerFDR", argPloti[[3]])
-    mtext("(c)", side=3, adj=-.13, padj=-.5, cex=cex.panel)
+    mtext(name.panel[3], side=3, adj=-.13, padj=-.5, cex=cex.panel)
 }

@@ -14,16 +14,29 @@ function(object)
 })
 
 
-powerFDR <- function(object,threshold=c(0.01, 0.05, 0.1), plot=TRUE, ...)
+powerFDR <- function(object=NULL, stratify=NULL, threshold=c(0.01, 0.05, 0.1), plot=TRUE, ...)
 ##Define powerFDR
 ##Xiaobei Zhou
 ##Sep 2014.  Last modified 15 Sep 2014.
         {
-            if(class(object)=="SimResult")
-                stratify <- object@stratify
-            else
-                stratify <- NULL  
-            .powerFDR(object, stratify=stratify, threshold=threshold, plot=plot, ...)
+            if(is.null(object)) 
+            {
+                arglist <- list(...)
+                pval <- arglist$pval
+                padj <- arglist$padj
+                if(is.null(padj))  
+                    stop("You must input a 'SimResults' object or 'padj' and 'lables'!") 
+                if(is.null(pval))   
+                    pval <- padj 
+                labels <- arglist$labels
+                object <- SimResults(pval=pval, padj=padj, 
+                     labels=labels, stratify=stratify)
+                    
+            }
+            stratify <- object@stratify[[1L]] 
+            if(!is.null(stratify))
+                stop("Currently, 'benchmarkR' only supports 'stratify=NULL'!")  
+            .powerFDR(object=object, stratify=stratify, threshold=threshold, plot=plot, ...)          
         }
 
 
@@ -63,32 +76,32 @@ setMethod(
 
 
 
-setMethod(
+#setMethod(
 ##Define .powerFDR for "pval" vector
 ##Xiaobei Zhou
 ##Sep 2014.  Last modified 19 Oct 2014.
-    .powerFDR,
-    signature(object="numeric", stratify="NULL"),
-    function(object, labels, stratify, threshold, plot=TRUE, ...)
-    {
-        re <- SimResults(pval=object, padj=object, labels=labels)
-        .powerFDR(re, stratify, threshold, plot=TRUE, ...)         
-    } 
-)
+#    .powerFDR,
+#    signature(object="numeric", stratify="NULL"),
+#    function(object, labels, stratify, threshold, plot=TRUE, ...)
+#    {
+#        re <- SimResults(pval=object, padj=object, labels=labels)
+#        .powerFDR(re, stratify, threshold, plot=TRUE, ...)         
+#    } 
+#)
 
 
-setMethod(
+#setMethod(
 ##Define .powerFDR for "pval" matrix
 ##Xiaobei Zhou
 ##Sep 2014.  Last modified 19 Oct 2014.
-    .powerFDR,
-    signature(object="matrix", stratify="NULL"),
-    function(object, labels, stratify, threshold, plot=TRUE, ...)
-    {
-        re <- SimResults(pval=object, padj=object, labels=labels)
-        .powerFDR(re, stratify, threshold, plot=TRUE, ...)         
-    } 
-)
+#    .powerFDR,
+#    signature(object="matrix", stratify="NULL"),
+#    function(object, labels, stratify, threshold, plot=TRUE, ...)
+#    {
+#        re <- SimResults(pval=object, padj=object, labels=labels)
+#        .powerFDR(re, stratify, threshold, plot=TRUE, ...)         
+#    } 
+#)
 
 
 
@@ -162,18 +175,16 @@ setMethod(
          object <- x
          l <- length(object@element)
          if(l > 10) stop("the number of method cannot be larger than 10") 
-         col <- .preCol(arglist, length(arglist$threshold))
-         pch <- .prePch(arglist, l)
-         
-         arglist$pch <- as.list(pch)
-         argSpecial <- list(xlim=c(0,0.5), ylim=c(0,1), col=col, 
-                            pch=pch, lwd.threshold=1, xlab="FDR", ylab="power(TPR)",
+         arglist$col <- col <- .preCol(arglist, l) 
+         arglist$pch <- pch <- .prePch(arglist, l)
+         xlim <- .preXlim(arglist, object)
+         ylim <- .preYlim(arglist, object)         
+         argSpecial <- list(xlim=xlim, ylim=ylim, lwd.threshold=1, xlab="FDR", ylab="TPR",
                             lty.threshold=3, col.threshold=1,lwd.ticks=1, col.line=1,
-                            lwd.line=1, add=add)
+                            lwd.line=3, add=add,lwd=3,cex=2)
          argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
          argPlot <- append(arglist, argSpecial)
-         argPlot <- lapply(argPlot, .repArgs, len=l)
-         #argPlot <- .expandListArgs(argPlot, len=l)
+         argPlot <- .expandListArgs(argPlot, len=l)
          argPlot$add[-1L] <- TRUE
          #print(argPlot)          
          for (i in 1:l)
@@ -191,8 +202,8 @@ setMethod(
              if(is.null(argPloti$cex))
                  cex <- 1
              else
-                 cex <- 0.6*argPloti$cex  
-             preLegend <- list("bottomright", col="gray50", legend=nms, cex=cex,pch=pch, lwd=argPloti$lwd, lty=NA)
+                 cex <- 0.5*argPloti$cex  
+             preLegend <- list("bottomright", col=col, legend=nms, cex=cex,pch=pch, lwd=argPloti$lwd, lty=NA)
              legend <- .replaceLegend(preLegend, legend)
              do.call("legend", legend)
          } 

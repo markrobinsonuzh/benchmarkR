@@ -455,15 +455,15 @@ The function \Rfunction{powerFDR} can also directly work with input value \Robje
  <<direct-powerFDR, results="hide",message=TRUE, fig.show=TRUE, fig.width=6, fig.height=6, dev="pdf">>= 
 col <- c("red", "blue", "green")
 # P-values from Method 1
-pvalues <- runif(100)
-pvalues <- sort(pvalues)
+padj <- runif(100)
+padj <- sort(padj)
 labels <- numeric(100)
 labels[1:10] <- 1
-powerFDR(pvalues, labels=labels, threshold=c(0.05, 0.1, 0.5), col=col, plot=TRUE, xlim=c(0,1))
+powerFDR(padj=padj, labels=labels, threshold=c(0.05, 0.1, 0.5), col=col, plot=TRUE, xlim=c(0,1))
 # P-values from Method 2 with larger p-values
-pvalues <- runif(100, min=0.02)
-pvalues <- sort(pvalues)
-powerFDR(pvalues, labels=labels, threshold=c(0.05, 0.1, 0.5), col=col, add=TRUE, pch=22)
+padj <- runif(100, min=0.02)
+padj <- sort(padj)
+powerFDR(padj=padj, labels=labels, threshold=c(0.05, 0.1, 0.5), col=col, add=TRUE, pch=22)
 # Legend
 legend("bottomright", pch=c(21, 22), legend=c("Method 1", "Method 2"), pt.bg="black")
 @          

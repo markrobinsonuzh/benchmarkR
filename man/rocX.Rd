@@ -3,33 +3,35 @@
 \alias{rocX}
 \title{rocX constructor.}
 
-\description{Produce an object of 'rocX' and a simple ROC plot with threshold X (fdr) using the features of ROCR}
+\description{Produce an object of 'rocX' and a simple ROC plot with a cutoff when false discovery rate (FDR) are under certain control using the features of ROCR}
 
 \usage{
-rocX(object, thresholdX=0.05, transformation="1-x", plot=TRUE, \ldots)
+rocX(object=NULL, stratify=NULL, thresholdX=0.05, transformation="1-x", plot=TRUE, \ldots)
 }
 
 \arguments{
 
-\item{object}{An object of 'SimResults'.}
+\item{object}{An object of \code{SimResults}.}
 
-\item{thresholdX}{The threshold of score (score.X). Note that if score is P_adjust_value, "threshold.X" can be set at 0.05 (FDR = 0.05).}
+\item{stratify}{A stratify factor driving data (Optional arguments. See details below.).}
 
-\item{transformation}{The transformation of score (score.X). The default setting "1-x" means "1-pval(padj, thresholdX)". Note that another useful transformation is "-log10(x)".} 
+\item{thresholdX}{Numeric value of the p-value threshold (cutoff). \code{threshold.X=0.05}(FDR = 0.05).}
+
+\item{transformation}{The transformation of \code{pval} and \code{padj} in object of \code{SimResults}. The default setting "1-x" means "1-pval(padj, thresholdX)". Note that another useful transformation is "-log10(x)".} 
  
 
-\item{plot}{logical, if 'plot' is TRUE, an ROC plot would be produced when 'rocX' or 'rocXList' object is created ('cexX', 'pchX', 'colX', 'pchX' are special parameters of threshold X for plot.). 'addFun' and 'addFunLocation' See details below.}
+\item{plot}{Logical, whether plot or not.}
 
-\item{\ldots}{Optional arguments from 'plot'.}
+\item{\ldots}{Optional arguments from 'plot'. Note that logical parameter 'add', should power-fdr value(s) be added to current plot. Graphical parameters from \code{par} such as 'col', 'cex' can be used for the figure. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point on the figure. 'addFun' and 'addFunLocation' are special arguments for multiple-panel figure (See details below).}
 }
 
-\details{\code{rocX} will call 'prediction' and 'performance' from package 'ROCR' by Pvalue (pval) and labels from the object of 'SimResults'. Additionally, the value of tpr and fpr corresponding to the threshold X will be calculated by P adjusted value (padj) from the object of 'SimResults'. The reason introduced 'rocX' is that standard 'roc' plot fails to show the information across different methods or methodology under the same condition (threshold of P-value). We want to present the information including precisely achieved tpr and fpr given a certain threshold across all the methods. 
+\details{\code{rocX} will call \code{prediction} and \code{performance} from package \code{ROCR} by p-value (pval) and labels from the object of \code{SimResults}. Additionally, the value (X point) of true positive rate (TPR) and false positve rate (PFR) corresponding to the threshold (\code{threholdX}) will be calculated by p-adjusted-value (padj) from the object of 'SimResults'. The reason introduced \code{rocX} is that standard the ROC curve fails to show the information across different methods or methodology under the same condition. We want to present the information including precisely achieved TPR and FPR given a certain threshold across all the methods. 
 
-When 'stratify' of 'SimResults' object is NULL, 'rocX' would produce a 'rocX' object and corresponding to a simple plot. 
+When \code{stratify} of \code{SimResults} object is NULL, function \code{rocX} would produce a \code{rocX-class} object and corresponding to a simple plot. 
 
-When 'stratify' is factor or numeric, it would produce a 'rocXList', which contains a series of collection of 'rocX' splited by different levels of 'stratify' or range of data in 'stratify' (by numGroups). For 'rocXList', multiple plots are made . During each iteration of plot, if you want to add some additional function, such as 'legend' or 'abline', you can use argument 'addFun' and 'addFunLocation' (see example2 and example3). It is useful for plotting different subsets of data.     
+When \code{stratify} is factor or numeric, it would produce a \code{rocXList}, which contains a series of collection of \code{rocX} splitted by different levels of \code{stratify} or range of data in \code{stratify} (by numGroups). For \code{rocXList}, multiple plots are made . During each iteration of plot, if you want to add some additional function, such as \code{legend} or \code{abline}, you can use the argument \code{addFun} and \code{addFunLocation} providing a utility of adding a specified function into a specified location for a multi-panel figure (see example2 and example3). It is useful for plotting different subsets of data.     
 
-To increase the flexibility of plots, you can use argument 'add'. If 'add'=TRUE, plots are added to current one. 
+To increase the flexibility of plots, you can use argument \code{add}. If \code{add=TRUE}, plots are added to current one combining different \code{rocX} curves together into one figure. 
   
 }
 
@@ -48,19 +50,28 @@ pval <- do.call("cbind", Pickrell$pval)
 padj <- do.call("cbind", Pickrell$padj)
 labels <- rep(0, nrow(pval))
 labels[Pickrell$indDE] <- 1
-re <- SimResults(pval=pval, padj=padj, labels=labels)
-######example1###############################################################################
+re <- SimResults(pval=pval, padj=padj, 
+                 labels=labels)
+######example1####################################
 roc1 <- rocX(re, plot=TRUE)
-###rocX can use all the args of par() and special args (i.e., pchX, colX, cexX, lwdX) ###
-roc2 <- rocX(re, plot = TRUE, xlim=c(0,0.6), lty = 1:2,col = 1:2, lwd = 2, main = "roc", cex.lab = 2, cex.main = 3, colX = 2:3, pchX = 2:3, lwdX =5:6)
+###rocX can use all the args of par()## 
+###special args (i.e., pchX, colX, cexX, lwdX) ###
+roc2 <- rocX(re, plot = TRUE, xlim=c(0,0.6), 
+             lty = 1:2,col = 1:2, lwd = 2, 
+             main = "roc", cex.lab = 2, 
+             cex.main = 3, colX = 2:3, 
+             pchX = 2:3, lwdX =5:6)
 ###you can also re-plot it###
 plot(roc1, lwd = 3)
 ###you can also do not add legends
 plot(roc1, lwd = 3, legend=NULL)
-plot(roc1, lwd = 3, legend=list("center", c("edgeR", "voom"), lwd=3, pch=1, lty=2))
-######example2###############################################################################
+plot(roc1, lwd = 3, 
+     legend=list("center", c("edgeR", "voom"), 
+     lwd=3, pch=1, lty=2))
+######example2######################################
 f <- as.factor(sample(0:3, nrow(pval), replace=TRUE))
-ref <- SimResults(pval=pval, padj=padj, labels=labels, stratify=f)
+ref <- SimResults(pval=pval, padj=padj, 
+          labels=labels, stratify=f)
 par(mfrow=c(2,2))
 roc3 <- rocX(ref, plot=TRUE)
 plot(roc3)
@@ -72,17 +83,26 @@ loca1 <- c(1,0,1,0)
 plot(roc3, addFun=fun1, addFunLocation=loca1)
 fun2 <- 'abline(0,1, col=3)'
 loca2 <- c(0,1,0,1)
-plot(roc3, addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2))
-plot(roc3, addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2), main = list("a", "b", "c", "d"), lwd = 1:2, col=c(1,3))
-plot(roc3, legend=list(location=c(1,0,0,1)),addFun=list(fun1, fun2), addFunLocation=list(loca1, loca2), main = list("a", "b", "c", "d"), lwd = c(1,3), col=c(1,2))
+plot(roc3, addFun=list(fun1, fun2), 
+     addFunLocation=list(loca1, loca2))
+plot(roc3, addFun=list(fun1, fun2), 
+     addFunLocation=list(loca1, loca2), 
+     main = list("a", "b", "c", "d"), 
+     lwd = 1:2, col=c(1,3))
+plot(roc3, legend=list(location=c(1,0,0,1)),
+     addFun=list(fun1, fun2), 
+     addFunLocation=list(loca1, loca2), 
+     main = list("a", "b", "c", "d"), 
+     lwd = c(1,3), col=c(1,2))
 
-######example3###############################################################################
+######example3######################################
 n <- rnorm(nrow(pval), 0, 10)
-ren <- SimResults(pval=pval, padj=padj, labels=labels, stratify=n)
+ren <- SimResults(pval=pval, padj=padj, 
+          labels=labels, stratify=n)
 roc4 <- rocX(ren, plot=TRUE)
 roc5 <- rocX(ren, plot=TRUE, numGroups=3)
 
-######example4###############################################################################
+######example4######################################
 res1 <- re[1:1000,] 
 res2 <- re[1001:2000,]
 res3 <- re[2001:3000,] 

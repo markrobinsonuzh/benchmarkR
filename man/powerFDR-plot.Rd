@@ -12,7 +12,7 @@
 
 \arguments{
 
-\item{x}{An object of 'rocX'.}
+\item{x}{An object of \code{powerFDR}.}
 
 \item{y}{not used.}
 
@@ -26,7 +26,7 @@
 \details{See the detials of \code{\link{powerFDR}}.   
 }
 
-\value{An S4 object of class "powerFDR". 
+\value{An S4 object of class \code{powerFDR-class}. 
 }
 
 

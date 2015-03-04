@@ -109,7 +109,7 @@
 
 .preCol <- function(x, len)
 {
-    pre.col <- c("black", "blue", "purple", "gray", "tan3", "red", "green", "powderblue", "chartreuse4", "yellow")	
+    pre.col <- c("black", "blue", "darkgreen", "gray", "tan3", "red", "purple", "powderblue", "darkkhaki", "yellow")	
     if(is.null(x[["col"]])) 
         pre.col[1:len]
     else 
@@ -172,4 +172,85 @@
    id6 <- !names(x2) == ""
    out <- append(out[!id5], x2[id6]) 
    out           
+}
+
+
+
+.preXlim <- function(x, object)
+{
+    if(is.null(x[["xlim"]]))
+    {
+        if(class(object) == "rocX")    
+        {
+             x <- unlist(lapply(object@element, 
+                             function(x) lapply(x[2], 
+                                 .subset2,"fprX")))
+             if(is.null(x)) x <- NA 
+             x1 <- pmax(round(1.5*max(x), 1), 0.4)
+             x2 <- pmin(1, x1, na.rm=TRUE) 
+             c(0,x2)
+        }
+        else if(class(object) == "fdX")    
+        {
+             x <- unlist(lapply(object@element,  
+                                 .subset2,"numberX"))
+             if(is.null(x)) x <- NA
+             xmax <- max(unlist(lapply(object@element,  
+                                 .subset2,"number"))) 
+             xx <- pmin(xmax, round(1.5*max(x)), na.rm=TRUE) 
+             c(0,xx)
+        }
+        else if(class(object) == "powerFDR")    
+        {
+             x <- unlist(lapply(object@element,  
+                                 function(x) x[,"FDR"]))
+             if(is.null(x)) x <- NA
+             x1 <- pmax(round(1.5*max(x), 1), 0.4)
+             x2 <- pmin(1, x1, na.rm=TRUE) 
+             c(0,x2)
+        }
+    }
+    else
+        x[["xlim"]]
+}
+
+
+
+
+.preYlim <- function(x, object)
+{
+    if(is.null(x[["ylim"]]))
+    {
+        if(class(object) == "rocX")    
+        {
+             y <- unlist(lapply(object@element, 
+                             function(x) lapply(x[2], 
+                                 .subset2,"tprX")))
+             if(is.null(y)) y <- NA
+             y1 <- pmax(round(1.5*max(y), 1), 0.4)
+             y2 <- pmin(1, y1, na.rm=TRUE) 
+             c(0,y2)
+        }
+        else if(class(object) == "fdX")    
+        {
+             y <- unlist(lapply(object@element,  
+                                 .subset2,"fdX"))
+             if(is.null(y)) y <- NA
+             ymax <- max(unlist(lapply(object@element,  
+                                 .subset2,"fd"))) 
+             yy <- pmin(ymax, round(1.5*max(y)), na.rm=TRUE) 
+             c(0,yy)
+        }
+        else if(class(object) == "powerFDR")    
+        {
+             y <- unlist(lapply(object@element,  
+                                 function(x) x[,"TPR"]))
+             if(is.null(y)) y <- NA
+             y1 <- pmax(round(1.5*max(y), 1), 0.4)
+             y2 <- pmin(1, y1, na.rm=TRUE) 
+             c(0,y2)
+        }
+    }
+    else
+        x[["ylim"]]
 }

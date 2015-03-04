@@ -4,7 +4,7 @@
 
 \title{Plot method for fdX.}
 
-\description{Plot false discoveries versus the number of selected positive value of object 'SimResults' with threshold X (fdr).}
+\description{Plot false discoveries versus the number of selected positive value of object \code{SimResults} with a threshold.}
 
 \usage{
 \S4method{plot}{fdX,ANY}(x, y, add=FALSE, legend=list(), \dots)
@@ -12,7 +12,7 @@
 
 \arguments{
 
-\item{x}{An object of 'fdX'.}
+\item{x}{An object of \code{fdX}.}
 
 \item{y}{not used.}
 
@@ -26,7 +26,7 @@
 \details{See the detials of \code{\link{rocX}}.   
 }
 
-\value{An S4 object of class "fdX". 
+\value{An S4 object of class \code{fdX-class}. 
 }
 
 

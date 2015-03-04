@@ -3,13 +3,16 @@ setClass("rocX", contains="BenchMetric")
 setClass("rocXList", contains="BenchMetricList")
 
 
-rocX <- function(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
+rocX <- function(object=NULL, stratify=NULL, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
 ##Define rocX
 ##Xiaobei Zhou
 ##June 2014.  Last modified 7 July 2014. 
         {
-            stratify=object@stratify[[1L]]
-            .rocX(object, stratify=stratify, thresholdX=thresholdX, transformation = transformation, plot=plot, ...)
+            
+            object <- SimResults(object=object, stratify=stratify, ...) 
+            stratify <- object@stratify[[1]]
+            .rocX(object, stratify=stratify, thresholdX=thresholdX, 
+                 transformation = transformation, plot=plot, ...)
         }
 
 rocXList <- function(...)
@@ -120,7 +123,11 @@ setMethod(
          if(l > 10) stop("the number of method cannot be larger than 10")
          col <- .preCol(arglist, l)
          col <- rep(col, length.out=l)
-         argSpecial <- list(xlim = c(0,0.4), xlab="FPR", ylab="TPR", colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add=add)
+         xlim <- .preXlim(arglist, object)
+         ylim <- .preYlim(arglist, object)
+         argSpecial <- list(xlim = xlim, ylim = ylim, xlab="FPR", 
+                           ylab="TPR", colX = NULL, cexX = NULL, 
+                           pchX = 3, lwdX = NULL, lwd=3, cex=2.5, add=add)
          #argSpecial <- lapply(argSpecial, .repArgs, len=l)
          argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
          #argSpecial$add[-1L] <- TRUE
@@ -191,30 +198,6 @@ setMethod(
    }
 )
 
-
-#plot.rocX <- function(object, ...)
-#Define plot of rocX
-##Xiaobei Zhou
-##June 2014.  Last modified 26 June 2014.
-#{
-#     arglist <- c(lapply( as.list(environment()), eval ), list(...) )
-#     l <- length(object)
-#     if(l > 10) stop("the number of method cannot be larger than 10")
-#     pre.col <- c("black", "blue", "purple", "gray", "tan3", "red", "green", "powderblue", "chartreuse4", "yellow")	
-#     if(is.null(arglist[["col"]])) col <- pre.col[1:l]
-#     else col <- arglist[["col"]]
-#     argSpecial <- list(fprCutoff = 0.4, colX = NULL, cexX = NULL, pchX = 3, lwdX = NULL, add = TRUE)
-#     argSpecial <- lapply(argSpecial, rep, l)
-#     argSpecial <- append(.select.args(arglist, names(argSpecial), complement = F), .select.args(argSpecial, names(arglist), complement = T))
-#     argSpecial$add[1] <- FALSE
-#     argPlot <- append(list(...), argSpecial) 
-#     for (i in 1:l)
-#     {
-#         argPloti <- lapply(argPlot, .getSub, id = i)
-#         argPloti <- .sarg(argPloti, object = object[[i]], col = col[i])  
-#         do.call(".rocXPlot", argPloti)
-#     }
-#}
 
 
 

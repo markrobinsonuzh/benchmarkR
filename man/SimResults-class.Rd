@@ -5,13 +5,13 @@
 \alias{SimResults-class}
 
 
-\title{Class 'SimResults'.}
+\title{Class \code{SimResults}.}
 
-\description{An S4 Object class 'SimResults' to store the Pvalue, true labels and other necessary values for further analysis and evaluation.
+\description{An S4 Object class \code{SimResults} to store the p-value, labels and other necessary values for further analysis and evaluation.
 }
 
 
-\section{Objects from the Class}{Objects can be created by using the \code{SimResults} function.
+\section{Objects from the class}{Objects can be created by using the \code{SimResults} function.
 }
 
 
@@ -19,13 +19,13 @@
 \section{Slots}{
 
 \describe{
-\item{pval}{A matrix containing the Pvalue.}
+\item{pval}{A matrix containing the p-value.}
 
-\item{padj}{A matrix containing the P adjusted value.}
+\item{padj}{A matrix containing the p-adjusted-value.}
 
-\item{labels}{A vector containing the true class labels. It must be numeric only containing '0' or '1'. '1' is positive and '0' is negative.}
+\item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
 
-\item{stratify}{Optional arguments.}
+\item{stratify}{A stratify factor driving data (Optional arguments.).}
 
 }
 

@@ -5,34 +5,42 @@
 \alias{SimResults}
 
 
-\title{object SimResults constructor.}
+\title{Object SimResults constructor.}
 
-\description{The 'SimResults' is a S4 class to store the Pvalue, true labels and other necessary values for further analysis and evaluation.
+\description{The \code{SimResults} is a S4 class object to store the p-value, labels and other necessary values for further analysis and evaluation.
 }
 
 \usage{
-SimResults(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NULL,  padjMethod="BH", \ldots)
+SimResults(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NULL, padjMethod="BH", \ldots)
 }
 
 \arguments{
 
-\item{pval}{A vector, matrix or NULL containing the Pvalue. if 'pval' is a vector, it would be transferred to a matrix.}
+\item{pval}{A vector, matrix or NULL containing the p-value.}
 
-\item{padj}{A vector, matrix or NULL containing the P adjusted value (optional). If 'padj' is missing, its P adjusted value would be calculated by 'BH' method. if 'padj' is a vector, it would be transferred to a matrix.}
+\item{padj}{A vector, matrix or NULL containing the p-adjusted-value (optional). If \code{padj} is missing, its p-adjusted-value would be calculated by  Benjamini & Hochberg (BH) method.}
 
-\item{labels}{A vector containing the true class labels. It must be numeric only containing '0' or '1'. '1' is positive and '0' is negative.}
+\item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
 
-\item{stratify}{A data.frame (optional arguments).}
+\item{stratify}{A stratify factor driving data (Optional arguments.).}
 
-\item{padjMethod}{The method to use for adjusting pValue, if "padj" is NULL.}
+\item{padjMethod}{The method to use for adjusting pValue, if "padj" is NULL. \code{padjMethod} are available from c("holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none")}
 
-\item{\ldots}{not used}
+\item{\ldots}{\ldots}
 
 }
 
 
 
-\value{An S4 "SimResults" object.
+\value{An S4 \code{SimResults-class} object.
+}
+
+
+\note{Selection observations can be done by:
+	
+	x <- SimResults()
+	
+	x[i,]
 }
 
 
@@ -40,10 +48,13 @@ SimResults(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NULL,  padjMeth
 
 \examples{
 library(benchmarkR)
+set.seed(100)
 ##'pval' can be a vector
-re <- SimResults(pval=rnorm(1000), labels=sample(0:1, 1000, replace=TRUE))
+re <- SimResults(pval=rnorm(2000), labels=sample(0:1, 2000, replace=TRUE))
 ##'pval' can also be a matirx
-re <- SimResults(pval=matrix(rnorm(1000), 250, 4), padj=matrix(rnorm(1000), 250, 4),  labels=sample(0:1, 250, replace=TRUE))
+pval <- matrix(runif(4000, 0, 0.8), 1000, 4)
+padj <- matrix(runif(4000, 0, 0.8), 1000, 4)
+re <- SimResults(pval=pval, padj=padj, labels=sample(0:1, 1000, replace=TRUE))
 ## matrix operators can be used for 'SimResults'
 res <- re[1:100,] 
 }
