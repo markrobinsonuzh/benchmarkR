@@ -32,23 +32,53 @@ library("benchmarkR")
 \DeclareFloatingEnvironment[name={Example},fileext=lsf,listname={List of Examples}]{example}
 
 \title{User's guide to the ``benchmarkR'' package}
-\author{Xiaobei Zhou, Mark D. Robinson}
+\author{Xiaobei Zhou, Charity Law, Mark D. Robinson}
 
 \begin{document}
 
 \maketitle
 
-\begin{abstract}
-\Rpackage{benchmarkR} is an R/Bioconductor \cite{Gentleman2004} package designed to evaluate and visualize classification model performance for universal dataset requiring an independent truth. This guide provides an overview of the \Rpackage{benchmarkR} package and detail information how to use it with valid and complete examples. \\
-  
-\vspace{1em} 
+\tableofcontents
+\listofexamples
+\thispagestyle{empty}
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Preliminaries}
+
+%\begin{abstract}
+% /Bioconductor \cite{Gentleman2004}
+\Rpackage{benchmarkR} is an R package designed with a simple purpose: to calculate, evaluate and
+visualize the performance of classification method, such as those common in statistical genomics.
+For example, much of our research has been related to methods to find differentially expressed genes,
+differential splicing, differential methylation and so on.  In principle, \Rpackage{benchmarkR} can
+be used for any similar situation, for example, where statistical tests are conducted
+across the features (e.g., genes) of a dataset and one wants to contrast sensitivity and false
+positive (discovery) rates.
+The package would typically be used for synthetic datasets or for datasets that are accompanied by independent
+validated ``truth'' (in quotes because validation data are typically measured with some uncertainty).
+
+Researchers already look at the performance of methods through simulations using ROC curves,
+precision-recall plots, false detection plots and the like -- so, what does \Rpackage{benchmarkR} offer?
+In these plots, we are often interested to know at the same time whether methods are
+``calibrated'', that is, do the methods actually achieve the false discovery control that the cutoffs 
+used would suggest.  The main idea behind the \Rpackage{benchmarkR} package is to simply augment the
+the set of standard plots that many methodologists look at with calibration information.  
+To do this, we in fact make use of the excellent codebase available in the \Rpackage{ROCR} package for
+performance assessment.
+
+This guide provides an overview of the \Rpackage{benchmarkR} package and
+detailed information on how to use it across the different types of plots and features to customize the visualizations.
+
+\vspace{1em}
 \begin{center}
     \begin{tabular}{ | l | }
       \hline
       \textbf{benchmarkR version:} \Sexpr{packageDescription("benchmarkR")$Version} \\
-      \hline 
+      \hline
 \end{tabular}
-\end{center} 
+\end{center}
 \vspace{1em}
 \begin{center}
     \begin{tabular}{ | l | }
@@ -58,27 +88,21 @@ library("benchmarkR")
       XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\\
       XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\\
       XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\\
-      \hline 
+      \hline
 \end{tabular}
 \end{center}
 \vspace{1em}
 
- \end{abstract}
+% \end{abstract}
 
-\tableofcontents
-\listofexamples
-\thispagestyle{empty}
-\clearpage
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{A quick start}
-\Rpackage{benchmarkR} might start with known pvalue, adjusted-pvalue and truth labels as following:\\ 
+In the simplest case, \Rpackage{benchmarkR} would start with a set of P-values and corresponding truth labels, as follows:\\ 
 \begin{example}[H]                 
 \centering
 <<quick, eval=FALSE>>=
 library(benchmarkR)
-results <- SimResults(pval,padj,labels)
+results <- SimResults(pval,labels)
 benchmarkR(results)
 @
 \caption[a quick start]{a quick start} 
@@ -86,7 +110,7 @@ benchmarkR(results)
 \end{example}
 
 \section{A short summary of \Rpackage{benchmarkR}}
-\Rpackage{benchmarkR} is an R/Bioconductor package designed to evaluate and visualize classification model performance for universal dataset requiring an independent truth. Generally speaking, the package of \Rpackage{benchmarkR} can be divided into two major parts:\\
+\Rpackage{benchmarkR} is an R/Bioconductor package designed to evaluate and visualize classification performance for reference datasets.  Generally speaking, the package of \Rpackage{benchmarkR} can be divided into two major parts:\\
 \begin{enumerate}
   \item \Robject{SimResults}:  a S4 class object to store the Pvalue, true labels and other necessary values for further analysis and evaluation.
   \item \Rfunction{benchmarkR}: produce a visualized benchmark result including a multi-panel plot of \Robject{rocX}, \Robject{fdX} and \Robject{powerFDR}.
@@ -115,14 +139,15 @@ Its whole structure is shown below:\\
 %---------------------------------------------------------
 \section{Data preparation: build a ``SimResults'' object}
 \label{sec:data}
-To use the \Rpackage{benchmarkR} package, it should be better to build a \Robject{SimResults} object firstly for the further analysis. a \Robject{SimResults} object contains three basic input data: 
+To use the \Rpackage{benchmarkR} package, it is best to build a \Robject{SimResults} object, which is 
+just a container for the results. A \Robject{SimResults} object contains three basic input data: 
 \begin{itemize}
-  \item \Robject{pval}:  a vector, matrix containing the pvalue
-  \item \Robject{padj}: a vector, matrix containing the p-adjusted-value (optional)
-  \item \Robject{labels}:  a vector containing the true class labels (only containing '0' or '1'. '1' is positive and '0' is negative.)
+  \item \Robject{pval}: a vector or matrix containing the P-values
+  \item \Robject{padj}: (optionally) a vector or matrix containing the adjusted P-values
+  \item \Robject{labels}:  a corresponding vector containing the true class labels (only containing '0' or '1' where '1' is positive and '0' is negative.)
 \end{itemize}
 
-The function \Rfunction{SimResults} is the constructor to build a \Robject{SimResults} object. It can be worked like that:
+The function \Rfunction{SimResults} is just the constructor to build a \Robject{SimResults} object. It can be invoked as below:
 \begin{example}[H]                 
 \centering
 <<SimResults,message=TRUE,cache=TRUE>>=
@@ -136,31 +161,39 @@ re
 \label{SimResults}
 \end{example}
 
-In this case \Robject{padj} is missing. As a results, the default method for adjusting pvalue (padjMethod="BH") is employed to correct \Robject{pval}. You can also choose a different method for adjusting pvalue, such as:\\
-\begin{example}[H]                 
-\centering
-<<padjMethod,message=TRUE>>=
-re <- SimResults(pval=pval, labels=labels, padjMethod="holm" )
-re
-@
-\caption[set up method for adjusting pvalue when \Robject{padj} is missing]{set up method for adjusting pvalue when \Robject{padj} is missing} 
-\label{padjMethod}
-\end{example}
-\Robject{pval} and \Robject{pval} can be not only numeric vectors but also be matrices. When they were matrices, each column should contain each classification model. At the end of this section, a practical example based Zhou's paper \cite{Zhou2014a} is presented (see \Rfunction{help("Pickrell")}): \\
- 
+In this case \Robject{padj} is missing. Internally, P-values will be adjusted using a method of choice (default is Benjamini-Hochberg, adjMethod="BH", but others from \Rfunction{p.adjust} can be used). 
+
+%You can also choose a different method for adjusting pvalue, such as:\\
+%\begin{example}[H]                 
+%\centering
+%<<padjMethod,message=TRUE>>=
+%re <- SimResults(pval=pval, labels=labels, padjMethod="holm" )
+%re
+%@
+%\caption[set up method for adjusting pvalue when \Robject{padj} is missing]{set up method for adjusting pvalue when \Robject{padj} is missing} 
+%\label{padjMethod}
+%\end{example}
+
+Note that \Robject{pval} (and \Robject{padj}) can be vectors (for a single method) but also be matrices. 
+If matrices are used, each column should represent a score (P-value) a classification model and 
+each row should represent a feature. 
+
+To give a practical example, we have pre-packaged the simulation results from Zhou et al. (2014) \cite{Zhou2014a} to
+highlight the construction of an \Robject{SimResults} object (see also \Rfunction{help("Pickrell")}): \\
+% 
+%padj <- do.call("cbind", Pickrell$padj)
 \begin{example}[H]                 
 \centering
  <<practica,message=TRUE>>=
 library(benchmarkR)
 data(Pickrell)
 pval <- do.call("cbind", Pickrell$pval)
-padj <- do.call("cbind", Pickrell$padj)
 labels <- rep(0, nrow(pval))
 labels[Pickrell$indDE] <- 1
-re <- SimResults(pval=pval, padj=padj, labels=labels)
+re <- SimResults(pval=pval, labels=labels)
 re
 @
-\caption[a practical example -- \Robject{pval} and \Robject{padj} are matrices]{a practical example -- \Robject{pval} and \Robject{padj} are matrices} 
+\caption[a practical example -- \Robject{pval} is a matrix]{a practical example -- \Robject{pval} is a matrix} 
 \label{practical}
 \end{example}
 %---------------------------------------------------------
