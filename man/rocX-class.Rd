@@ -4,14 +4,14 @@
 \title{rocX - class}
 
 \description{
-A simple S4 class for storing results of \code{rocX} for reproducible plots and re-analysis.
+A simple S4 class for storing results of \code{\link{rocX}} for reproducible plots and re-analysis.
 }
 
 
 
 \section{Slots}{
   \describe{
-    \item{\code{element}:}{A list contains: \code{performance} from package \code{ROCR} and \code{threshold}, which consits of the x-axis (fprX) and y-axis(tprX) corresponding to X.}
+    \item{\code{element}:}{A list contains: \code{performance} from package \code{ROCR} and \code{threshold}, which consists of the x-axis (fprX) and y-axis(tprX) corresponding to X.}
   }
 }
 

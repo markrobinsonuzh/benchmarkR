@@ -1,19 +1,55 @@
-setClass("rocX", contains="BenchMetric")
+setClass("rocX", contains=".BenchMetric")
 
-setClass("rocXList", contains="BenchMetricList")
+setClass("rocXList", contains=".BenchMetricList")
 
 
-rocX <- function(object=NULL, stratify=NULL, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
-##Define rocX
+
+setGeneric(
+##Define genetric of rocX
 ##Xiaobei Zhou
-##June 2014.  Last modified 7 July 2014. 
-        {
-            
-            object <- SimResults(object=object, stratify=stratify, ...) 
-            stratify <- object@stratify[[1]]
+##March 2014.  Last modified 19 March 2015.
+   "rocX", 
+   function(object, pval, ...)   
+   {
+       standardGeneric("rocX")
+   }  
+)
+
+
+
+setMethod(
+##Define rocX for "SimResults"
+##Xiaobei Zhou
+##March 2015.  Last modified 19 March 2015.
+    "rocX",
+    signature(object="SimResults", pval="missing"),
+    function(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
+    {
+        stratify <- object@stratify[[1]]
             .rocX(object, stratify=stratify, thresholdX=thresholdX, 
                  transformation = transformation, plot=plot, ...)
-        }
+
+    }
+)
+
+
+setMethod(
+##Define rocX for "pval"
+##Xiaobei Zhou
+##March 2015.  Last modified 19 March 2015.
+    "rocX",
+    signature(object="missing", pval="ANY"),
+    function(pval, padj=NULL, labels, stratify=NULL, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
+    {
+        object <- SimResults(pval=pval, padj=padj, labels=labels, stratify=stratify, ...)
+        rocX(object, thresholdX=thresholdX, 
+                 transformation = transformation, plot=plot, ...)
+    }
+)
+
+
+
+
 
 rocXList <- function(...)
 {

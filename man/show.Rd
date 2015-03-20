@@ -11,14 +11,14 @@
 
 }
 \arguments{
-  \item{object}{a SimResults or rocX object}
+  \item{object}{a \code{\link{SimResults-class}}, \code{\link{rocX-class}} \code{\link{fdX-class}} and \code{\link{powerFDR-class}} object}
 }
 
 \details{
 
-The \code{show} method of SimResults is directly used fucntion \code{printHead} from limma. It print only the leading elements or rows of components or slots which contain large quantities of data.
+The \code{show} method of SimResults is directly used function \code{printHead} from "limma". It print only the leading elements or rows of components or slots which contain large quantities of data.
 
-The \code{show} method of rocX is defined to use function \code{str} to 'summary' the features of data. 
+The \code{show} method of rocX is defined to use function \code{\link{str}} to 'summary' the features of data. 
 
 }
 

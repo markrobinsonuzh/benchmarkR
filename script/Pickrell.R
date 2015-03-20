@@ -11,4 +11,13 @@ g5 <- as.factor(rep(0:1,each=n5/2))
 data <- NBsim(foldDiff=3, dataset = pickrell, group = g5, add.outlier = TRUE, pOutlier = 0.1, nTags = 4000)
 Pickrell <- pval(data, method = method ,count.type = "counts", mc.cores = 4)
 
+pval <- do.call("cbind", Pickrell$pval)
+padj <- do.call("cbind", Pickrell$padj)
+labels <- rep(0, nrow(pval))
+labels[Pickrell$indDE] <- 1
+Pickrell$pval <- pval
+Pickrell$padj <- padj
+Pickrell$labels <- labels
+class(Pickrell) <- "list"
+
 save(Pickrell, file="Pickrell.rda")

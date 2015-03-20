@@ -1,9 +1,9 @@
 Package: benchmarkR
 Title: benchmarkR.
-Version: 0.0-4
-Date: 2014-02-07
+Version: 0.0-5
+Date: 2015-03-19
 Depends:
-Imports: ROCR, gplots, methods, limma, edgeR
+Imports: ROCR, gplots, methods
 VignetteBuilder: knitr
 Suggests: BiocStyle, knitr
 Author: Xiaobei Zhou, Charity Law, Mark D. Robinson

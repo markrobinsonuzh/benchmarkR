@@ -4,7 +4,7 @@
 \title{fdX - class}
 
 \description{
-A simple S4 class for storing results of \code{fdX} for reproducible plots and re-analysis.
+A simple S4 class for storing results of \code{\link{fdX}} for reproducible plots and re-analysis.
 }
 
 

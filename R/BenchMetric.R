@@ -1,13 +1,13 @@
-setClass("BenchMetric", slots=c(element="list"))
+setClass(".BenchMetric", slots=c(element="list"))
 
-##Define BenchMetric
+##Define .BenchMetric
 ##Xiaobei Zhou
 ##Sep 2014.  Last modified 15 Sep 2014.
 
 
-setMethod("show","BenchMetric",
+setMethod("show",".BenchMetric",
 function(object) 
-##Define show of BenchMetric
+##Define show of .BenchMetric
 ##Xiaobei Zhou
 ##Sep 2014.  Last modified 15 Sep 2014.
 {
@@ -20,13 +20,13 @@ function(object)
 
 
 
-setClass("BenchMetricList",
-         prototype = prototype(elementType = "BenchMetric"),
+setClass(".BenchMetricList",
+         prototype = prototype(elementType = ".BenchMetric"),
          contains = "list")
 
-setMethod("show","BenchMetricList",
+setMethod("show",".BenchMetricList",
 function(object) 
-##Define show of BenchMetricList
+##Define show of .BenchMetricList
 ##Xiaobei Zhou
 ##Sep 2014.  Last modified 15 Sep 2014.
 {

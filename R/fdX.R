@@ -1,16 +1,51 @@
-setClass("fdX", contains="BenchMetric")
+setClass("fdX", contains=".BenchMetric")
 
-fdX <- function(object=NULL, stratify=NULL, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
-##Define fdX
+
+setGeneric(
+##Define genetric of fdX
 ##Xiaobei Zhou
-##December 2014.  Last modified 16 December 2014. 
-        {
-            object <- SimResults(object=object, stratify=stratify, ...)
-            stratify=object@stratify[[1L]]
-            if(!is.null(stratify))
-                stop("Currently, 'benchmarkR' only supports 'stratify=NULL'!") 
-            .fdX(object, stratify=stratify, thresholdX=thresholdX, plot=plot, ...)
-        }
+##March 2014.  Last modified 19 March 2015.
+   "fdX", 
+   function(object, pval, ...)   
+   {
+       standardGeneric("fdX")
+   }  
+)
+
+
+
+setMethod(
+##Define fdX for "SimResults"
+##Xiaobei Zhou
+##March 2015.  Last modified 19 March 2015.
+    "fdX",
+    signature(object="SimResults", pval="missing"),
+    function(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
+    {
+        stratify <- object@stratify[[1]]
+        if(!is.null(stratify))
+            stop("Currently, 'fdX' only supports 'stratify=NULL'!") 
+        .fdX(object, stratify=stratify, thresholdX=thresholdX, 
+                 transformation = transformation, plot=plot, ...)
+
+    }
+)
+
+
+setMethod(
+##Define fdX for "pval"
+##Xiaobei Zhou
+##March 2015.  Last modified 19 March 2015.
+    "fdX",
+    signature(object="missing", pval="ANY"),
+    function(pval, padj=NULL, labels, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
+    {
+        object <- SimResults(pval=pval, padj=padj, labels=labels, stratify=NULL, ...)
+        fdX(object, thresholdX=thresholdX, 
+                 transformation = transformation, plot=plot, ...)
+    }
+)
+
 
 
 setGeneric(

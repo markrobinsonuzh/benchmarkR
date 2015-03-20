@@ -2,7 +2,7 @@
 \name{rocXList-plot}
 \alias{plot,rocXList,ANY-method}
 
-\title{Plot method for rocXList.}
+\title{Plot method for rocXList}
 
 \description{Produce a series of ROC plots with threshold X (fdr) using the features of ROCR for 'rocXList' object.}
 
@@ -12,25 +12,25 @@
 
 \arguments{
 
-\item{x}{An object of 'rocXList'.}
+\item{x}{An object of \code{link{rocXList}}.}
 
-\item{y}{not used.}
+\item{y}{Not used.}
 
-\item{add}{logical. If 'TRUE', plots are added to current one.}
+\item{add}{Logical. If 'TRUE', plots are added to current one.}
 
-\item{addFun}{additional function for each iteration plot.}
+\item{addFun}{Additional function for each iteration plot.}
 
 \item{addFunLocation}{Location of 'addFun'. '1' means add and '0' means skip 'addFun' on each iteration.}
 
-\item{legend}{list or NULL. Add legends to plots. It is a 'list' including all the argments from function 'legend' (see help(legend)). 'location' is to define location of 'legend'. '1' means add and '0' means skip 'legend' on each iteration. If 'legend' is NULL, do not add legends to plots.}
+\item{legend}{A list or NULL. Add legends to plots.}
 
-\item{\dots}{Optional arguments from 'par()' 'cexX', 'pchX', 'colX', 'pchX' are special parameters of threshold X for plot. 'fprCutoff' is the cutoff of fpr to domaine 'xlim' of the plot.).}
+\item{\dots}{Optional.}
 }
 
 \details{See the detials of \code{\link{rocX}}.   
 }
 
-\value{An S4 object of class "rocX". 
+\value{An S4 object of class\code{\link{rocX}}. 
 }
 
 

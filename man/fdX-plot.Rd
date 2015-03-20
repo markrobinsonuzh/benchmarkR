@@ -2,9 +2,9 @@
 \name{fdX-plot}
 \alias{plot,fdX,ANY-method}
 
-\title{Plot method for fdX.}
+\title{Plot method for fdX}
 
-\description{Plot false discoveries versus the number of selected positive value of object \code{SimResults} with a threshold.}
+\description{Plot false discoveries versus the number of selected positive value of object \code{\link{SimResults}} with a threshold.}
 
 \usage{
 \S4method{plot}{fdX,ANY}(x, y, add=FALSE, legend=list(), \dots)
@@ -14,19 +14,18 @@
 
 \item{x}{An object of \code{fdX}.}
 
-\item{y}{not used.}
+\item{y}{Not used.}
 
-\item{add}{logical. If 'TRUE', plots are added to current one.}
+\item{add}{Logical. If 'TRUE', plots are added to current one.}
 
-\item{legend}{list or NULL. Add legends to plots. It is a 'list' including all the argments from function 'legend' (see help(legend)). If it is NULL, do not add legends to plots.}
-
-\item{\dots}{Optional arguments from 'par()' 'cexX', 'pchX', 'colX', 'pchX' are special parameters of threshold X for plot. 'fprCutoff' is the cutoff of fpr to domaine 'xlim' of the plot.).}
+\item{legend}{A list or NULL. Add legends to plots. }
+\item{\dots}{Optional.}
 }
 
-\details{See the detials of \code{\link{rocX}}.   
+\details{See the detials of \code{\link{fdX}}.   
 }
 
-\value{An S4 object of class \code{fdX-class}. 
+\value{An S4 object of class \code{\link{fdX}}. 
 }
 
 

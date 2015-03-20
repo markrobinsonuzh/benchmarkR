@@ -1,5 +1,5 @@
-setClass("powerFDR", contains="BenchMetric")
-#setClass("powerFDRList", contains="BenchMetricList")
+setClass("powerFDR", contains=".BenchMetric")
+#setClass("powerFDRList", contains=".BenchMetricList")
 
 setMethod("show","powerFDR",
 function(object) 
@@ -14,30 +14,49 @@ function(object)
 })
 
 
-powerFDR <- function(object=NULL, stratify=NULL, threshold=c(0.01, 0.05, 0.1), plot=TRUE, ...)
-##Define powerFDR
+setGeneric(
+##Define genetric of powerFDR
 ##Xiaobei Zhou
-##Sep 2014.  Last modified 15 Sep 2014.
-        {
-            if(is.null(object)) 
-            {
-                arglist <- list(...)
-                pval <- arglist$pval
-                padj <- arglist$padj
-                if(is.null(padj))  
-                    stop("You must input a 'SimResults' object or 'padj' and 'lables'!") 
-                if(is.null(pval))   
-                    pval <- padj 
-                labels <- arglist$labels
-                object <- SimResults(pval=pval, padj=padj, 
-                     labels=labels, stratify=stratify)
-                    
-            }
-            stratify <- object@stratify[[1L]] 
-            if(!is.null(stratify))
-                stop("Currently, 'benchmarkR' only supports 'stratify=NULL'!")  
-            .powerFDR(object=object, stratify=stratify, threshold=threshold, plot=plot, ...)          
-        }
+##March 2014.  Last modified 19 March 2015.
+   "powerFDR", 
+   function(object, padj, ...)   
+   {
+       standardGeneric("powerFDR")
+   }  
+)
+
+
+
+setMethod(
+##Define powerFDR for "SimResults"
+##Xiaobei Zhou
+##March 2015.  Last modified 19 March 2015.
+    "powerFDR",
+    signature(object="SimResults", padj="missing"),
+    function(object, threshold=c(0.01, 0.05, 0.1), plot=TRUE, ...)
+    {
+        stratify <- object@stratify[[1]]
+        if(!is.null(stratify))
+            stop("Currently, 'powerFDR' only supports 'stratify=NULL'!") 
+        .powerFDR(object, stratify=stratify, threshold=threshold, 
+                  plot=plot, ...)
+
+    }
+)
+
+
+setMethod(
+##Define powerFDR for "pval"
+##Xiaobei Zhou
+##March 2015.  Last modified 19 March 2015.
+    "powerFDR",
+    signature(object="missing", padj="ANY"),
+    function(padj, labels, threshold=c(0.01, 0.05, 0.1), plot=TRUE, ...)
+    {
+        object <- SimResults(pval=padj, padj=padj, labels=labels, stratify=NULL)
+        powerFDR(object, threshold=threshold, plot=plot, ...)
+    }
+)
 
 
 
@@ -121,10 +140,10 @@ setMethod(
 }
 
 
-.powerFDRplot <- function(FDR, TPR, add=TRUE, threshold=c(0.01,0.05,0.1), pointType="b", ...)
+.powerFDRplot <- function(FDR, TPR, add=TRUE, threshold=c(0.01,0.05,0.1), point.type="b", ...)
 {
     arglist <- c(lapply( as.list(environment()), eval ), list(...) ) 
-    pointType <- match.arg(pointType, c("b","p","l"))
+    point.type <- match.arg(point.type, c("b","p","l"))
     bg <- arglist$col
     bg[FDR>threshold] <- "white" 
     arglistPlot <- .sarg(.slice.run(.getArgList("plot", arglist)), x=1, 
@@ -152,13 +171,13 @@ setMethod(
         suppressWarnings(do.call("abline", arglistAbline))
 
     } 
-    if(pointType %in% c("l","b")) 
+    if(point.type %in% c("l","b")) 
     {
         do.call("points", arglistL)
-        if(pointType=="b") 
+        if(point.type=="b") 
             do.call("points", arglistP)
     }
-    if(pointType=="p")    
+    if(point.type=="p")    
         do.call("points", arglistP) 
 }
 

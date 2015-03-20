@@ -105,7 +105,7 @@ function(object)
 	if(length(x) > 0) 
         {
 	    cat("@",what,"\n",sep="")
-	    printHead(x)
+	    .printHead(x)
 	    cat("\n")
 	}
     }

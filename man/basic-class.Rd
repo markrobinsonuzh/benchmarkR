@@ -7,7 +7,7 @@
 \title{basic-class of object \code{SimResults}}
 
 \description{
-All S4 class for storing results of object of \code{SimResults}. 
+All S4 class for storing results of object of \code{\link{SimResults}}. 
 'pval' is a matrix or NULL.
 'padj' is a matrix or NULL.
 'label' is numeric or NULL.
