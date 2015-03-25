@@ -19,9 +19,9 @@
 \section{Slots}{
 
 \describe{
-\item{pval}{A matrix containing the p-value.}
+\item{pval}{A matrix containing p-values.}
 
-\item{padj}{A matrix containing the p-adjusted-value.}
+\item{padj}{A matrix containing the adjusted p-values.}
 
 \item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
 

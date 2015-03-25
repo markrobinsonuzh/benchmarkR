@@ -4,7 +4,7 @@
 
 \title{Subset SimResults Object}
 \description{
-Extract a subset of a \code{link{SimResults}}.}
+Extract a subset of a \code{\link{SimResults}}.}
 \usage{
 \S4method{[}{SimResults}(x, i, j)
 }

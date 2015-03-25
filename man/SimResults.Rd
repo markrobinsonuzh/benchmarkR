@@ -14,9 +14,9 @@ SimResults(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NULL, padjMetho
 
 \arguments{
 
-\item{pval}{A vector, matrix containing the p-value from a classifier or a test.}
+\item{pval}{A vector, matrix containing p-values from a classifier or a test.}
 
-\item{padj}{A vector, matrix containing the p-adjusted-value (optional). If 'padj' is missing, its p-adjusted-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY').}
+\item{padj}{A vector, matrix containing the adjust p-values (optional). If 'padj' is missing, its p-adjusted-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY').}
 
 \item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
 

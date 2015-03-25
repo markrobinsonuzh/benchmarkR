@@ -1,6 +1,6 @@
 Package: benchmarkR
 Title: benchmarkR.
-Version: 0.0-5
+Version: 0.0-6
 Date: 2015-03-19
 Depends:
 Imports: ROCR, gplots, methods

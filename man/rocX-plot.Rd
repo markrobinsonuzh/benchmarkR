@@ -12,7 +12,7 @@
 
 \arguments{
 
-\item{x}{An object of \code{link{rocX}}.}
+\item{x}{An object of \code{\link{rocX}}.}
 
 \item{y}{Not used.}
 

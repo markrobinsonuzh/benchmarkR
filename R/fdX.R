@@ -120,7 +120,7 @@ setMethod(
          xlim <- .preXlim(arglist, object)
          ylim <- .preYlim(arglist, object)
          argSpecial <- list(xlim=xlim, ylim=ylim,
-                            xlab="Top rank feature", 
+                            xlab="Top ranked features", 
                             ylab = "Number of false discoveries", 
                             colX = NULL, cexX = NULL, pchX = 3, 
                             lwdX = NULL,cex=2.5,lwd=3, add=add)

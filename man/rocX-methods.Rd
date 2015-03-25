@@ -18,11 +18,11 @@ rocX(object, pval, \ldots)
 
 \arguments{
 
-\item{object}{An object of \code{link{SimResults}}.}
+\item{object}{An object of \code{\link{SimResults}}.}
 
-\item{pval}{A vector, matrix containing the p-value.}
+\item{pval}{A vector or matrix containing p-values.}
 
-\item{padj}{A vector, matrix containing the p-adjusted-value (optional). If 'padj' is missing, its p-adjusted-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY'). For more details please see \code{\link{SimResults}}.}
+\item{padj}{A vector or matrix containing adjusted p-values (optional). If 'padj' is missing, its p-adjusted-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY'). For more details, see \code{\link{SimResults}}.}
 
 \item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
 
