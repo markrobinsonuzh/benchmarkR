@@ -15,7 +15,7 @@ powerFDR(object, padj, \ldots)
 }
 \arguments{
   \item{object}{An object of \code{\link{SimResults}}.}
-  \item{padj}{A vector, matrix containing the p-adjusted-value.}
+  \item{padj}{A vector or matrix containing the adjusted p-value.}
   \item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
   \item{threshold}{Numeric value of the p-value threshold (cutoff), or vector of multiple p-value threshold, used to determine the significance of tests.}
   \item{plot}{Logical, should power-fdr values be plotted.}

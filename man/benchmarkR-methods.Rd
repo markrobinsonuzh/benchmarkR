@@ -23,9 +23,9 @@ benchmarkR(object, pval, \ldots)
 
 \item{object}{An object of \code{\link{SimResults}}.}
 
-\item{pval}{A vector, matrix containing p-values.}
+\item{pval}{A vector or matrix containing p-values.}
 
-\item{padj}{A vector, matrix containing adjusted p-values (optional). If 'padj' is missing, its p-adjusted-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY'). For more details, see \code{\link{SimResults}}.}
+\item{padj}{A vector or matrix containing adjusted p-values (optional). If 'padj' is missing, its p-adjusted-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY'). For more details, see \code{\link{SimResults}}.}
 
 \item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
 
@@ -41,7 +41,7 @@ benchmarkR(object, pval, \ldots)
 \code{benchmarkR} produce a visualized benchmark result combining with three plots: \code{rocX} (topleft) \code{fdX} (bottomleft) and \code{powerFDR} (right).
 
 
-Most of the graphical parameters such as 'col', 'cex', 'pch' and etc from \code{\link{par}}, can be directly passed into 'plot' for all the subfigures. They can be set up as a vector (e.g., 'col=1') sharing the same value for all the subfigures, or a list (e.g, 'col=list(1,2,3)' for different value of different subfigure. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point (\code{rocX} and \code{fdX}). Their usage are similar with 'col', 'cex', 'pch'.
+Most of the graphical parameters such as 'col', 'cex', 'pch' and etc from \code{\link{par}}, can be directly passed into 'plot' for all the subfigures. They can be set up as a vector (e.g., 'col=1') sharing the same value for all the subfigures, or a list (e.g, 'col=list(1,2,3)' for different value of different subfigure. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point (\code{rocX} and \code{fdX}). Their usage is similar to 'col', 'cex', 'pch'.
 
 'name.panel' and 'cex.panel' are referring to the panel label but not title of each subfigure (e.g., name.panel=c("A", "B", "C"), cex.panel=2). The title of each subfigure can be done by 'main', such as 'main=list("roc curve", "false discovery plot", "power curve")'. The main title can be done by 'title' (e.g, 'title(main="benchmark result", outer=TRUE)'). For more details, see the examples below.  
 

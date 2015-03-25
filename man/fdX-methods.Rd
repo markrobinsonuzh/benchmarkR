@@ -22,7 +22,7 @@ fdX(object, pval, \ldots)
 
 \item{pval}{A vector or matrix containing p-values.}
 
-\item{padj}{A vector or matrix containing adjusted p-values (optional). If 'padj' is missing, its p-adjusted-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY'). For more details, see \code{\link{SimResults}}.}
+\item{padj}{A vector or matrix containing adjusted p-values (optional). If 'padj' is missing, its adjusted p-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY'). For more details, see \code{\link{SimResults}}.}
 
 
 \item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
@@ -40,7 +40,7 @@ fdX(object, pval, \ldots)
 
 \details{False discoveries are calculated according to the p-value rank (pval) and labels (from the object of \code{SimResults}). The X point displays the actual false discoveries number versus number of top ranked features given a threshold (e.g., FDR=0.05).
 
-Most of the graphical parameters such as 'col', 'cex', 'pch' and etc from \code{\link{par}}, can be directly passed into 'plot' for all the subfigures. They can be set up as a vector (e.g., 'col=1') sharing the same value for all the subfigures, or a list (e.g, 'col=list(1,2,3)' for different value of different subfigure. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point. Their usage are similar with 'col', 'cex', 'pch'. 
+Most of the graphical parameters such as 'col', 'cex', 'pch' and etc from \code{\link{par}}, can be directly passed into 'plot' for all the subfigures. They can be set up as a vector (e.g., 'col=1') sharing the same value for all the subfigures, or a list (e.g, 'col=list(1,2,3)' for different value of different subfigure. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point. Their usage is similar to 'col', 'cex', 'pch'. 
 
 To increase the flexibility of plots, you can use argument 'add'. If 'add=TRUE', plots are added to current one combining different \code{rocX} curves together into one figure. 
 

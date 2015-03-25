@@ -22,7 +22,7 @@ rocX(object, pval, \ldots)
 
 \item{pval}{A vector or matrix containing p-values.}
 
-\item{padj}{A vector or matrix containing adjusted p-values (optional). If 'padj' is missing, its p-adjusted-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY'). For more details, see \code{\link{SimResults}}.}
+\item{padj}{A vector or matrix containing adjusted p-values (optional). If 'padj' is missing, its adjusted p-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY'). For more details, see \code{\link{SimResults}}.}
 
 \item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
 
@@ -38,13 +38,13 @@ rocX(object, pval, \ldots)
 \item{\ldots}{Optional arguments from 'plot'. General graphical parameters from \code{\link{par}} such as 'col', 'cex' can be directly used into the figure. Logical parameter 'add', whether the new plot added to current one or not. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point on the figure. A list or NULL. 'legend' is used to add legends to plots (see details below). 'addFun' and 'addFunLocation' are special arguments for multiple-panel figure (see details below).}
 }
 
-\details{\code{rocX} will call \code{prediction} and \code{performance} from package \code{ROCR} by p-value (pval) and labels (from the object of \code{SimResults}). Additionally, the value (X point) of true positive rate (TPR) and false positve rate (PFR) corresponding to the threshold ('threholdX') will be calculated by p-adjusted-value (padj). The reason introduced \code{rocX} is that standard the ROC curve fails to show the information across different methods or methodology under the same condition. We want to present the information including precisely achieved TPR and FPR given a certain threshold across all the methods. 
+\details{\code{rocX} will call \code{prediction} and \code{performance} from package \code{ROCR} using p-value (pval) and labels (from the object of \code{SimResults}). Additionally, the value (X point) of true positive rate (TPR) and false positve rate (PFR) corresponding to the threshold ('threholdX') will be calculated according to the adjusted p-value (padj). We introduced \code{rocX} to augment information (e.g., show the power at a selected FDR cutoff) available in standard ROC curves.
 
 When 'stratify' is NULL, function \code{rocX} would produce a \code{rocX-class} object and corresponding to a simple plot. 
 
 When \code{stratify} is factor or numeric, it would produce a \code{rocXList}, which contains a series of collection of \code{rocX} splitted by different levels of \code{stratify} or range of data in \code{stratify} (by numGroups). For \code{rocXList}, multiple plots are made . During each iteration of plot, if you want to add some additional function, such as \code{abline}, you can use the argument 'addFun' and 'addFunLocation' providing a utility of adding a specified function into a specified location for a multi-panel figure (see example2 and example3). It is useful for plotting different subsets of data.     
 
-Most of the graphical parameters such as 'col', 'cex', 'pch' and etc from \code{\link{par}}, can be directly passed into 'plot' for all the subfigures. They can be set up as a vector (e.g., 'col=1') sharing the same value for all the subfigures, or a list (e.g, 'col=list(1,2,3)' for different value of different subfigure. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point. Their usage are similar with 'col', 'cex', 'pch'. 
+Most of the graphical parameters such as 'col', 'cex', 'pch' and etc from \code{\link{par}}, can be directly passed into 'plot' for all the subfigures. They can be set up as a vector (e.g., 'col=1') sharing the same value for all the subfigures, or a list (e.g, 'col=list(1,2,3)' for different value of different subfigure. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point. Their usage is similar to 'col', 'cex', 'pch'. 
 
 To increase the flexibility of plots, you can use argument 'add'. If 'add=TRUE', plots are added to current one combining different \code{rocX} curves together into one figure. 
 
