@@ -8,5 +8,6 @@ To install the package from github, please run the following code:
 
 <code>
 library(devtools)
+
 install_github("robinsonlabuzh/benchmarkR")
 </code>
