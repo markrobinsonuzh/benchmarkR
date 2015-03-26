@@ -187,10 +187,7 @@ highlight the construction of an \Robject{SimResults} object (see also \Rfunctio
  <<practica,message=TRUE>>=
 library(benchmarkR)
 data(Pickrell)
-pval <- do.call("cbind", Pickrell$pval)
-labels <- rep(0, nrow(pval))
-labels[Pickrell$indDE] <- 1
-re <- SimResults(pval=pval, labels=labels)
+re <- SimResults(pval=Pickrell$pval, labels=Pickrell$labels)
 re
 @
 \caption[a practical example -- \Robject{pval} is a matrix]{a practical example -- \Robject{pval} is a matrix} 
@@ -203,13 +200,8 @@ Following with the last example of section~\ref{sec:data}, a visualized benchmar
 \begin{example}[H]                 
 \centering
  <<benchmarkR, message=TRUE, fig.show=TRUE, fig.width=10, fig.height=6, dev="pdf">>=
-library(benchmarkR)
 data(Pickrell)
-pval <- do.call("cbind", Pickrell$pval)
-padj <- do.call("cbind", Pickrell$padj)
-labels <- rep(0, nrow(pval))
-labels[Pickrell$indDE] <- 1
-re <- SimResults(pval=pval, padj=padj, labels=labels)
+re <- SimResults(pval=Pickrell$pval, labels=Pickrell$labels)
 benchmarkR(re)
 @
 \caption[usage of \Rfunction{benchmarkR}]{usage of \Rfunction{benchmarkR} }
@@ -352,8 +344,8 @@ rocX(re,  transformation="-log10(x^5)")
  \begin{example}[H]                 
 \centering
  <<stratify, results="hide", fig.show=TRUE, fig.width=6, fig.height=6, dev="pdf">>=
-f <- as.factor(sample(0:3, nrow(pval), replace=TRUE))
-ref <- SimResults(pval=pval, padj=padj, labels=labels, stratify=f)
+f <- as.factor(sample(0:3, nrow(Pickrell$pval), replace=TRUE))
+ref <- SimResults(pval=Pickrell$pval, labels=Pickrell$labels,stratify=f)
 par(mfrow=c(2,2))
 par(mar=c(2,5,3,1),mgp = c(2.6, 1, 0))
 rocX(ref)
