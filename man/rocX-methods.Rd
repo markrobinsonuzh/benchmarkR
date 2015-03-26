@@ -52,7 +52,7 @@ To increase the flexibility of plots, you can use argument 'add'. If 'add=TRUE',
   
 }
 
-\value{An S4 object of class \code{\link{rocX-class}} or \code{\link{rocXList-class}}. 
+\value{Invisibly, an S4 object of class \code{\link{rocX-class}} or \code{\link{rocXList-class}}. 
 }
 
 \seealso{ \code{\link{SimResults}}, \code{\link{powerFDR}}

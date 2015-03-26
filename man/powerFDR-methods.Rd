@@ -38,7 +38,7 @@ To increase the flexibility of plots, you can use argument 'add'. If 'add=TRUE',
 
 
 \value{
-An S4 object of class \code{\link{powerFDR-class}} containing  the threshold value(s) assessed, and the associated false discovery rate(s), FDR, and true positive rates, TPR.}
+Invisibly, an S4 object of class \code{\link{powerFDR-class}} containing  the threshold value(s) assessed, and the associated false discovery rate(s), FDR, and true positive rates, TPR.}
 
 \seealso{ \code{\link{SimResults}}, \code{\link{rocX}}
 }

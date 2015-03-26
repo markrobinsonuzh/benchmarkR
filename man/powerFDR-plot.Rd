@@ -26,7 +26,7 @@
 \details{See the detials of \code{\link{powerFDR}}.   
 }
 
-\value{An S4 object of class \code{powerFDR-class}. 
+\value{Invisibly, an S4 object of class \code{powerFDR-class}. 
 }
 
 

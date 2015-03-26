@@ -46,7 +46,7 @@ To increase the flexibility of plots, you can use argument 'add'. If 'add=TRUE',
 
 'legend' is a list including all the argments from function \code{legend} (see help(legend)). If it is NULL, do not add legends to plots.}
 
-\value{An S4 object of class \code{\link{fdX-class}}.
+\value{Invisibly, an S4 object of class \code{\link{fdX-class}}.
 } 
 
 \seealso{ \code{\link{SimResults}}
@@ -62,6 +62,9 @@ fdX(pval=Pickrell$pval, labels=Pickrell$labels)
 
 # removing legends
 fdX(re, legend=NULL)
+
+# controlling legend location
+fdX(re, legend=list("topleft",cex=2))
 
 # combining multiple plots 
 fdX(re[,1], col=1, legend=NULL)

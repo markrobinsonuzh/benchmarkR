@@ -26,7 +26,7 @@
 \details{See the details of \code{\link{rocX}}.   
 }
 
-\value{An S4 object of class \code{\link{rocX}}. 
+\value{Invisibly, an S4 object of class \code{\link{rocX}}. 
 }
 
 

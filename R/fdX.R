@@ -77,7 +77,7 @@ setMethod(
             names(out@element) <- colnames(object@pval)
             if(plot)
                 plot(out, ...) 
-         out
+         invisible(out)
     } 
 )
 
@@ -123,24 +123,28 @@ setMethod(
                             xlab="Top ranked features", 
                             ylab = "Number of false discoveries", 
                             colX = NULL, cexX = NULL, pchX = 3, 
-                            lwdX = NULL,cex=2.5,lwd=3, add=add)
+                            lwdX = NULL,cex=2.5,lwd=3, lty=1,add=add)
          #argSpecial <- lapply(argSpecial, .repArgs, len=l)
          argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
          #argSpecial$add[-1L] <- TRUE
          argPlot <- append(arglist, argSpecial)
          argPlot <- .expandListArgs(argPlot, len=l)
-         argPlot$add[-1L] <- TRUE  
+         argPlot$add[-1L] <- TRUE
+         argPloti <- list()
          for (i in 1:l)
          {
-             argPloti <- lapply(argPlot, .getSub2, id = i)
-             argPloti <- .sarg(argPloti, object = object@element[[i]], col = col[i]) 
-             do.call(".fdXPlot", argPloti)
+             argPloti[[i]] <- lapply(argPlot, .getSub2, id = i)
+             argPloti[[i]] <- .sarg(argPloti[[i]], object = object@element[[i]], col = col[i])
+             do.call(".fdXPlot", argPloti[[i]])
 
          }
          nms <- names(object@element) 
          if(!is.null(legend) & !is.null(nms))
          {
-             preLegend <- list("bottomright", col=col, legend=nms, lty=argPloti$lty, pch=argPloti$pchX, lwd=argPloti$lwd)
+             pchX <- unlist(lapply(argPloti, .subset2,"pchX"))
+             lwd <- unlist(lapply(argPloti, .subset2,"lwd"))
+             lty <- unlist(lapply(argPloti, .subset2,"lty"))
+             preLegend <- list("bottomright", col=col, legend=nms, lty=lty, pch=pchX, lwd=lwd)
              legend <- .replaceLegend(preLegend, legend)
              do.call("legend", legend)
          } 

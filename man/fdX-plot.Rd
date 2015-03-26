@@ -25,7 +25,7 @@
 \details{See the detials of \code{\link{fdX}}.   
 }
 
-\value{An S4 object of class \code{\link{fdX}}. 
+\value{Invisibly, an S4 object of class \code{\link{fdX}}. 
 }
 
 

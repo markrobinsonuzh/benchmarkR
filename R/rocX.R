@@ -91,12 +91,12 @@ setMethod(
             names(out@element) <- colnames(object@pval)
             if(plot)
                 plot(out, ...) 
-         out
+         invisible(out)
     } 
 )
 
 setMethod(
-##Define .rocX for "SimResults"
+##Define .rocX for "factor"
 ##Xiaobei Zhou
 ##June 2014.  Last modified 26 June 2014.
     ".rocX",
@@ -119,14 +119,14 @@ setMethod(
         out <- rocXList(out)
         if(plot)
             plot(out, add=add, addFun=addFun, addFunLocation=addFunLocation, legend=legend, ...) 
-        out 
+        invisible(out) 
     } 
 )
 
 
 
 setMethod(
-##Define .rocX for "SimResults"
+##Define .rocX for "numeric"
 ##Xiaobei Zhou
 ##June 2014.  Last modified 26 June 2014.
     ".rocX",
@@ -138,7 +138,7 @@ setMethod(
         out <- rocX(object1, plot=FALSE, thresholdX=thresholdX, transformation = transformation)
         if(plot)
             plot(out, add=add, addFun=addFun, addFunLocation=addFunLocation, ...) 
-        out 
+        invisible(out) 
     } 
 )
 
@@ -163,24 +163,30 @@ setMethod(
          ylim <- .preYlim(arglist, object)
          argSpecial <- list(xlim = xlim, ylim = ylim, xlab="FPR", 
                            ylab="TPR", colX = NULL, cexX = NULL, 
-                           pchX = 3, lwdX = NULL, lwd=3, cex=2.5, add=add)
+                           pchX = 3, lwdX = NULL, lwd=3, cex=2.5, lty=1, add=add)
          #argSpecial <- lapply(argSpecial, .repArgs, len=l)
          argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
          #argSpecial$add[-1L] <- TRUE
          argPlot <- append(arglist, argSpecial)
          argPlot <- .expandListArgs(argPlot, len=l)
-         argPlot$add[-1L] <- TRUE  
+         argPlot$add[-1L] <- TRUE
+         argPloti <- list()
          for (i in 1:l)
          {
-             argPloti <- lapply(argPlot, .getSub2, id = i)
-             argPloti <- .sarg(argPloti, object = object@element[[i]], col = col[i]) 
-             do.call(".rocXPlot", argPloti)
+             argPloti[[i]] <- lapply(argPlot, .getSub2, id = i)
+             argPloti[[i]] <- .sarg(argPloti[[i]], object = object@element[[i]], col = col[i])
+             do.call(".rocXPlot", argPloti[[i]])
 
          }
+         
          nms <- names(object@element) 
          if(!is.null(legend) & !is.null(nms))
+         
          {
-             preLegend <- list("bottomright", col=col, legend=nms, lty=argPloti$lty, pch=argPloti$pchX, lwd=argPloti$lwd)
+             pchX <- unlist(lapply(argPloti, .subset2,"pchX"))
+             lwd <- unlist(lapply(argPloti, .subset2,"lwd"))
+             lty <- unlist(lapply(argPloti, .subset2,"lty"))
+             preLegend <- list("bottomright", col=col, legend=nms, lty=lty, pch=pchX, lwd=lwd)
              legend <- .replaceLegend(preLegend, legend)
              do.call("legend", legend)
          } 

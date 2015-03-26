@@ -89,7 +89,7 @@ setMethod(
             names(out@element) <- colnames(object@pval)
             if(plot)
                 plot(out, threshold=threshold, ...) 
-        out
+        invisible(out)
     } 
 )
 
@@ -144,7 +144,7 @@ setMethod(
 {
     arglist <- c(lapply( as.list(environment()), eval ), list(...) ) 
     point.type <- match.arg(point.type, c("b","p","l"))
-    bg <- arglist$col
+    bg <- rep(arglist$col,length.out=length(FDR))
     bg[FDR>threshold] <- "white" 
     arglistPlot <- .sarg(.slice.run(.getArgList("plot", arglist)), x=1, 
                     type="n", xaxt="n")
