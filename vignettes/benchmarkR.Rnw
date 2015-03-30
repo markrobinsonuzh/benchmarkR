@@ -188,7 +188,7 @@ each row should represent a feature.
 
 %---------------------------------------------------------
 \section{Present a benchmark}
-\subsection{benchmarkR: a visualized benchmark result}
+\subsection{\Robject{benchmarkR}: a visualized benchmark result}
 Following with the last example of Section \ref{sec:data}, a visualized benchmark result can be generated with: \\
 \begin{example}[H]                 
 \centering
@@ -227,7 +227,7 @@ An example is shown below: \\
 \begin{example}[H]                 
 \centering
  <<parameter, message=TRUE, fig.show=TRUE, fig.width=10, fig.height=6, dev="pdf">>=
-benchmarkR(re, lwd=list(1,2,3), cex=2)
+benchmarkR(re, lwd=list(3,1,3), cex=2)
 @
 \caption[graphical parameters in \Rfunction{benchmarkR}]{graphical parameters in \Rfunction{benchmarkR} }
 \label{parameter}
@@ -259,15 +259,15 @@ r <- rocX(re)
 
 \Rfunction{rocX} will call \Robject{prediction} and \Robject{performance} from the \Rpackage{ROCR} package using the P-value
 and labels from the \Robject{SimResults} object.  Additionally, the value of TPR and FPR corresponding to the threshold 
-X will be calculated from the adjust P-values.  We introduced \Rfunction{rocX} to augment the standard ROC curves in order to show 
-where on the curve a method is operating. \\
+X will be calculated from the adjust P-values.  We introduced \Rfunction{rocX} to augment the standard ROC curves in order to show where on the curve a method is operating. \\
 
 For convenience, an \Robject{rocX} object can be re-plotted by function \Rfunction{plot} allowing flexible resetting of graphical parameters from \Rfunction{par()}. \\
+
 There are several special graphical parameters (``cexX'', ``pchX'' and ``colX'') referring to setting of ``X'' point of \Robject{rocX}. You can simply change them as:\\
 
 \begin{example}[H]                 
 \centering
- <<replot-rocX, message=TRUE, fig.show=TRUE, fig.width=6, fig.height=12, dev="pdf">>=
+ <<replot-rocX, message=TRUE, fig.show=TRUE, fig.width=4.5, fig.height=9, dev="pdf">>=
 par(mfrow=c(2,1))
 plot(r, lwd=4, cex=4,col=1:3)
 plot(r, cexX=3,lwdX=3)
@@ -276,23 +276,20 @@ plot(r, cexX=3,lwdX=3)
 \label{replot-rocX}
 \end{example}  
 
-
-In the next examples, a variety of variations are show.
-
-You can remove ``X'', if you do not like it.\\
+In the next examples, additional variations are shown.  For example, you can remove ``X'', if it is not needed.\\
 
 \begin{example}[H]                 
 \centering
- <<X, results="hide", fig.show=TRUE, fig.width=9, fig.height=9, dev="pdf">>=
-par(mfrow=c(2,2))
+ <<X, results="hide", fig.show=TRUE, fig.width=9, fig.height=4.5, dev="pdf">>=
+par(mfrow=c(1,2))
 rocX(re, thresholdX=NULL)
-rocX(re, xlim=c(0,1))
+rocX(re, xlim=c(0,.5))
 @
 \caption[various examples of \Robject{rocX}]{various examples of \Robject{rocX}}
 \label{X}
 \end{example}   
 
-\Robject{rocX} allows any flexible transformation formula for input data, in order to have more resolution along the ROC curve.     
+In addition, \Robject{rocX} allows any flexible transformation formula for input data, in order to have more resolution along the ROC curve.     
 \vspace{1em}
 \begin{center}
     \begin{tabular}{ | l | }
@@ -325,7 +322,7 @@ results according to other features of the assay (e.g., gene expression strength
  
  \begin{example}[H]                 
 \centering
- <<stratify, results="hide", fig.show=TRUE, fig.width=6, fig.height=6, dev="pdf">>=
+ <<stratify, results="hide", fig.show=TRUE, fig.width=8, fig.height=8, dev="pdf">>=
 f <- as.factor(sample(0:3, nrow(Pickrell$pval), replace=TRUE))
 ref <- SimResults(pval=Pickrell$pval, labels=Pickrell$labels,stratify=f)
 par(mfrow=c(2,2))
@@ -402,7 +399,7 @@ A couple quick examples of \Rfunction{fdX} include:
 
 \begin{example}[H]                 
 \centering
-<<fdX, message=TRUE, fig.show=TRUE, fig.width=6, fig.height=6, dev="pdf">>=
+<<fdX, message=TRUE, fig.show=TRUE, fig.width=4.5, fig.height=9, dev="pdf">>=
 par(mfrow=c(2,1))
 f <- fdX(re)
 plot(f, lwd=2, col=1:3, pchX=9:11, cex=3, legend=list("topleft"))
@@ -413,7 +410,7 @@ plot(f, lwd=2, col=1:3, pchX=9:11, cex=3, legend=list("topleft"))
 
 The \Robject{fdX} function (and objects) use almost all the characteristics of the \Robject{rocX} function, including ``thresholdX'', ``transformation'', special graphical parameters (``cexX'', ``pchX'' and ``colX'')  and so on. A customized example is:\\
 
-\subsection{powerFDR: power (TPR) versus achieved FDR given a threshold}
+\subsection{\Robject{powerFDR}: power (TPR) versus achieved FDR given a threshold}
 
 \Rfunction{powerFDR} calculates and plots power (true positive rate) versus the {\em achieved} FDR using adjusted P-values and the known true positives (labels).  By default, it calculates TPR and achieved FDR at three cutoffs: 0.01, 0.05 and 0.10. \\
 
@@ -421,7 +418,7 @@ The constructor function \Rfunction{powerFDR} will produce an S4 object of \Robj
 
 \begin{example}[H]                 
 \centering 
- <<powerFDR, results="hide",message=TRUE, fig.show=TRUE, fig.width=6, fig.height=12, dev="pdf">>=
+<<powerFDR, results="hide",message=TRUE, fig.show=TRUE, fig.width=6, fig.height=12, dev="pdf">>=
 par(mfrow=c(2,1))
 p <- powerFDR(re)
 powerFDR(re, threshold=c(0.01,0.02,0.03,0.04,0.05), xlim=c(0,0.2))
@@ -466,8 +463,10 @@ powerFDR(padj=padj, labels=labels, threshold=c(0.05, 0.1, 0.5),
 # P-values from Method 2 with larger p-values
 padj <- runif(100, min=0.02)
 padj <- sort(padj)
-powerFDR(padj=padj, labels=labels, threshold=c(0.05, 0.1, 0.5), col=col, add=TRUE, pch=22)
-legend("bottomright", pch=c(21, 22), legend=c("Method 1", "Method 2"), pt.bg="black")
+powerFDR(padj=padj, labels=labels, threshold=c(0.05, 0.1, 0.5), 
+         col=col, add=TRUE, pch=22)
+legend("bottomright", pch=c(21, 22), 
+       legend=c("Method 1", "Method 2"), pt.bg="black")
 @          
 \caption[direct usage of \Robject{powerFDR} plot without \Robject{SimResults}]{direct usage of \Robject{powerFDR} plot without \Robject{SimResults}}
 \label{direct-powerFDR}
