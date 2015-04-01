@@ -4,7 +4,7 @@
 
 \title{Plot method for rocX}
 
-\description{Produce the ROC plot with threshold X (fdr) using the features of ROCR for \code{\link{rocX}} object.}
+\description{Produce a ROC plot augmented with X point for \code{\link{rocX}} object.}
 
 \usage{
 \S4method{plot}{rocX,ANY}(x, y, add=FALSE, legend=list(), \dots)

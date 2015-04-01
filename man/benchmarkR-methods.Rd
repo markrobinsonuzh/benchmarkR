@@ -25,25 +25,31 @@ benchmarkR(object, pval, \ldots)
 
 \item{pval}{A vector or matrix containing p-values.}
 
-\item{padj}{A vector or matrix containing adjusted p-values (optional). If 'padj' is missing, its p-adjusted-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY'). For more details, see \code{\link{SimResults}}.}
+\item{padj}{A vector or matrix containing adjusted p-values (optional). If \code{padj} is missing, its p-adjusted-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., \code{padjMethod=BH}). For more details, see \code{\link{SimResults}}.}
 
 \item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
 
 \item{name.panel}{A list containing the three sub-panel (label) names. Default is c("a", "b", "c").}
 
-\item{\ldots}{Optional arguments for plotting (see below for more details). General graphical parameters from \code{\link{par}} such as 'col', 'cex' can be used for all the subfigures. 'cexX', 'pchX', 'colX', 'pchX' are special parameters for the X point (\code{rocX} and \code{fdX}). 'lty.threshold' and 'point.type' are for \code{powerFDR}.}
-
+\item{\ldots}{Optional arguments for plotting (see below for more details).
+	\itemize{
+	 \item \code{col}, \code{cex} and other general graphical parameters from \code{\link{par}} can be directly used into the figure.
+	 \item\code{cexX}, \code{pchX}, \code{colX}, \code{pchX} are special parameters for the X point (\code{rocX} and \code{fdX}). 
+	 \item \code{lty.threshold}, \code{lwd.threshold}, \code{col.threshold} and \code{point.type} are for \code{powerFDR}.}
+}	 
+	 
+	 
 \item{cex.panel}{A numerical value giving the amount by plotting sub-panel text.}
 
 }
 
 \details{
-\code{benchmarkR} produce a visualized benchmark result combining with three plots: \code{rocX} (topleft) \code{fdX} (bottomleft) and \code{powerFDR} (right).
+\code{benchmarkR} produces a visualized benchmark result combining with three plots: \code{rocX} (topleft) \code{fdX} (bottomleft) and \code{powerFDR} (right).
 
 
-Most of the graphical parameters such as 'col', 'cex', 'pch' and etc from \code{\link{par}}, can be directly passed into 'plot' for all the subfigures. They can be set up as a vector (e.g., 'col=1') sharing the same value for all the subfigures, or a list (e.g, 'col=list(1,2,3)' for different value of different subfigure. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point (\code{rocX} and \code{fdX}). Their usage is similar to 'col', 'cex', 'pch'.
+Most of the graphical parameters such as \code{col}, \code{cex}, \code{pch} and etc from \code{\link{par}}, can be directly passed into \code{plot} for all the subfigures. They can be set up as a vector (e.g., \code{col=1}) sharing the same value for all the subfigures, or a list (e.g, \code{col=list(1,2,3)}) for different value of different subfigure. \code{cexX}, \code{pchX}, \code{colX}, \code{pchX} are special parameters of X point (\code{rocX} and \code{fdX}). Their usage is similar to \code{col}, \code{cex}, \code{pch}.
 
-'name.panel' and 'cex.panel' are referring to the panel label but not title of each subfigure (e.g., name.panel=c("A", "B", "C"), cex.panel=2). The title of each subfigure can be done by 'main', such as 'main=list("roc curve", "false discovery plot", "power curve")'. The main title can be done by 'title' (e.g, 'title(main="benchmark result", outer=TRUE)'). For more details, see the examples below.  
+\code{name.panel} and \code{cex.panel} are referring to the panel label but not title of each subfigure (e.g., \code{name.panel=c("A", "B", "C")}, \code{cex.panel=2}). The title of each subfigure can be done by \code{main}, such as \code{main=list("roc curve", "false discovery plot", "power curve")}. The main title can be done by \code{title} (e.g, \code{title(main="benchmark result", outer=TRUE)}). For more details, see the examples below.  
 
 }
 

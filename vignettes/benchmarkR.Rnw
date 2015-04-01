@@ -97,7 +97,7 @@ detailed information on how to use it across the different types of plots and fe
 
 
 \section{A quick start}
-In the simplest case, \Rpackage{benchmarkR} would start with a set of P-values and corresponding truth labels, as follows:\\ 
+In the simplest case, \Rpackage{benchmarkR} would start with a set of p-values and corresponding truth labels, as follows:\\ 
 \begin{example}[H]                 
 \centering
 <<quick, eval=FALSE>>=
@@ -113,8 +113,8 @@ benchmarkR(results)
 \Rpackage{benchmarkR} is an R package designed to evaluate and visualize classification performance for reference datasets.  Generally speaking, 
 the \Rpackage{benchmarkR} package can be divided into two major parts:\\
 \begin{enumerate}
-  \item \Robject{SimResults}:  a S4 class object to store the P-value, true labels and other necessary values for further analysis and evaluation.
-  \item \Rfunction{benchmarkR}: a method to produce a visualized benchmark result including a multi-panel plot of \Robject{rocX}, \Robject{fdX} and \Robject{powerFDR}.
+  \item \Robject{SimResults}:  a S4 class object to store the p-values, true labels and other necessary values for further analysis and evaluation.
+  \item \Rfunction{benchmarkR}: a method to produce a visualized benchmark result including a 3-panel plot of a ROC curve (\Robject{rocX}), a false discovery (FD) plot (\Robject{fdX}) and a true-positive-rate versus achieved false-discovery plot(\Robject{powerFDR}).
 \end{enumerate}
 Its whole structure is shown below:\\
   
@@ -147,9 +147,9 @@ The individual methods, \Robject{rocX}, \Robject{fdX}, \Robject{powerFDR}, can b
 To use the \Rpackage{benchmarkR} package, it is best to build a \Robject{SimResults} object, which is 
 just a container for the results. A \Robject{SimResults} object contains three basic input data: 
 \begin{itemize}
-  \item \Robject{pval}: a vector or matrix containing the P-values
-  \item \Robject{padj}: (optionally) a vector or matrix containing the adjusted P-values
-  \item \Robject{labels}:  a corresponding vector containing the true class labels (only containing '0' or '1' where '1' is positive and '0' is negative.)
+  \item \Robject{pval}: a vector or matrix containing p-values from a classifier or a test.
+  \item \Robject{padj}: a vector or matrix containing the adjust p-values (optional).
+  \item \Robject{labels}: a numeric vector indicating positive with a 1, and negative with a 0.
 \end{itemize}
 
 The function \Rfunction{SimResults} is just the constructor to build a \Robject{SimResults} object.  To give a practical example, 
@@ -169,7 +169,7 @@ re
 \end{example}
 
 
-In this case, \Robject{padj} is missing. Internally, P-values will be adjusted using a method of choice (default is Benjamini-Hochberg, adjMethod="BH", but others from \Rfunction{p.adjust} can be used). 
+In this case,  adjust p-values (\Robject{padj}) is missing. Internally, P-values will be adjusted using a method of choice (default is Benjamini-Hochberg, adjMethod="BH", but others from \Rfunction{p.adjust} can be used). 
 
 %You can also choose a different method for adjusting pvalue, such as:\\
 %\begin{example}[H]                 
@@ -183,7 +183,7 @@ In this case, \Robject{padj} is missing. Internally, P-values will be adjusted u
 %\end{example}
 
 Note that \Robject{pval} (and \Robject{padj}) can be vectors (for a single method) but also be matrices. 
-If matrices are used, each column should represent a score (P-value) a classification model and 
+If matrices are used, each column should represent a score (p-values) a classification model and 
 each row should represent a feature. 
 
 %---------------------------------------------------------
@@ -203,7 +203,7 @@ benchmarkR(re)
 
 The function \Rfunction{benchmarkR} will produce a multi-panel figure of three graphical metrics \Robject{rocX}, \Robject{fdX} and \Robject{powerFDR}. They are defined as:\\
 \begin{itemize}
-\item \Robject{rocX}:  a simple (partial) ROC curve with given threshold X (FDR, default=0.05)
+\item \Robject{rocX}: a simple (partial) ROC curve with given threshold X (FDR, default=0.05)
 \item \Robject{fdX}: false discovery number by number of selected outcome positive given a certain of threshold X (FDR, default=0.05)
 \item \Robject{powerFDR}: power (TPR) versus achieved FDR given a particular threshold (FDR, default=c(0.001,0.05,0.1))
 \end{itemize}
@@ -269,8 +269,8 @@ There are several special graphical parameters (``cexX'', ``pchX'' and ``colX'')
 \centering
  <<replot-rocX, message=TRUE, fig.show=TRUE, fig.width=4.5, fig.height=9, dev="pdf">>=
 par(mfrow=c(2,1))
-plot(r, lwd=4, cex=4,col=1:3)
-plot(r, cexX=3,lwdX=3)
+plot(r, lwd=4, cex=4, col=1:3)
+plot(r, cexX=3, lwdX=3)
 @
 \caption[re-plot of \Robject{rocX}, using special graphical parameters]{re-plot of \Robject{rocX}, using special graphical parameters}
 \label{replot-rocX}
@@ -323,10 +323,10 @@ results according to other features of the assay (e.g., gene expression strength
  \begin{example}[H]                 
 \centering
  <<stratify, results="hide", fig.show=TRUE, fig.width=8, fig.height=8, dev="pdf">>=
-f <- as.factor(sample(0:3, nrow(Pickrell$pval), replace=TRUE))
+f <- as.factor(sample(1:4, nrow(Pickrell$pval), replace=TRUE))
 ref <- SimResults(pval=Pickrell$pval, labels=Pickrell$labels,stratify=f)
 par(mfrow=c(2,2))
-par(mar=c(2,5,3,1),mgp = c(2.6, 1, 0))
+par(mar=c(2,5,3,1), mgp=c(2.6,1,0))
 rocX(ref)
 @
 \caption[``stratify'' factor  of \Robject{rocX}]{``stratify'' factor  of \Robject{rocX}}
@@ -349,9 +349,14 @@ collection of multiple \Robject{rocX} objects.
 \centering
 <<rocXList, results="hide",fig.show="hide", fig.width=6, fig.height=6, dev="pdf">>=
 par(mfrow=c(2,2), mar=c(2,5,3,1), mgp=c(2.6, 1, 0))
-res <- lapply(0:3, function(u) re[f==u,])
-rs <- lapply(res, rocX, plot=FALSE)
+rs <- res <- list()
+for(i in 1:4) 
+{
+     res[[i]] <- re[f==i,]
+     rs[[i]] <- rocX(res[[i]], plot=FALSE)
+}
 rl <- rocXList(rs)
+
 plot(rl)
 @
 \caption[multiple rocX curves(\Robject{rocXList})]{multiple rocX curves(\Robject{rocXList})}
@@ -366,13 +371,13 @@ into a specified location for a multi-panel figure.
 \centering
  <<add-fun, results="hide",fig.show=TRUE, fig.width=6, fig.height=6, dev="pdf">>=
 par(mfrow=c(2,2))
-par(mar=c(2,5,3,1),mgp = c(2.6, 1, 0))
+par(mar=c(2,5,3,1), mgp=c(2.6, 1, 0))
 f1 <- 'abline(0,1, col=2)' 
 loc1 <- c(1,0,1,0)
 f2 <- 'abline(0,1, col=3)'
 loca2 <- c(0,1,0,1)
 plot(rl, addFun=list(f1,f2), addFunLocation=list(loc1,loca2), 
-      main = list("a", "b", "c", "d"), lwd = 1:3, col=1:3)
+      main=list("a", "b", "c", "d"), lwd =1:3, col=1:3)
 @
 \caption[add function for multiple rocX curves(\Robject{rocXList})]{add function for multiple rocX curves(\Robject{rocXList})}
 \label{add-fun}
@@ -383,8 +388,8 @@ plot(rl, addFun=list(f1,f2), addFunLocation=list(loc1,loca2),
 \begin{example}[H]                 
 \centering
  <<add, results="hide",fig.show=TRUE, fig.width=6, fig.height=6, dev="pdf">>=
-plot(r1)
-plot(r2, lwd=2, add=TRUE)
+plot(rs[[1]])
+plot(rs[[2]], lwd=2, add=TRUE)
  @
 \caption[combining multiple \Robject{rocX} curves together]{combining multiple \Robject{rocX} curves together}
 \label{add}

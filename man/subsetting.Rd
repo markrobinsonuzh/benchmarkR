@@ -13,7 +13,7 @@ Extract a subset of a \code{\link{SimResults}}.}
 \item{i,j}{elements to extract. \code{i} subsets the tags or genes while \code{j} subsets the libraries.}
 }
 \details{
-'i,j' may take any values acceptable for the matrix components of an object of class \code{\link{SimResults}}.
+\code{i,j} may take any values acceptable for the matrix components of an object of class \code{\link{SimResults}}.
 
 }
 \value{

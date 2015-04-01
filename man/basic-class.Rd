@@ -8,10 +8,10 @@
 
 \description{
 All S4 class for storing results of object of \code{\link{SimResults}}. 
-'pval' is a matrix or NULL.
-'padj' is a matrix or NULL.
-'label' is numeric or NULL.
-'label' is a data.frame or NULL.
+\code{pval} is a matrix or NULL.
+\code{padj} is a matrix or NULL.
+\code{label} is numeric or NULL.
+\code{stratify} is a data.frame or NULL.
 }
 
 

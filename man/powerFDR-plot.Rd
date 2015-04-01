@@ -18,9 +18,9 @@
 
 \item{add}{logical. If 'TRUE', plots are added to current one.}
 
-\item{legend}{list or NULL. Add legends to plots. It is a 'list' including all the argments from function 'legend' (see help(legend)). If it is NULL, do not add legends to plots.}
+\item{legend}{list or NULL. Add legends to plots. It is a 'list' including all the argments from function \code{legend} (see help(legend)). If it is NULL, do not add legends to plots.}
 
-\item{\ldots}{Optional arguments from 'par()' 'cexX', 'pchX', 'colX', 'pchX', 'ltyX' and ''pointType'' are special parameters of threshold X for plot.}
+\item{\ldots}{Optional(see details on \code{\link{powerFDR}}).}
 }
 
 \details{See the detials of \code{\link{powerFDR}}.   

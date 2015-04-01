@@ -4,9 +4,9 @@
 \alias{fdX-methods}
 \alias{fdX,SimResults,missing-method}
 \alias{fdX,missing,ANY-method}
-\title{False discovery plot with threshold X}
+\title{False discovery plot augmented with X point}
 
-\description{Plot false discoveries versus the number of top rank feature with a cutoff when false discovery rate (FDR) are under certain control. }
+\description{Plot cumulative number of false discoveries versus top ranked features with an X point marking the location of the method's FDR (at a chosen level). }
 
 \usage{
 fdX(object, pval, \ldots)
@@ -22,29 +22,35 @@ fdX(object, pval, \ldots)
 
 \item{pval}{A vector or matrix containing p-values.}
 
-\item{padj}{A vector or matrix containing adjusted p-values (optional). If 'padj' is missing, its adjusted p-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY'). For more details, see \code{\link{SimResults}}.}
+\item{padj}{A vector or matrix containing adjusted p-values (optional). If \code{padj} is missing, its adjusted p-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., \code{padjMethod=BH}). For more details, see \code{\link{SimResults}}.}
 
 
 \item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
 
 \item{thresholdX}{Numeric value of the p-value threshold (cutoff). (e.g., FDR = 0.05).}
 
-\item{transformation}{The transformation of 'pval' and 'padj'. The default setting "1-x" means "1-pval(padj, thresholdX)". Note that another useful transformation is "-log10(x)".} 
+\item{transformation}{The transformation of \code{pval} and \code{padj}. The default setting "1-x" means \code{1-pval(padj)}. Note that another useful transformation is "-log10(x)".} 
  
 
 \item{plot}{Logical, whether plot or not.}
 
-\item{\ldots}{Optional arguments from 'plot'. General graphical parameters from \code{\link{par}} such as 'col', 'cex' can be directly used into the figure. Logical parameter 'add', whether the new plot added to current one or not. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point on the figure. A list or NULL. 'legend' is used to add legends to plots (see details below). 'addFun' and 'addFunLocation' are special arguments for multiple-panel figure (see details below).}
+\item{\ldots}{Optional arguments for plotting (see below for more details). 
+	\itemize{
+	    \item \code{col}, \code{cex} and other general graphical parameters from \code{\link{par}} can be directly used into the figure.	
+	    \item \code{add}, logical, whether the new plot added to current one or not.  
+	    \item \code{cexX}, \code{pchX}, \code{colX}, \code{pchX} are special parameters of X point on the figure. 
+            \item \code{legend}, a list or NULL, is used to add legends to plots (see details below). }
+}    
 
 }
 
 \details{False discoveries are calculated according to the p-value rank (pval) and labels (from the object of \code{SimResults}). The X point displays the actual false discoveries number versus number of top ranked features given a threshold (e.g., FDR=0.05).
 
-Most of the graphical parameters such as 'col', 'cex', 'pch' and etc from \code{\link{par}}, can be directly passed into 'plot' for all the subfigures. They can be set up as a vector (e.g., 'col=1') sharing the same value for all the subfigures, or a list (e.g, 'col=list(1,2,3)' for different value of different subfigure. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point. Their usage is similar to 'col', 'cex', 'pch'. 
+Most of the graphical parameters such as \code{col}, \code{cex}, \code{pch} and etc from \code{\link{par}}, can be directly passed into \code{plot} for all the subfigures. They can be set up as a vector (e.g., 'col=1') sharing the same value for all the subfigures, or a list (e.g, 'col=list(1,2,3)' for different value of different subfigure. \code{cexX}, \code{pchX}, \code{colX}, \code{pchX} are special parameters of X point. Their usage is similar to \code{col}, \code{cex}, \code{pch}. 
 
-To increase the flexibility of plots, you can use argument 'add'. If 'add=TRUE', plots are added to current one combining different \code{rocX} curves together into one figure. 
+To increase the flexibility of plots, you can use argument \code{add}. If \code{add=TRUE}, plots are added to current one combining different \code{rocX} curves together into one figure. 
 
-'legend' is a list including all the argments from function \code{legend} (see help(legend)). If it is NULL, do not add legends to plots.}
+'legend' is a list including all the arguments from function \code{legend} (see help(legend)). If it is NULL, do not add legends to plots.}
 
 \value{Invisibly, an S4 object of class \code{\link{fdX-class}}.
 } 

@@ -4,7 +4,7 @@
 \title{rocXList - class}
 
 \description{
-The object of 'rocXList' class is a container for storing a collection of 'rocX' objects.
+The object of \code{rocXList} class is a container for storing a collection of \code{rocX} objects.
 
 }
 

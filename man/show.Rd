@@ -18,7 +18,7 @@
 
 The \code{show} method of SimResults is directly used function \code{printHead} from "limma". It print only the leading elements or rows of components or slots which contain large quantities of data.
 
-The \code{show} method of rocX is defined to use function \code{\link{str}} to 'summary' the features of data. 
+The \code{show} method of rocX is defined to use function \code{\link{str}} to \code{summary} the features of data. 
 
 }
 

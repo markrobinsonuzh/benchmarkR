@@ -4,7 +4,7 @@
 
 \title{Plot method for rocXList}
 
-\description{Produce a series of ROC plots with threshold X (fdr) using the features of ROCR for 'rocXList' object.}
+\description{Produce a series of ROC plots augmented with point for \code{rocXList} object.}
 
 \usage{
 \S4method{plot}{rocXList,ANY}(x, y, add=FALSE, addFun=NULL, addFunLocation=NULL, legend=list(), \dots)
@@ -20,7 +20,7 @@
 
 \item{addFun}{Additional function for each iteration plot.}
 
-\item{addFunLocation}{Location of 'addFun'. '1' means add and '0' means skip 'addFun' on each iteration.}
+\item{addFunLocation}{Location of \code{addFun}. '1' means add and '0' means skip \code{addFun} on each iteration.}
 
 \item{legend}{A list or NULL. Add legends to plots.}
 

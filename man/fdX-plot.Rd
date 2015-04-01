@@ -19,7 +19,8 @@
 \item{add}{Logical. If 'TRUE', plots are added to current one.}
 
 \item{legend}{A list or NULL. Add legends to plots. }
-\item{\dots}{Optional.}
+
+\item{\ldots}{Optional(see details on \code{\link{powerFDR}}).}
 }
 
 \details{See the detials of \code{\link{fdX}}.   

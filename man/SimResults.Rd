@@ -16,13 +16,13 @@ SimResults(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NULL, padjMetho
 
 \item{pval}{A vector or matrix containing p-values from a classifier or a test.}
 
-\item{padj}{A vector or matrix containing the adjust p-values (optional). If 'padj' is missing, its adjusted p-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY').}
+\item{padj}{A vector or matrix containing the adjust p-values (optional). If \code{padj} is missing, its adjusted p-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or by default (e.g., \code{padjMethod="BH"}).}
 
 \item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
 
 \item{stratify}{A stratify factor driving data (optional).}
 
-\item{padjMethod}{The method to use for adjusting p-value, if 'padj' is NULL. \code{padjMethod} are available from c("holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none")}
+\item{padjMethod}{The method to use for adjusting p-value, if \code{padj} is NULL. \code{padjMethod} are available from c("holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"). For more details, see \code{help("p.adjust")}}
 
 \item{\ldots}{\ldots}
 

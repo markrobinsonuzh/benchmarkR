@@ -4,9 +4,9 @@
 \alias{rocX-methods}
 \alias{rocX,SimResults,missing-method}
 \alias{rocX,missing,ANY-method}
-\title{ROC curve with threshold X}
+\title{ROC curve augmented with X point}
 
-\description{Produce a simple ROC plot with a cutoff when false discovery rate (FDR) are under certain control using the features of ROCR}
+\description{Produce a ROC plot with an X point marking the location of the method's FDR (at a chosen level). }
 
 \usage{
 rocX(object, pval, \ldots)
@@ -22,7 +22,7 @@ rocX(object, pval, \ldots)
 
 \item{pval}{A vector or matrix containing p-values.}
 
-\item{padj}{A vector or matrix containing adjusted p-values (optional). If 'padj' is missing, its adjusted p-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., 'padjMethod=BY'). For more details, see \code{\link{SimResults}}.}
+\item{padj}{A vector or matrix containing adjusted p-values (optional). If \code{padj} is missing, its adjusted p-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., \code{padjMethod=BY}). For more details, see \code{\link{SimResults}}.}
 
 \item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
 
@@ -30,25 +30,32 @@ rocX(object, pval, \ldots)
 
 \item{thresholdX}{Numeric value of the p-value threshold (cutoff).(e.g, FDR=0.05)}
 
-\item{transformation}{The transformation of 'pval' and 'padj'. The default setting "1-x" means "1-pval(padj, thresholdX)". Note that another useful transformation is "-log10(x)".} 
+\item{transformation}{The transformation of \code{pval} and \code{padj}. The default setting "1-x" means \code{1-pval(padj)}. Note that another useful transformation is "-log10(x)".} 
  
 
 \item{plot}{Logical, whether plot or not.}
 
-\item{\ldots}{Optional arguments from 'plot'. General graphical parameters from \code{\link{par}} such as 'col', 'cex' can be directly used into the figure. Logical parameter 'add', whether the new plot added to current one or not. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point on the figure. A list or NULL. 'legend' is used to add legends to plots (see details below). 'addFun' and 'addFunLocation' are special arguments for multiple-panel figure (see details below).}
+\item{\ldots}{Optional arguments for plotting (see below for more details). 
+	\itemize{
+	    \item \code{col}, \code{cex} and other general graphical parameters from \code{\link{par}} can be directly used into the figure.	
+	    \item \code{add}, logical, whether the new plot added to current one or not.  
+	    \item \code{cexX}, \code{pchX}, \code{colX}, \code{pchX} are special parameters of X point on the figure (see details below). 
+        \item \code{legend}, a list or NULL, is used to add legends to plots (see details below). 
+        \item \code{addFun} and \code{addFunLocation} are special arguments for multiple-panel figure (see details below).}
+}        
 }
 
-\details{\code{rocX} will call \code{prediction} and \code{performance} from package \code{ROCR} using p-value (pval) and labels (from the object of \code{SimResults}). Additionally, the value (X point) of true positive rate (TPR) and false positve rate (PFR) corresponding to the threshold ('threholdX') will be calculated according to the adjusted p-value (padj). We introduced \code{rocX} to augment information (e.g., show the power at a selected FDR cutoff) available in standard ROC curves.
+\details{\code{rocX} will call \code{prediction} and \code{performance} from package \code{ROCR} using p-value (pval) and labels (from the object of \code{SimResults}). Additionally, the X point showing true positive rate (TPR) versus false positve rate (PFR) corresponding to the threshold ('threholdX') will be calculated according to the adjusted p-value (padj). We introduced \code{rocX} to augment information (e.g., show the power at a selected FDR cutoff) available in standard ROC curves.
 
-When 'stratify' is NULL, function \code{rocX} would produce a \code{rocX-class} object and corresponding to a simple plot. 
+When \code{stratify} is NULL, function \code{rocX} would produce a \code{rocX-class} object and corresponding to a simple plot. 
 
 When \code{stratify} is factor or numeric, it would produce a \code{rocXList}, which contains a series of collection of \code{rocX} splitted by different levels of \code{stratify} or range of data in \code{stratify} (by numGroups). For \code{rocXList}, multiple plots are made . During each iteration of plot, if you want to add some additional function, such as \code{abline}, you can use the argument 'addFun' and 'addFunLocation' providing a utility of adding a specified function into a specified location for a multi-panel figure (see example2 and example3). It is useful for plotting different subsets of data.     
 
-Most of the graphical parameters such as 'col', 'cex', 'pch' and etc from \code{\link{par}}, can be directly passed into 'plot' for all the subfigures. They can be set up as a vector (e.g., 'col=1') sharing the same value for all the subfigures, or a list (e.g, 'col=list(1,2,3)' for different value of different subfigure. 'cexX', 'pchX', 'colX', 'pchX' are special parameters of X point. Their usage is similar to 'col', 'cex', 'pch'. 
+Most of the graphical parameters such as \code{col}, \code{cex}, \code{pch} and etc from \code{\link{par}}, can be directly passed into \code{plot} for all the subfigures. They can be set up as a vector (e.g., \code{col=1}) sharing the same value for all the subfigures, or a list (e.g, \code{col=list(1,2,3)} for different value of different subfigure. \code{cexX}, \code{pchX}, \code{colX}, \code{pchX} are special parameters of X point. Their usage is similar to \code{col}, \code{cex}, \code{pch}. 
 
 To increase the flexibility of plots, you can use argument 'add'. If 'add=TRUE', plots are added to current one combining different \code{rocX} curves together into one figure. 
 
-'legend' is a list including all the argments from function \code{legend} (see help(legend)). If it is NULL, do not add legends to plots. For a multiple-panel figure containing several \code{rocX} curves, 'location' can be used to determine whether to add legends on specific location (e.g., legend=list(location=c(1,0,0,0))).  
+\code{legend} is a list including all the argments from function \code{legend} (see help(legend)). If it is NULL, do not add legends to plots. For a multiple-panel figure containing several \code{rocX} curves, \code{location} can be used to determine whether to add legends on specific location (e.g., legend=list(location=c(1,0,0,0))).  
   
 }
 
@@ -119,15 +126,14 @@ roc5 <- rocX(ren, plot=TRUE, numGroups=3)
 
 ## example4
 # combining multiple plots
-res1 <- re[1:1000,] 
-res2 <- re[1001:2000,]
-res3 <- re[2001:3000,] 
-res4 <- re[3001:4000,] 
-r1 <- rocX(res1, plot=FALSE)
-r2 <- rocX(res2, plot=FALSE)
-r3 <- rocX(res3, plot=FALSE)
-r4 <- rocX(res4, plot=FALSE) 
-roc6 <- rocXList(r1=r1, r2=r2, r3=r3, r4=r4)
+rl <- list()
+s <- seq(0,4000,by=1000)
+for(i in 1:4)
+{
+    rei <- re[(1+s[i]):s[i+1],]
+    rl[[i]] <- rocX(rei, plot=FALSE)
+}     
+roc6 <- rocXList(rl)
 par(mfrow=c(2,2))
 plot(roc6, lwd=list(1,2,3,4))
 

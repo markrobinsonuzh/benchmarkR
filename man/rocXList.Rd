@@ -16,7 +16,7 @@ rocXList(\ldots)
 
 \arguments{
 
-\item{\ldots}{each element of 'rocX' object}
+\item{\ldots}{each element of \code{link{rocX}} object}
 
 }
 

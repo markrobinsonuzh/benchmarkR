@@ -7,7 +7,7 @@
 
 \title{Class \code{\link{SimResults}} }
 
-\description{An S4 Object class \code{\link{SimResults}}  to store the p-value, labels and other necessary values for further analysis and evaluation.
+\description{An S4 Object class \code{\link{SimResults}}  to store the p-values, labels and other necessary values for further analysis and evaluation.
 }
 
 
