@@ -62,17 +62,9 @@ plot(p, cex=2, pch=c(23,25), col=1:3, main="powerFDR plot",
      lwd.line=2, cex.axis=1.5, col.threshold=4, lwd.threshold=2)
 
 # example2
-col <- c("red", "blue", "green")
-# P-values from Method 1
-padj <- runif(100)
-padj <- sort(padj)
-labels <- numeric(100)
-labels[1:10] <- 1
-powerFDR(padj=padj, labels=labels, threshold=c(0.05, 0.1, 0.5), col=col, plot=TRUE, xlim=c(0,1))
-# P-values from Method 2 with larger p-values
-padj <- runif(100, min=0.02)
-padj <- sort(padj)
-powerFDR(padj=padj, labels=labels, threshold=c(0.05, 0.1, 0.5), col=col, add=TRUE, pch=22)
-legend("bottomright", pch=c(21, 22), legend=c("Method 1", "Method 2"), pt.bg="black")
+data(calibration)
+padj <- calibration$padj
+labels <- calibration$labels
+powerFDR(padj=padj, labels=labels, xlim=c(0,.3))
 }
 \keyword{powerFDR, SimResults}
