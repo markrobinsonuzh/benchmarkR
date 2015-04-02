@@ -22,12 +22,12 @@ fdX(object, pval, \ldots)
 
 \item{pval}{A vector or matrix containing p-values.}
 
-\item{padj}{A vector or matrix containing adjusted p-values (optional). If \code{padj} is missing, its adjusted p-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or a certain defined adjust method (e.g., \code{padjMethod=BH}). For more details, see \code{\link{SimResults}}.}
+\item{padj}{A vector or matrix containing adjusted p-values (optional). If \code{padj} is missing, adjusted p-values are calculated using \code{p.adjust(..,method=padjMethod)}.  By default, \code{padjMethod="BH"}). For more details, see \code{\link{SimResults}} or \code{help("p.adjust")}.}
 
 
-\item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
+\item{labels}{A numeric vector indicating class labels (positives with 1, negatives with 0).  For more details, see \code{?ROCR::prediction}.}
 
-\item{thresholdX}{Numeric value of the p-value threshold (cutoff). (e.g., FDR = 0.05).}
+\item{thresholdX}{Numeric value of the adjusted p-value threshold (cutoff). (e.g., FDR = 0.05).}
 
 \item{transformation}{The transformation of \code{pval} and \code{padj}. The default setting "1-x" means \code{1-pval(padj)}. Note that another useful transformation is "-log10(x)".} 
  
@@ -38,7 +38,7 @@ fdX(object, pval, \ldots)
 	\itemize{
 	    \item \code{col}, \code{cex} and other general graphical parameters from \code{\link{par}} can be directly used into the figure.	
 	    \item \code{add}, logical, whether the new plot added to current one or not.  
-	    \item \code{cexX}, \code{pchX}, \code{colX}, \code{pchX} are special parameters of X point on the figure. 
+	    \item \code{cexX}, \code{pchX}, \code{colX}, \code{pchX} are special parameters to control the plotting of the X point on the figure. 
             \item \code{legend}, a list or NULL, is used to add legends to plots (see details below). }
 }    
 

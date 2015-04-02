@@ -23,7 +23,7 @@
 
 \item{padj}{A matrix containing the adjusted p-values.}
 
-\item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
+\item{labels}{A numeric vector indicating class labels (positives with 1, negatives with 0).  For more details, see \code{?ROCR::prediction}.}
 
 \item{stratify}{A stratify factor driving data (optional).}
 

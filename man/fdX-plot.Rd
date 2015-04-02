@@ -4,7 +4,7 @@
 
 \title{Plot method for fdX}
 
-\description{Plot false discoveries versus the number of selected positive value of object \code{\link{SimResults}} with a threshold.}
+\description{Plot the cumulative number of false discoveries versus the number of selected features (using \code{\link{SimResults}} object) with a threshold.}
 
 \usage{
 \S4method{plot}{fdX,ANY}(x, y, add=FALSE, legend=list(), \dots)

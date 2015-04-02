@@ -16,9 +16,9 @@ SimResults(pval=NULL, padj=NULL, labels=new("numeric"), stratify=NULL, padjMetho
 
 \item{pval}{A vector or matrix containing p-values from a classifier or a test.}
 
-\item{padj}{A vector or matrix containing the adjust p-values (optional). If \code{padj} is missing, its adjusted p-value would be defaultly calculated by  Benjamini & Hochberg (BH) method or by default (e.g., \code{padjMethod="BH"}).}
+\item{padj}{A vector or matrix containing adjusted p-values (optional). If \code{padj} is missing, adjusted p-values are calculated using \code{p.adjust(..,method=padjMethod)}.  By default, \code{padjMethod="BH"}). For more details, see \code{\link{SimResults}} or \code{help("p.adjust")}.}
 
-\item{labels}{A numeric vector indicating positive with a 1, and negative with a 0.}
+\item{labels}{A numeric vector indicating class labels (positives with 1, negatives with 0).  For more details, see \code{?ROCR::prediction}.}
 
 \item{stratify}{A stratify factor driving data (optional).}
 

@@ -6,9 +6,9 @@
 \alias{labelAB}
 
 
-\title{DE analysis results of difference between cell lines A and B in Association of Biomolecular Resource Facilities (ABRF) Studies to test \code{rocX}, \code{fdX} and other functions}
+\title{DE analysis results of expression differences between cell lines A and B in Association of Biomolecular Resource Facilities (ABRF) Studies to test \code{rocX}, \code{fdX} and other functions}
 \description{
-    DE analysis results contain "edgeR", "limma-voom" and "DESeq2". The truth labels are based on Taqman PCR data. The procedure can be found on "script/ABRF.R"
+    DE analysis results contain "edgeR", "limma-voom" and "DESeq2". The truth labels are based on Taqman PCR data. The details can be found in "script/ABRF.R"
 }
 \usage{data(ABRF)
 }
