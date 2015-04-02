@@ -71,7 +71,7 @@ the set of standard plots that many methodologists already look at, with some ad
 To do this, we in fact make use of the excellent codebase available in the \Rpackage{ROCR} package for
 performance assessment.
 
-The typical usage of the \Rpackage{benchmarkR} package would involve p-values, in order to do a calibration assessment.  More generally, the package will happily take ``scores''.  An example of this is given in \fixme{PUT SECTION HERE.}.
+The typical usage of the \Rpackage{benchmarkR} package would involve p-values, in order to do a calibration assessment.  More generally, the package will happily take ``scores'', but in this case, no calibration assessment can be done.
 
 
 This guide provides an overview of the \Rpackage{benchmarkR} package and
