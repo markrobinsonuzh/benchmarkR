@@ -53,7 +53,7 @@ library("benchmarkR")
 % /Bioconductor \cite{Gentleman2004}
 
 \Rpackage{benchmarkR} is an R package designed with a simple purpose: to calculate, evaluate and
-visualize the performance of \fixme{explain classification method}, such as those common in statistical genomics.
+visualize the performance of a classification method (e.g., a statistical method that returns p-values), such as those common in statistical genomics.
 For example, much of our research has been related to methods to find differentially expressed genes,
 differential splicing, differential methylation and so on.  In principle, \Rpackage{benchmarkR} can
 be used for any similar situation, for example, where statistical tests are conducted
@@ -66,12 +66,13 @@ Researchers already look at the performance of methods through simulations using
 precision-recall plots, false detection plots and the like -- so, what does \Rpackage{benchmarkR} offer?
 In these plots, we are often interested to know at the same time whether methods are
 ``calibrated'', that is, do the methods actually achieve the false discovery control that the cutoffs 
-used would suggest.  The main idea behind the \Rpackage{benchmarkR} package is to simply augment the
-the set of standard plots that many methodologists already look at, with this additional calibration information.  
+used would suggest?  The main idea behind the \Rpackage{benchmarkR} package is to simply augment the
+the set of standard plots that many methodologists already look at, with some additional calibration information.  
 To do this, we in fact make use of the excellent codebase available in the \Rpackage{ROCR} package for
 performance assessment.
 
-\fixme{mention score}
+The typical usage of the \Rpackage{benchmarkR} package would involve p-values, in order to do a calibration assessment.  More generally, the package will happily take ``scores''.  An example of this is given in \fixme{PUT SECTION HERE.}.
+
 
 This guide provides an overview of the \Rpackage{benchmarkR} package and
 detailed information on how to use it across the different types of plots and features to customize the visualizations.
@@ -114,7 +115,7 @@ These abbreviations are used through the whole user guide:
       \tabitem FPR: false positive rate\\
       \tabitem FDR: false discovery rate\\  
       \tabitem FD: false discovery \\
-      \tabitem BH: Benjamini \& Hochbergi \cite{Benjamini1995}\\       
+      \tabitem BH: Benjamini \& Hochberg \cite{Benjamini1995}\\       
       \hline 
 \end{tabular}
 \end{center}
@@ -124,13 +125,17 @@ These abbreviations are used through the whole user guide:
 
 
 \section{A quick start}
-In the simplest case, \Rpackage{benchmarkR} would start with a set of p-values and corresponding truth labels, as follows:\\ 
+In the simplest case, \Rpackage{benchmarkR} would start with a set of p-values and corresponding truth labels and a call will be made to one of the plotting functions, as follows:\\ 
 \begin{example}[H]                 
 \centering
 <<quick, eval=FALSE>>=
 library(benchmarkR)
-results <- SimResults(pval,labels)
-benchmarkR(results)
+re <- SimResults(pval,labels)
+benchmarkR(re)
+
+rocX(re)
+fdX(re)
+powerFDR(re)
 @
 \caption[A quick start]{A quick start} 
 \label{quick}
@@ -190,11 +195,11 @@ More details of these can be found at Section \ref{sec:powerFDR}, \ref{sec:rocX}
 \label{sec:data}
 
 To use the \Rpackage{benchmarkR} package, it is best to build a \Robject{SimResults} object, which is 
-just a container for the results. A \Robject{SimResults} object contains three basic input data: 
+just a container for the results. A \Robject{SimResults} object contains three basic inputs: 
 \begin{itemize}
   \item \Robject{pval}: a vector or matrix containing p-values from a classifier or a test.
-  \item \Robject{padj}: a vector or matrix containing the adjust p-values (optional).
-  \item \Robject{labels}: a numeric vector indicating positive with a 1, and negative with a 0.
+  \item \Robject{padj}: a vector or matrix containing the adjusted p-values (optional).
+  \item \Robject{labels}: a numeric vector indicating class labels (positives with 1, negatives with 0).  For more details, see \Rfunction{?ROCR::prediction}. 
 \end{itemize}
 
 The function \Rfunction{SimResults} is just the constructor to build a \Rclass{SimResults} object.  To give a practical example, 
@@ -214,7 +219,7 @@ re
 \end{example}
 
 
-In this case,  adjust p-values (\Robject{padj}) is missing. Internally, p-values will be adjusted using a method of choice (default is Benjamini-Hochberg \cite{Benjamini1995}, \Robject{padjMethod="BH"}, but others from \Rfunction{p.adjust} can be used). 
+In this example,  adjusted p-values (\Robject{padj}) are missing.  In this case, p-values will be adjusted using the chosen method (default is Benjamini-Hochberg \cite{Benjamini1995}, \Robject{padjMethod="BH"}, but others from \Rfunction{p.adjust} can be used). 
 
 %You can also choose a different method for adjusting pvalue, such as:\\
 %\begin{example}[H]                 
@@ -227,8 +232,8 @@ In this case,  adjust p-values (\Robject{padj}) is missing. Internally, p-values
 %\label{padjMethod}
 %\end{example}
 
-Note that \Robject{pval} (and \Robject{padj}) can be a vector or matrix (for a single method or multiple methods). 
-If a matrice is used, each column should represent a score (p-value) a classification method and 
+Note that \Robject{pval} (and \Robject{padj}) can be a vector or matrix (for a single method or multiple methods, respectively). 
+If a matrix is used, each column should represent a score (p-value) for a classification method and 
 each row should represent a feature. 
 
 %---------------------------------------------------------
@@ -246,7 +251,7 @@ benchmarkR(re)
 \label{benchmarkR}
 \end{example}
 
-\Rfunction{benchmarkR} will  produce a set of performance assessment plots for benchmarking.  A 3-panel plot is created with: an ROC curve (\Rfunction{rocX}), a false discovery (FD) plot (\Rfunction{fdX}) and a true-positive-rate versus achieved false-discovery plot (\Rfunction{powerFDR}).  All plots show the augmented calibration information.
+\Rfunction{benchmarkR} will  produce a set of performance assessment plots for benchmarking.  A 3-panel plot is created with: an ROC curve (\Rfunction{rocX}), a false discovery (FD) plot (\Rfunction{fdX}) and a true-positive-rate versus achieved false-discovery plot (\Rfunction{powerFDR}).  All plots are augmented with calibration information of some form.  The \Rfunction{rocX} and \Rfunction{fdX} highlight a point on the curve for the chosen threshold (default: the method's FDR=5\%) while \Rfunction{powerFDR} shows the power versus the achieved FDR of a method.
 
 \Rfunction{benchmarkR} provides many graphical parameters allowing flexible adjustment of each sub-panel. The graphical parameters of \Rfunction{par()} can directly work in \Rfunction{benchmarkR}, but follows one common rule:\\
 \vspace{1em}
@@ -278,7 +283,7 @@ plugged in \Rfunction{benchmarkR} function as a graphical parameter that can be 
 \begin{example}[H]                 
 \centering
  <<legend, message=TRUE, fig.show=TRUE, fig.width=10, fig.height=6, dev="pdf">>=
-benchmarkR(re, legend=list(NULL,"topleft","bottomright"))
+benchmarkR(re, legend=list(NULL,"topleft","topright"))
 @
 \caption[Set up `legend' in \Rfunction{benchmarkR}]{Set up `legend' in \Rfunction{benchmarkR} }
 \label{legend}
@@ -289,7 +294,7 @@ benchmarkR(re, legend=list(NULL,"topleft","bottomright"))
 
 \Rfunction{powerFDR} calculates and plots power (true positive rate) versus the {\em achieved} FDR using adjusted P-values and the known true positives (labels).  By default, it calculates TPR and achieved FDR at three cutoffs: 0.01, 0.05 and 0.10. \\
 
-The constructor function \Rfunction{powerFDR} will produce an S4 object of \Rclass{powerFDR}. A typical usage for an object of \Rclass{SimResults} is:\\
+The constructor function \Rfunction{powerFDR} will invisibly return an S4 object of \Rclass{powerFDR}. A typical usage for an object of \Rclass{SimResults} is:\\
 
 \begin{example}[H]                 
 \centering 
@@ -302,7 +307,7 @@ powerFDR(re, threshold=c(0.01,0.02,0.03,0.04,0.05), xlim=c(0,0.2))
 \label{powerFDR}
 \end{example}
 
-Most of the graphical parameters such as `col', `cex', `pch', etc. from \Rfunction{par}, can be directly passed to \Rfunction{plot} for the power-FDR plots. `pointType', letter indicating how power-FDR values should be plotted: \Robject{"b"} for both points and lines; \Robject{"p"} for points only; and \Robject{"l"} for lines only. `col.line' and `lwd.line', `col' and `lwd' of line connecting power-FDR points, if `pointType' is either \Robject{"b"} or \Robject{"l"}. `lwd.threshold', `lty.threshold' and `col.threshold' are `wd', `lty' and `col' referred to the lines drawn for the threshold.
+Most of the graphical parameters such as `col', `cex', `pch', etc. from \Rfunction{par}, can be directly passed to \Rfunction{plot} for the power-FDR plots. `point.type', letter indicating how power-FDR values should be plotted: \Robject{"b"} for both points and lines; \Robject{"p"} for points only; and \Robject{"l"} for lines only. `col.line' and `lwd.line', `col' and `lwd' of line connecting power-FDR points, if `point.type' is either \Robject{"b"} or \Robject{"l"}. `lwd.threshold', `lty.threshold' and `col.threshold' are `wd', `lty' and `col' referred to the lines drawn for the threshold.
 
 \begin{example}[H]                 
 \centering
@@ -315,7 +320,7 @@ plot(p, cex=2, pch=c(23,25), col=1:3, main="powerFDR plot",
 \label{parameter-powerFDR}
 \end{example}
 
-A method's FDR is considered to be controlled if its achieved FDR falls below the threshold; 
+A method's FDR is considered to be controlled if its achieved FDR falls below the set threshold; 
 if this happens, plotted power-FDR points are filled-in. power-FDR points are unfilled, 
 or empty, if the FDR is not controlled and is equal to or greater than the cutoff it is assessed at. 
 Note that the fill-unfill option is only compatible with `pch' values of 21 to 25. Visually, this 
@@ -342,7 +347,7 @@ powerFDR(padj=padj, labels=labels, xlim=c(0,.3))
 
 \subsection[\Rfunction{rocX}]{\Rfunction{rocX}: ROC curve augmented with X point}
 \label{sec:rocX}
- \Rfunction{rocX} will produce a ROC plot with an X point marking the location of the method's FDR (at a chosen level), using the features of \Rpackage{ROCR} \cite{Sing2005}.  The special feature of \Robject{rocX} beyond \Rpackage{ROCR} is that an X point is employed to shows the actual position along the ROC curve (e.g., FDR=0.05).\\
+ \Rfunction{rocX} will produce a ROC plot with an X point marking the location of the method's FDR (at a chosen level), using the features of \Rpackage{ROCR} \cite{Sing2005}.  The special feature of \Robject{rocX} beyond \Rpackage{ROCR} is that an X point is employed to shows the actual position along the ROC curve (e.g., at the method's 5\% FDR point).\\
 
 The function \Rfunction{rocX} is just the constructor to build a \Rclass{rocX} object. It can be simply used as:  
 \begin{example}[H]                 
@@ -421,12 +426,12 @@ results according to other features of the assay (e.g., gene expression strength
  
  \begin{example}[H]                 
 \centering
- <<stratify, results="hide", fig.show=TRUE, fig.width=9, fig.height=4.5, dev="pdf">>=
- m <- rowMeans(Pickrell$counts)
-f <- cut(log(m), 2)
-ref <- SimResults(pval=Pickrell$pval, labels=Pickrell$labels,stratify=f)
+<<stratify, results="hide", fig.show=TRUE, fig.width=9, fig.height=4.5, dev="pdf">>=
+rm <- rowMeans(Pickrell$counts)
+f <- cut(log(rm), 2)
+re <- SimResults(pval=Pickrell$pval, labels=Pickrell$labels, stratify=f)
 par(mfrow=c(1,2), mar=c(2,5,3,1), mgp=c(2.6,1,0))
-rocX(ref, ylim=c(0,1))
+rocX(re, ylim=c(0,1))
 @
 \caption[`stratify' factor  of \Robject{rocX}]{`stratify' factor  of \Robject{rocX}}
 \label{transformation}
@@ -447,7 +452,7 @@ rocX(ref, ylim=c(0,1))
 \label{sec:fdX}
 
 
-\Rfunction{fdX} plots cumulative number of false discoveries versus the number of top ranked features with an X point marking the location of the method's FDR (at a chosen level).The constructor function \Rfunction{fdX} will produce an S4 object of \Robject{fdX}. \\
+\Rfunction{fdX} plots the cumulative number of false discoveries versus the number of top ranked features with an X point marking the location of the method's FDR (at a chosen level).The constructor function \Rfunction{fdX} will produce an S4 object of \Robject{fdX}. \\
 
 A couple quick examples of \Rfunction{fdX} include:
 
