@@ -1,7 +1,7 @@
 Package: benchmarkR
 Title: benchmarkR.
-Version: 0.0-15
-Date: 2015-04-02
+Version: 0.0-16
+Date: 2015-04-08
 Depends:
 Imports: ROCR, gplots, methods
 VignetteBuilder: knitr
