@@ -65,7 +65,7 @@ setMethod(
 ##December 2014.  Last modified 16 December 2014.
     ".fdX",
     signature(object="SimResults", stratify="NULL"),
-    function(object, stratify, thresholdX=0.05, plot=TRUE, ...)
+    function(object, stratify, thresholdX=0.05, plot=TRUE, transformation = "1-x", ...)
     {
         #arglist <- c(lapply( as.list(environment()), eval ), list(...) )
         l <- ncol(object@pval)
@@ -73,7 +73,7 @@ setMethod(
         out <- new("fdX")
         for (i in 1:l)
             out@element[[i]] <- .fdXfun(pval=object@pval[, i], labels=object@labels,
-                        padj=object@padj[, i], thresholdX=thresholdX) 
+                        padj=object@padj[, i], thresholdX=thresholdX, transformation=transformation) 
             names(out@element) <- colnames(object@pval)
             if(plot)
                 plot(out, ...) 
@@ -83,19 +83,31 @@ setMethod(
 
 
 
-.fdXfun <- function(pval, padj, labels, thresholdX)
+.fdXfun <- function(pval, padj, labels, thresholdX,transformation = "1-x")
 {
+    tf <- function(x) eval(parse(text=transformation))
+    pval <- pval+(1e-20)
+    score <- tf(pval)
     id <- which(labels == 1)	
     x <- 1:length(id)
-    o <- order(pval)
+    o <- order(score,decreasing=TRUE)
     y <- !o[x] %in% id
     y <- cumsum(y)
-    if(is.null(thresholdX))
-    yX <- xX <- NULL
+    if(!is.null(padj) & !is.null(thresholdX))
+    {
+        thresholdX <- thresholdX+(1e-20)
+        thresholdX <- tf(thresholdX)
+        padj <- padj+(1e-20)
+        scoreX <- tf(padj)      
+        yX <- sum(scoreX > thresholdX & labels==0)
+        xX <- approx(y=x, x=y, xout=yX)$y     	
+    	
+    	
+    }
+ 
     else
     {   
-        yX <- sum(padj < thresholdX & labels==0)
-        xX <- approx(y=x, x=y, xout=yX)$y
+         yX <- xX <- NULL 
     }
     list(number=x, fd=y, numberX=xX, fdX=yX)  
 }
@@ -123,7 +135,7 @@ setMethod(
                             xlab="Top ranked features", 
                             ylab = "Number of false discoveries", 
                             colX = NULL, cexX = NULL, pchX = 3, 
-                            lwdX = NULL,cex=2.5,lwd=3, lty=1,add=add)
+                            lwdX = NULL,cex=2,lwd=3, lty=1,add=add)
          #argSpecial <- lapply(argSpecial, .repArgs, len=l)
          argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
          #argSpecial$add[-1L] <- TRUE
@@ -144,7 +156,9 @@ setMethod(
              pchX <- unlist(lapply(argPloti, .subset2,"pchX"))
              lwd <- unlist(lapply(argPloti, .subset2,"lwd"))
              lty <- unlist(lapply(argPloti, .subset2,"lty"))
-             preLegend <- list("bottomright", col=col, legend=nms, lty=lty, pch=pchX, lwd=lwd)
+             cex <- 0.5*argPlot$cex[[1]]  
+             preLegend <- list("bottomright", col=col, legend=nms, lty=lty, pch=pchX, lwd=lwd,
+                                           text.font=2,cex=cex)
              legend <- .replaceLegend(preLegend, legend)
              do.call("legend", legend)
          } 

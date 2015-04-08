@@ -9,8 +9,8 @@
 \usage{
 powerFDR(object, padj, \ldots)
 
-\S4method{powerFDR}{SimResults,missing}(object, threshold=c(0.01, 0.05, 0.1), plot=TRUE, \ldots)
-\S4method{powerFDR}{missing,ANY}(padj, labels, threshold=c(0.01, 0.05, 0.1), plot=TRUE, \ldots)
+\S4method{powerFDR}{SimResults,missing}(object, threshold=c(0.01, 0.05, 0.1),  transformation="1-x", plot=TRUE, \ldots)
+\S4method{powerFDR}{missing,ANY}(padj, labels, threshold=c(0.01, 0.05, 0.1),  transformation="1-x", plot=TRUE, \ldots)
 
 }
 \arguments{
@@ -18,6 +18,7 @@ powerFDR(object, padj, \ldots)
   \item{padj}{A vector or matrix containing the adjusted p-value.}
   \item{labels}{A numeric vector indicating class labels (positives with 1, negatives with 0).  For more details, see \code{?ROCR::prediction}.}
   \item{threshold}{Numeric value of the adjusted p-value threshold (cutoff), or vector of multiple thresholds, used to determine the significance of tests.}
+  \item{transformation}{The transformation of \code{pval} and \code{padj}. The default setting "1-x" means \code{1-pval(padj)}. Note that another useful transformation is "-log10(x)".} 
   \item{plot}{Logical, should power-fdr values be plotted.}
   \item{\ldots}{Optional arguments for plotting (see below for more details). 
 	\itemize{

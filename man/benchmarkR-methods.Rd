@@ -14,8 +14,8 @@ All plots show the augmented calibration information.}
 \usage{
 benchmarkR(object, pval, \ldots)	
 
-\S4method{benchmarkR}{SimResults,missing}(object, name.panel=c("a", "b", "c"), \ldots, cex.panel=1.5)
-\S4method{benchmarkR}{missing,ANY}(pval, padj=NULL, labels, name.panel=c("a", "b", "c"), \ldots, cex.panel=1.5)
+\S4method{benchmarkR}{SimResults,missing}(object, thresholdX=0.05, threshold=c(0.01,0.05,0.1), transformation="1-x", name.panel=c("a", "b", "c"), \ldots, cex.panel=1.5)
+\S4method{benchmarkR}{missing,ANY}(pval, padj=NULL, labels, thresholdX=0.05, threshold=c(0.01,0.05,0.1), transformation="1-x", name.panel=c("a", "b", "c"), \ldots, cex.panel=1.5)
 
 }
 
@@ -28,6 +28,15 @@ benchmarkR(object, pval, \ldots)
 \item{padj}{A vector or matrix containing adjusted p-values (optional). If \code{padj} is missing, adjusted p-values are calculated using \code{p.adjust(..,method=padjMethod)}.  By default, \code{padjMethod="BH"}). For more details, see \code{\link{SimResults}} or \code{help("p.adjust")}.}
 
 \item{labels}{A numeric vector indicating class labels (positives with 1, negatives with 0).  For more details, see \code{?ROCR::prediction}.}
+
+\item{thresholdX}{Numeric value of the adjusted p-value threshold (cutoff) for \code{\link{rocX}} and \code{\link{fdX}} (e.g., FDR = 0.05). }
+
+\item{threshold}{Numeric value of the adjusted p-value threshold (cutoff), or vector of multiple thresholds for \code{\link{powerFDR}}.}
+
+\item{transformation}{The transformation of \code{pval} and \code{padj}. The default setting "1-x" means \code{1-pval(padj)}. Note that another useful transformation is "-log10(x)".} 
+ 
+
+
 
 \item{name.panel}{A list containing the three sub-panel (label) names. Default is c("a", "b", "c").}
 
@@ -59,7 +68,7 @@ A plot is created on the current graphics device.
 }
 
 
-\seealso{ \code{\link{SimResults}}, \code{\link{rocX}}, \code{\link{fdX}}, \code{\link{powerFDR}, \code{\link{p.adjust}}} 
+\seealso{ \code{\link{SimResults}}, \code{\link{rocX}}, \code{\link{fdX}}, \code{\link{powerFDR}}, \code{\link{p.adjust}} 
 }
 
 \author{Xiaobei Zhou and Mark D. Robinson}

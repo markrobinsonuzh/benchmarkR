@@ -33,13 +33,13 @@ setMethod(
 ##March 2015.  Last modified 19 March 2015.
     "powerFDR",
     signature(object="SimResults", padj="missing"),
-    function(object, threshold=c(0.01, 0.05, 0.1), plot=TRUE, ...)
+    function(object, threshold=c(0.01, 0.05, 0.1),  transformation="1-x", plot=TRUE, ...)
     {
         stratify <- object@stratify[[1]]
         if(!is.null(stratify))
             stop("Currently, 'powerFDR' only supports 'stratify=NULL'!") 
         .powerFDR(object, stratify=stratify, threshold=threshold, 
-                  plot=plot, ...)
+                  plot=plot,  transformation=transformation, ...)
 
     }
 )
@@ -51,10 +51,10 @@ setMethod(
 ##March 2015.  Last modified 19 March 2015.
     "powerFDR",
     signature(object="missing", padj="ANY"),
-    function(padj, labels, threshold=c(0.01, 0.05, 0.1), plot=TRUE, ...)
+    function(padj, labels, threshold=c(0.01, 0.05, 0.1),  transformation="1-x", plot=TRUE, ...)
     {
         object <- SimResults(pval=padj, padj=padj, labels=labels, stratify=NULL)
-        powerFDR(object, threshold=threshold, plot=plot, ...)
+        powerFDR(object, threshold=threshold, plot=plot,  transformation= transformation, ...)
     }
 )
 
@@ -78,14 +78,14 @@ setMethod(
 ##Sep 2014.  Last modified Sep 16 2014.
     .powerFDR,
     signature(object="SimResults", stratify="NULL"),
-    function(object, stratify, threshold, plot=TRUE, ...)
+    function(object, stratify, threshold, plot=TRUE,  transformation="1-x", ...)
     {
         l <- ncol(object@pval)
         if(l > 10) stop("the number of method cannot be larger than 10")    
         out <- new("powerFDR")
         for (i in 1:l)
             out@element[[i]] <- .powerFDRfun(padj=object@padj[, i], labels=object@labels,
-                                              threshold=threshold) 
+                                              threshold=threshold, transformation=transformation) 
             names(out@element) <- colnames(object@pval)
             if(plot)
                 plot(out, threshold=threshold, ...) 
@@ -125,15 +125,19 @@ setMethod(
 
 
 
-.powerFDRfun <- function(padj, labels, threshold)
+.powerFDRfun <- function(padj, labels, threshold, transformation = "1-x")
 { 
 ## Calculate false discovery rate and true positive rate.
+	 tf <- function(x) eval(parse(text=transformation))
 	TPR <- NULL
 	FDR <- NULL
-	for (i in 1:length(threshold)) 
+	padj <- padj+(1e-20)
+    score <- tf(padj)
+    thresholdX <- tf(threshold)      
+	for (i in 1:length(thresholdX)) 
         {
-	    pred <- labels[padj<threshold[i]]
-            FDR <- c(FDR, 1-sum(pred)/length(pred))
+	    pred <- labels[score>thresholdX[i]]
+        FDR <- c(FDR, 1-sum(pred)/length(pred))
 	    TPR <- c(TPR, sum(pred)/sum(labels))
 	}
         out <- cbind(threshold=threshold, FDR=FDR, TPR=TPR)
@@ -150,9 +154,10 @@ setMethod(
                     type="n", xaxt="n")
     arglistAxis <- .sarg(.slice.run(.getArgList("axis", arglist)), 
                       side=1, at=(1:10)/10, labels=(1:10)/10, las=2, 
-                      col.ticks="grey", col.axis="grey", col=1)
+                      col.ticks="grey", col.axis="grey", col=1, lwd=0)
     arglistAxisThreshold <- .sarg(.slice.run(.getArgList("axis", arglist)), 
-                      side=1, at=threshold, labels=threshold, las=2, col=1)
+                      side=1, at=threshold, labels=threshold, las=2, 
+                      col=1, lwd=0)
     arglistAbline <- .sarg(.slice.run(.getArgList("axis", arglist)), 
                       v=threshold, lty=arglist$lty.threshold, 
                       lwd=arglist$lwd.threshold, 
@@ -218,11 +223,9 @@ setMethod(
          nms <- names(object@element) 
          if(!is.null(legend) & !is.null(nms))
          {
-             if(is.null(argPloti$cex))
-                 cex <- 1
-             else
-                 cex <- 0.5*argPloti$cex  
-             preLegend <- list("bottomright", col=col, legend=nms, cex=cex,pch=pch, lwd=argPloti$lwd, lty=NA)
+             cex <- 0.5*argPlot$cex[[1]]  
+             preLegend <- list("bottomright", col=col, legend=nms, pch=pch, lwd=argPloti$lwd, 
+                                         lty=NA, text.font=2,cex=cex)
              legend <- .replaceLegend(preLegend, legend)
              do.call("legend", legend)
          } 

@@ -163,7 +163,7 @@ setMethod(
          ylim <- .preYlim(arglist, object)
          argSpecial <- list(xlim = xlim, ylim = ylim, xlab="FPR", 
                            ylab="TPR", colX = NULL, cexX = NULL, 
-                           pchX = 3, lwdX = NULL, lwd=3, cex=2.5, lty=1, add=add)
+                           pchX = 3, lwdX = NULL, lwd=3, cex=2, lty=1, add=add)
          #argSpecial <- lapply(argSpecial, .repArgs, len=l)
          argSpecial <- .select.args(argSpecial, names(arglist), complement = T)
          #argSpecial$add[-1L] <- TRUE
@@ -186,7 +186,9 @@ setMethod(
              pchX <- unlist(lapply(argPloti, .subset2,"pchX"))
              lwd <- unlist(lapply(argPloti, .subset2,"lwd"))
              lty <- unlist(lapply(argPloti, .subset2,"lty"))
-             preLegend <- list("bottomright", col=col, legend=nms, lty=lty, pch=pchX, lwd=lwd)
+             cex <- 0.5*argPlot$cex[[1]]  
+             preLegend <- list("bottomright", col=col, legend=nms, lty=lty, 
+                                         pch=pchX, lwd=lwd, text.font=2,cex=cex)
              legend <- .replaceLegend(preLegend, legend)
              do.call("legend", legend)
          } 
