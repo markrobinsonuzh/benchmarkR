@@ -479,9 +479,9 @@ plot(f, lwd=2, col=1:3, pchX=9:11, cex=3, legend=list("topleft"))
 \end{example} 
 
 
-\subsection{``scores'' but not p-values}
+\subsection{``Scores'' instead of p-values ?}
 
-Not only for assessing p-values, but also can \Rpackage{benchmarkR} take predictions or scores from classification methods. In this case, calibration assessment (\Rfunction{powerFDR}) is not available. X point of \Rfunction{rocX} and \Rfunction{fdX} refers to marking the location of method's scores at a chosen level. \Robject{pval} and \Robject{padj} are used to load scores (e.g., \Robject{pval=score, pval=score}); \Robject{transformation} is set up as ``x'' but not ``1-x'';  \Robject{thresholdX} is chosen depending on the scores (e.g, \Robject{thresholdX=0}). A modified example from \Rpackage{ROCR} evaluating performances between support vector machines (SVM) and neural networks (NN) applied to the HIV envelope protein dataset \cite{Sing2004} is presented below:\\
+More generally for assessing methods beyond p-values, \Rpackage{benchmarkR} can take predictions or scores from classification methods on any scale. In this case, calibration assessment (\Rfunction{powerFDR}) is not practical. The X point of \Rfunction{rocX} and \Rfunction{fdX} marks the location on the scale of the methods' scores, according to the chosen. For this setting, \Robject{pval} and \Robject{padj} are used to load scores (e.g., \Robject{pval=score, padj=score}); \Robject{transformation} is set up as ``x'' instead of ``1-x'';  \Robject{thresholdX} is chosen depending on the scores (e.g, \Robject{thresholdX=0}). A modified example from \Rpackage{ROCR} evaluating performances between support vector machines (SVM) and neural networks (NN) applied to the HIV envelope protein dataset \cite{Sing2004} is presented below:\\
 \begin{example}[H]                 
 \centering
 <<score, message=FALSE, fig.show=TRUE, fig.width=9, fig.height=4.5, dev="pdf">>=
