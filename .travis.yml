@@ -2,7 +2,7 @@ language: r
 bioc_required: false
 
 # Be strict when checking our package
-warnings_are_errors: true
+warnings_are_errors: false
 
 # System dependencies for HTTP calling
 r_packages:
