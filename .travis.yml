@@ -3,4 +3,7 @@ warnings_are_errors: false
 bioc_packages:
  - BiocStyle
 r_binary_packages:
- - ROCR		
+ - ROCR	
+ - gplots
+ - knitr
+ - devtools	
