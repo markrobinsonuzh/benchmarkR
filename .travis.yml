@@ -8,8 +8,8 @@ warnings_are_errors: false
 r_packages:
  - ROCR
  - gplots
- - methods
- - knitr
 bioc_packages:
  - BiocStyle
 
+r_github_packages:
+ - hadley/httr
