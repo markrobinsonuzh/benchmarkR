@@ -9,3 +9,5 @@ To install the package from github, please run the following code:
 library(devtools)
 devtools::install_github("markrobinsonuzh/benchmarkR")
 ```
+
+[![Build Status](https://travis-ci.org/markrobinsonuzh/benchmarkR.svg?branch=master)](https://travis-ci.org/markrobinsonuzh/benchmarkR)
