@@ -1,15 +1,1 @@
 language: r
-bioc_required: false
-
-# Be strict when checking our package
-warnings_are_errors: false
-
-# System dependencies for HTTP calling
-r_packages:
- - ROCR
- - gplots
-bioc_packages:
- - BiocStyle
-
-r_github_packages:
- - hadley/httr
