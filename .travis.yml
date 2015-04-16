@@ -1,9 +1,11 @@
 language: r
-install:
- - sudo apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
 bioc_packages:
  - BiocStyle
 r_binary_packages:
  - ROCR
  - gplots
  - knitr
+apt_packages:
+ - texlive-latex-recommended
+ - texlive-latex-extra
+ - texlive-fonts-recommended
