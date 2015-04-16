@@ -1,8 +1,7 @@
 Package: benchmarkR
-Title: benchmarkR
+Title: benchmarkR.
 Version: 0.0-18
 Date: 2015-04-12
-Depends:
 Imports: ROCR, gplots, methods
 VignetteBuilder: knitr
 Suggests: BiocStyle, knitr
@@ -10,4 +9,3 @@ Author: Xiaobei Zhou, Charity Law, Mark D. Robinson
 Description: Tools in R for visualizing benchmarking performance (generally for methods that operate on a genome-scale)
 Maintainer: Xiaobei zhou <xiaobei.zhou@uzh.ch>, Mark D. Robinson <mark.robinson@imls.uzh.ch>
 License: GPL (>= 2)
-
