@@ -3,6 +3,4 @@ bioc_packages:
  - BiocStyle
 r_binary_packages:
  - ROCR
- - plots
- - knitr
- - devtools
+ - gplots
