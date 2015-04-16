@@ -6,3 +6,4 @@ bioc_packages:
 r_binary_packages:
  - ROCR
  - gplots
+ - knitr
