@@ -8,3 +8,4 @@ r_binary_packages:
 apt_packages:
  - texlive
  - texlive-latex-extra
+ - pgf
