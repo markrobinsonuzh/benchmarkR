@@ -9,7 +9,7 @@ To install the package from github, please run the following code:
 library(devtools)
 devtools::install_github("markrobinsonuzh/benchmarkR")
 ```
-The  vignettes can be found at:
+PDF vignettes document:
 [benchmarkR.pdf](https://github.com/markrobinsonuzh/benchmarkR/tree/master/vignettes/benchmarkR.pdf)
 
 [![Build Status](https://travis-ci.org/markrobinsonuzh/benchmarkR.svg?branch=master)](https://travis-ci.org/markrobinsonuzh/benchmarkR)
