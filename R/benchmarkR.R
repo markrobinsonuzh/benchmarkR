@@ -19,6 +19,12 @@ setMethod(
     signature(object="SimResults", pval="missing"),
     function(object, thresholdX=0.05, threshold=c(0.01,0.05,0.1), transformation="1-x", name.panel=c("a", "b", "c"), ..., cex.panel=1.5)
     {
+        idNA <- is.na(object@labels)
+        if(any(idNA))
+        {
+            message("remove NA values from labels for benchmarkR")
+            object <- object[!idNA,]
+        }  
         l <- 3
         #arglist <- list(...)
         arglist <- c(lapply( as.list(environment()), eval), list(...) )

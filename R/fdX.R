@@ -24,7 +24,13 @@ setMethod(
     {
         stratify <- object@stratify[[1]]
         if(!is.null(stratify))
-            stop("Currently, 'fdX' only supports 'stratify=NULL'!") 
+            stop("Currently, 'fdX' only supports 'stratify=NULL'!")
+        idNA <- is.na(object@labels)
+        if(any(idNA))
+        {
+            message("remove NA values from labels for fdX")
+            object <- object[!idNA,]
+        }   
         .fdX(object, stratify=stratify, thresholdX=thresholdX, 
                  transformation = transformation, plot=plot, ...)
 

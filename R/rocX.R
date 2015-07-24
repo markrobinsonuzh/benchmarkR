@@ -26,6 +26,12 @@ setMethod(
     function(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, ...)
     {
         stratify <- object@stratify[[1]]
+        idNA <- is.na(object@labels)
+        if(any(idNA))
+        {
+            message("remove NA values from labels for rocX")
+            object <- object[!idNA,]
+        }  
             .rocX(object, stratify=stratify, thresholdX=thresholdX, 
                  transformation = transformation, plot=plot, ...)
 

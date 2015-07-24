@@ -41,7 +41,7 @@ setMethod(
         idNA <- is.na(object@labels)
         if(any(idNA))
         {
-            message("remove NA values from labels")
+            message("remove NA values from labels for powerFDR")
             object <- object[!idNA,]
         }    
         .powerFDR(object, stratify=stratify, threshold=threshold, 
