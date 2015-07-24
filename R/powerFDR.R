@@ -37,7 +37,13 @@ setMethod(
     {
         stratify <- object@stratify[[1]]
         if(!is.null(stratify))
-            stop("Currently, 'powerFDR' only supports 'stratify=NULL'!") 
+            stop("Currently, 'powerFDR' only supports 'stratify=NULL'!")
+        idNA <- is.na(object@labels)
+        if(any(idNA))
+        {
+            message("remove NA values from labels")
+            object <- object[!idNA,]
+        }    
         .powerFDR(object, stratify=stratify, threshold=threshold, 
                   plot=plot,  transformation=transformation, ...)
 
