@@ -1,21 +1,21 @@
+R = R_LIBS=/home/Shared/Rcode/benchmarkR/Rlibs/:/home/Shared/Rlib/release-3.0-lib/ /usr/local/R/R-3.1.1/bin/R
 PKGNAME := $(shell sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGVERS := $(shell sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGSRC  := $(shell basename `pwd`)
-
 all: build check doc clean
 
 build:
 	cd ..;\
-	R CMD build $(PKGSRC)
+	$(R) CMD build $(PKGSRC)
 
 check:
 	cd ..;\
-	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz
+	$(R) CMD check $(PKGNAME)_$(PKGVERS).tar.gz
 
 doc:
 	cd ..;\
 	mkdir -m 777 pkg_install;\
-	R_LIBS=pkg_install R CMD INSTALL $(PKGNAME)_$(PKGVERS).tar.gz;\
+	$(R) CMD INSTALL -l pkg_install $(PKGNAME)_$(PKGVERS).tar.gz;\
 	cp ./pkg_install/benchmarkR/doc/benchmarkR.pdf ./benchmarkR/vignettes/
 
 clean:
