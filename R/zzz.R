@@ -258,11 +258,11 @@
 
 
 
-.printHead <- function (x)
+.printHead <- function (x,n1)
 ##this function copys from limma printHead
 ##Define built-in function of get arguments 
 ##Xiaobei Zhou
-##June 2014.  Last modified 26 June 2014. 
+##June 2014.  Last modified 3 Nov 2015. 
 {
     if (is.atomic(x)) {
         d <- dim(x)
@@ -291,26 +291,26 @@
     switch(which, OneD = {
         n <- length(x)
         if (n > 20) {
-            print(x[1:5])
-            cat(n - 5, "more elements ...\n")
+            print(x[1:n1])
+            cat(n - n1, "more elements ...\n")
         } else print(x)
     }, TwoD = {
         n <- d[1]
         if (n > 10) {
-            print(x[1:5, ])
-            cat(n - 5, "more rows ...\n")
+            print(x[1:n1, ])
+            cat(n - n1, "more rows ...\n")
         } else print(x)
     }, Array = {
         n <- d[1]
         if (n > 10) {
             dn <- dimnames(x)
             dim(x) <- c(d[1], prod(d[-1]))
-            x <- x[1:5, ]
-            dim(x) <- c(5, d[-1])
-            if (!is.null(dn[[1]])) dn[[1]] <- dn[[1]][1:5]
+            x <- x[1:n1, ]
+            dim(x) <- c(n1, d[-1])
+            if (!is.null(dn[[1]])) dn[[1]] <- dn[[1]][1:n1]
             dimnames(x) <- dn
             print(x)
-            cat(n - 5, "more rows ...\n")
+            cat(n - n1, "more rows ...\n")
         } else print(x)
     }, Recursive = {
         n <- length(x)

@@ -91,6 +91,7 @@ setMethod("[", c("SimResults", "ANY", "ANY"),
 
 
 
+
 setMethod("show", "SimResults",
 function(object)
 ##Define show of SimResults
@@ -105,7 +106,7 @@ function(object)
 	if(length(x) > 0) 
         {
 	    cat("@",what,"\n",sep="")
-	    .printHead(x)
+	    .printHead(x,n=2)
 	    cat("\n")
 	}
     }
