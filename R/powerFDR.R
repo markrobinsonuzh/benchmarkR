@@ -239,3 +239,26 @@ setMethod(
 )
 
 
+
+
+setMethod(
+##Define powerFDR for "SimResultsList"
+##Xiaobei Zhou
+##November 2015.  Last modified 13 November 2015.
+    "powerFDR",
+    signature(object="SimResultsList", padj="missing"),
+    function(object, threshold=c(0.01,0.05,0.1), transformation="1-x", plot=TRUE, ...)
+    {
+        pval_a <- do.call("rbind", (lapply(object, function(x) x@pval)))
+        padj_a <- do.call("rbind", (lapply(object, function(x) x@padj)))
+        labels_a <- unlist(lapply(object, function(x) x@labels))
+        re_a <- SimResults(pval=pval_a,padj=padj_a, labels=labels_a)
+            powerFDR(re_a, threshold=threshold,
+                 transformation="1-x", plot=plot, ...)
+            
+    }
+
+)
+
+
+

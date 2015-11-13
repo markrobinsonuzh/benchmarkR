@@ -318,3 +318,132 @@ setMethod(
 
 
 
+setMethod(
+##Define rocX for "SimResultsList"
+##Xiaobei Zhou
+##November 2015.  Last modified 12 November 2015.
+    "rocX",
+    signature(object="SimResultsList", pval="missing"),
+    function(object, thresholdX=0.05, transformation="1-x", plot=TRUE,
+             typeLine="b", percentile=c(0,1), alpha=0.3, ...)
+    {
+        pval_a <- do.call("rbind", (lapply(object, function(x) x@pval)))
+        padj_a <- do.call("rbind", (lapply(object, function(x) x@padj)))
+        labels_a <- unlist(lapply(object, function(x) x@labels))
+        re_a <- SimResults(pval=pval_a,padj=padj_a, labels=labels_a)  
+        typeLine <- match.arg(typeLine, c("average","shape","b"))     
+        if(typeLine=="average")
+            rocX(re_a, thresholdX=thresholdX,
+                 transformation="1-x", plot=plot, ...)
+        else if (typeLine=="shape")
+        {
+            .rocXShape(object, thresholdX=thresholdX, 
+                transformation=transformation, alpha=alpha,
+                percentile=percentile, ...)
+                 
+        }
+        else
+        {
+            .rocXShape(object, thresholdX=thresholdX, 
+                transformation=transformation, alpha=alpha,
+                percentile=percentile, ...)
+             rocX(re_a, thresholdX=thresholdX,
+                 transformation="1-x", add=TRUE, plot=plot, ...)
+        }
+    }
+
+)
+
+
+
+
+
+.rocShapePlot <- function(x1,y1, add=FALSE, col="black",  
+            percentile=c(0,1), ...)
+##Define built-in function of rocX for SimResultsList
+##Xiaobei Zhou
+##November 2015.  Last modified 12 November 2015.
+{     
+    y11 <- do.call("cbind",y1)
+    #ymax <- do.call(pmax,y1)
+    #ymin <- do.call(pmin,y1)
+    ymax <- apply(y11,1, quantile, percentile[2])
+    ymin <- apply(y11,1, quantile, percentile[1])
+    if(!add)
+        plot(x1[[1]],y1[[1]], type="n", ...)
+    polygon(c(x1[[1]],rev(x1[[1]])), 
+            c(ymax,rev(ymin)),    
+            col=col, border=col, ...)
+}
+ 
+
+.rocXShape <- function(object, thresholdX=0.05, transformation="1-x",alpha=0.3,
+               percentile=c(0,1), legend=list(), ...)
+##Define built-in function of rocX for SimResultsList
+##Xiaobei Zhou
+##November 2015.  Last modified 12 November 2015.
+{ 
+    library(scales)
+    out <- lapply(object, rocX, plot=FALSE,thresholdX=thresholdX, 
+                      transformation=transformation)
+    nms <- names(out[[1L]]@element) 
+    xList <- yList <- list()
+    for (j in 1:3)
+    {
+        xList[[j]] <- lapply(out, function(x) 
+                     x@element[[j]]$performance@x.values[[1]])
+        yList[[j]] <- lapply(out, function(x) 
+                     x@element[[j]]$performance@y.values[[1]])
+    }
+    approxL <- function(x,y)
+    {
+        yy <- xx <- list()
+        for (i in seq(x))
+        {
+            yy[[i]] <- approx(y=y[[i]],x=x[[i]],xout=x[[1]])$y
+            xx[[i]] <- x[[1]]
+        }
+        list(x=xx,y=yy)    
+    }
+    out <- mapply(function(u,v)approxL(u,v), u=xList, v=yList)
+    xList <- out[1,]
+    yList <- out[2,]
+    l <- length(xList)
+    arglist <- list(...)
+    col <- .preCol(arglist, l)
+    #col <- rep(col, length.out=l)
+    col <- alpha(col,alpha)
+    xlim <- .preXlim(arglist, object)
+    ylim <- .preYlim(arglist, object)
+    argSpecial <- list(xlim = xlim, ylim = ylim, xlab="FPR", 
+                       ylab="TPR", lwd=1, cex=2, lty=1, add=FALSE)
+    argSpecial <- .select.args(argSpecial, names(arglist),
+                     complement = T)
+    argPlot <- append(arglist, argSpecial)
+    argPlot <- .expandListArgs(argPlot, len=l)
+    argPlot$add[-1L] <- TRUE
+    argPloti <- list()
+    for (i in 1:l)
+    {
+        argPloti[[i]] <- lapply(argPlot, .getSub2, id=i)
+        argPloti[[i]] <- .sarg(argPloti[[i]], 
+              x1=xList[[i]], y1=yList[[i]], col=col[i],
+              percentile=percentile)
+        do.call(".rocShapePlot", argPloti[[i]])
+
+     }
+     if(!is.null(legend) & !is.null(nms))
+     {
+         cex <- 0.5*argPlot$cex[[1]]
+         lwd <- 3*unlist(lapply(argPloti, .subset2,"lwd"))
+         pch <- unlist(lapply(argPloti, .subset2,"pch")) 
+         lty <- unlist(lapply(argPloti, .subset2,"lty"))
+         preLegend <- list("bottomright", col=col, legend=nms, lty=lty, 
+                           pch=pch, lwd=lwd, text.font=2, cex=cex)
+         legend <- .replaceLegend(preLegend, legend)
+         do.call("legend", legend)
+     }
+} 
+
+
+

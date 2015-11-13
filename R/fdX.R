@@ -210,4 +210,40 @@ setMethod(
 
 
 
+setMethod(
+##Define fdX for "SimResultsList"
+##Xiaobei Zhou
+##November 2015.  Last modified 13 November 2015.
+    "fdX",
+    signature(object="SimResultsList", pval="missing"),
+    function(object, thresholdX=0.05, transformation="1-x", plot=TRUE, ...)
+    {
+        pval_a <- do.call("rbind", (lapply(object, function(x) x@pval)))
+        padj_a <- do.call("rbind", (lapply(object, function(x) x@padj)))
+        labels_a <- unlist(lapply(object, function(x) x@labels))
+        re_a <- SimResults(pval=pval_a,padj=padj_a, labels=labels_a)
+        n <- length(object)  
+            .fdXAve(re_a, thresholdX=thresholdX,
+                 transformation="1-x", n=n, plot=plot, ...)
+            
+    }
+
+)
+
+
+
+.fdXAve <- function(object,thresholdX=0.05, transformation="1-x", n, plot=TRUE, ...)
+{
+   tmp <- fdX(object=object, thresholdX=thresholdX, 
+          transformation=transformation, plot=FALSE)
+   tmp <- lapply(tmp@element, lapply,function(x) x/n)
+   out <- new("fdX")
+   out@element <- tmp
+   if(plot) 
+      plot(out, ...)
+   invisible(out)  
+}
+
+
+
 
