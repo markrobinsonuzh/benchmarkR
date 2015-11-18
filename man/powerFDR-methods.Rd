@@ -4,6 +4,7 @@
 \alias{powerFDR-methods}
 \alias{powerFDR,SimResults,missing-method}
 \alias{powerFDR,missing,ANY-method}
+\alias{powerFDR,SimResultsList,missing-method}
 \title{Power (TPR) versus achieved false discovery rate (FDR) plot}
 \description{Calculate and plot power (TPR) versus achieved false discovery rate (FDR) using adjusted p-values (padj) and known true positives (labels).}
 \usage{
@@ -11,6 +12,7 @@ powerFDR(object, padj, \ldots)
 
 \S4method{powerFDR}{SimResults,missing}(object, threshold=c(0.01, 0.05, 0.1),  transformation="1-x", plot=TRUE, \ldots)
 \S4method{powerFDR}{missing,ANY}(padj, labels, threshold=c(0.01, 0.05, 0.1),  transformation="1-x", plot=TRUE, \ldots)
+\S4method{powerFDR}{SimResultsList,missing}(object, threshold=c(0.01, 0.05, 0.1),  transformation="1-x", plot=TRUE, \ldots)
 
 }
 \arguments{
@@ -33,6 +35,9 @@ powerFDR(object, padj, \ldots)
 
 \details{
 The function \code{powerFDR} calculates the true positive rate and false discovery rate given a particular threshold, control FDR. Several thresholds can be assessed simultaneously (e.g., \code{threshold=c(0.01,0.02,0.03,0.04,0.05)}).
+
+If input is an \code{\link{SimResultsList}} object, the average performance would be plotted. 
+
 
 Most of the graphical parameters such as \code{col}, \code{cex}, \code{pch} and etc from \code{\link{par}}, can be directly passed to \code{plot} for power-fdr values. \code{point.type}, letter indicating how power-fdr values should be plotted: "b" for both points and lines; "p" for points only; and "l" for lines only. \code{col.line} and \code{lwd.line}, \code{col} and \code{lwd} of line connecting power-fdr points, if \code{point.type} is either "b" or "l". \code{lwd.threshold}, \code{lty.threshold} and \code{col.threshold} are \code{lwd}, \code{lty} and \code{col} referred to the lines drawn for 'threshold'. 
  

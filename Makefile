@@ -6,7 +6,7 @@ all: build check doc clean
 
 build:
 	cd ..;\
-	$(R) CMD build $(PKGSRC)
+	$(R) CMD build --resave-data $(PKGSRC)
 
 check:
 	cd ..;\

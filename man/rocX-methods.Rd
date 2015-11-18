@@ -4,6 +4,7 @@
 \alias{rocX-methods}
 \alias{rocX,SimResults,missing-method}
 \alias{rocX,missing,ANY-method}
+\alias{rocX,SimResultsList,missing-method}
 \title{ROC curve augmented with X point}
 
 \description{Produce a ROC plot with an X point marking the location of the method's FDR (at a chosen level). }
@@ -13,6 +14,7 @@ rocX(object, pval, \ldots)
 
 \S4method{rocX}{SimResults,missing}(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, \ldots)
 \S4method{rocX}{missing,ANY}(pval, padj=NULL, labels, stratify=NULL, thresholdX=0.05, transformation = "1-x", plot=TRUE, \ldots)
+\S4method{rocX}{SimResultsList,missing}(object, thresholdX=0.05, transformation = "1-x", plot=TRUE,typeLine="b", percentile=c(0,1), alpha=0.3, \ldots)
 
 }
 
@@ -34,6 +36,12 @@ rocX(object, pval, \ldots)
  
 
 \item{plot}{Logical, whether plot or not.}
+
+\item{typeLine}{Letter indicate how the average performance should be plotted: "ave" for average performance; "shape" for the defined interval (see percentile) and "b" for both average and defined interval. This argument is only referred to \code{\link{SimResultsList}}.}
+
+\item{percentile}{Defined interval for "shape". This argument is only referred to \code{\link{SimResultsList}}.}
+
+\item{alpha}{Modify colour transparency for "shape". This argument is only referred to \code{\link{SimResultsList}}.}
 
 \item{\ldots}{Optional arguments for plotting (see below for more details). 
 	\itemize{

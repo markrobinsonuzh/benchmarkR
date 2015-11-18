@@ -383,7 +383,6 @@ setMethod(
 ##Xiaobei Zhou
 ##November 2015.  Last modified 12 November 2015.
 { 
-    library(scales)
     out <- lapply(object, rocX, plot=FALSE,thresholdX=thresholdX, 
                       transformation=transformation)
     nms <- names(out[[1L]]@element) 

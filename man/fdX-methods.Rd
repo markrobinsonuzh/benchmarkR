@@ -4,6 +4,7 @@
 \alias{fdX-methods}
 \alias{fdX,SimResults,missing-method}
 \alias{fdX,missing,ANY-method}
+\alias{fdX,SimResultsList,missing-method}
 \title{False discovery plot augmented with X point}
 
 \description{Plot cumulative number of false discoveries versus top ranked features with an X point marking the location of the method's FDR (at a chosen level). }
@@ -13,7 +14,7 @@ fdX(object, pval, \ldots)
 
 \S4method{fdX}{SimResults,missing}(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, \ldots)
 \S4method{fdX}{missing,ANY}(pval, padj=NULL, labels, thresholdX=0.05, transformation = "1-x", plot=TRUE, \ldots)
-
+\S4method{fdX}{SimResultsList,missing}(object, thresholdX=0.05, transformation = "1-x", plot=TRUE, \ldots)
 }
 
 \arguments{
@@ -45,6 +46,8 @@ fdX(object, pval, \ldots)
 }
 
 \details{False discoveries are calculated according to the p-value rank (pval) and labels (from the object of \code{SimResults}). The X point displays the actual false discoveries number versus number of top ranked features given a threshold (e.g., FDR=0.05).
+
+If input is an \code{\link{SimResultsList}} object, the average performance would be plotted. 
 
 Most of the graphical parameters such as \code{col}, \code{cex}, \code{pch} and etc from \code{\link{par}}, can be directly passed into \code{plot} for all the subfigures. They can be set up as a vector (e.g., 'col=1') sharing the same value for all the subfigures, or a list (e.g, 'col=list(1,2,3)' for different value of different subfigure. \code{cexX}, \code{pchX}, \code{colX}, \code{pchX} are special parameters of X point. Their usage is similar to \code{col}, \code{cex}, \code{pch}. 
 

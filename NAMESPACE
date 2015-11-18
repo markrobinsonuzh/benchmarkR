@@ -2,6 +2,7 @@
 exportPattern("^[^\\.]")
 import(methods)
 import(gplots)
+importFrom("scales", alpha)
 importFrom("graphics", plot)
 importClassesFrom(ROCR, performance, prediction)
 importFrom(ROCR, performance, prediction)
