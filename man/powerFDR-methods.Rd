@@ -36,9 +36,6 @@ powerFDR(object, padj, \ldots)
 \details{
 The function \code{powerFDR} calculates the true positive rate and false discovery rate given a particular threshold, control FDR. Several thresholds can be assessed simultaneously (e.g., \code{threshold=c(0.01,0.02,0.03,0.04,0.05)}).
 
-If input is an \code{\link{SimResultsList}} object, the average performance would be plotted. 
-
-
 Most of the graphical parameters such as \code{col}, \code{cex}, \code{pch} and etc from \code{\link{par}}, can be directly passed to \code{plot} for power-fdr values. \code{point.type}, letter indicating how power-fdr values should be plotted: "b" for both points and lines; "p" for points only; and "l" for lines only. \code{col.line} and \code{lwd.line}, \code{col} and \code{lwd} of line connecting power-fdr points, if \code{point.type} is either "b" or "l". \code{lwd.threshold}, \code{lty.threshold} and \code{col.threshold} are \code{lwd}, \code{lty} and \code{col} referred to the lines drawn for 'threshold'. 
  
 The FDR is considered to be controlled if the false discovery rate falls below the threshold it is assessed at, and power-fdr points are filled-in. power-fdr points are unfilled, or empty, if the FDR is not controlled and is equal to or greater than the cutoff it is assessed at. Note that the fill-unfill option is only compatible with \code{pch} values of 21 to 25. Visually, this means that for a given threshold, a point (of the same color) will be filled if it falls left of the threshold line, and will be unfilled if it sits to the right of the threshold line.
@@ -47,6 +44,8 @@ To increase the flexibility of plots, you can use argument \code{add}. If \code{
 
 \code{legend} is a list including all the arguments from function \code{legend} (see help(legend)). If it is NULL, do not add legends to plots.
    
+
+If input is an \code{\link{SimResultsList}} object, the average performance would be plotted (see example 3). 
 }
 
 
@@ -72,5 +71,12 @@ data(calibration)
 padj <- calibration$padj
 labels <- calibration$labels
 powerFDR(padj=padj, labels=labels, xlim=c(0,.3))
+
+# example3
+data(PickrellList)
+rel <- SimResultsList()
+for(i in 1:5)
+    rel[[i]] <- SimResults(pval=PickrellList[[i]]$pval, labels=PickrellList[[i]]$labels)
+powerFDR(rel)
 }
 \keyword{powerFDR, SimResults}

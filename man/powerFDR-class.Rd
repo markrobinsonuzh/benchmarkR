@@ -11,7 +11,7 @@ A simple S4 class for storing results of \code{powerFDR} for reproducible plots 
 
 \section{Slots}{
   \describe{
-    \item{\code{element}:}{A list contains: false discovery rate (fdr), true positive rate (tpr) and the thresholdX value (control FDR) assessed..}
+    \item{\code{element}:}{A list contains: false discovery rate (fdr), true positive rate (tpr) and the threshold value (control FDR) assessed...}
   }
 }
 

@@ -47,13 +47,15 @@ fdX(object, pval, \ldots)
 
 \details{False discoveries are calculated according to the p-value rank (pval) and labels (from the object of \code{SimResults}). The X point displays the actual false discoveries number versus number of top ranked features given a threshold (e.g., FDR=0.05).
 
-If input is an \code{\link{SimResultsList}} object, the average performance would be plotted. 
-
 Most of the graphical parameters such as \code{col}, \code{cex}, \code{pch} and etc from \code{\link{par}}, can be directly passed into \code{plot} for all the subfigures. They can be set up as a vector (e.g., 'col=1') sharing the same value for all the subfigures, or a list (e.g, 'col=list(1,2,3)' for different value of different subfigure. \code{cexX}, \code{pchX}, \code{colX}, \code{pchX} are special parameters of X point. Their usage is similar to \code{col}, \code{cex}, \code{pch}. 
 
 To increase the flexibility of plots, you can use argument \code{add}. If \code{add=TRUE}, plots are added to current one combining different \code{rocX} curves together into one figure. 
 
-'legend' is a list including all the arguments from function \code{legend} (see help(legend)). If it is NULL, do not add legends to plots.}
+'legend' is a list including all the arguments from function \code{legend} (see help(legend)). If it is NULL, do not add legends to plots.
+
+If input is an \code{\link{SimResultsList}} object, the average performance would be plotted (see example multiple results). 
+
+}
 
 \value{Invisibly, an S4 object of class \code{\link{fdX-class}}.
 } 
@@ -82,6 +84,17 @@ fdX(re[,3], col=3, add=TRUE, legend=NULL)
 
 # setting X point 
 fdX(re, pchX = 1:3, lwdX =4:6)
+
+
+# multiple results
+data(PickrellList)
+rel <- SimResultsList()
+for(i in 1:5)
+    rel[[i]] <- SimResults(pval=PickrellList[[i]]$pval, labels=PickrellList[[i]]$labels)
+fdX(rel)
+
+
+
 }  
 
 \keyword{fdX, SimResults}

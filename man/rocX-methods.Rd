@@ -63,11 +63,13 @@ Most of the graphical parameters such as \code{col}, \code{cex}, \code{pch} and 
 
 To increase the flexibility of plots, you can use argument 'add'. If 'add=TRUE', plots are added to current one combining different \code{rocX} curves together into one figure. 
 
-\code{legend} is a list including all the argments from function \code{legend} (see help(legend)). If it is NULL, do not add legends to plots. For a multiple-panel figure containing several \code{rocX} curves, \code{location} can be used to determine whether to add legends on specific location (e.g., legend=list(location=c(1,0,0,0))).  
+\code{legend} is a list including all the argments from function \code{legend} (see help(legend)). If it is NULL, do not add legends to plots. For a multiple-panel figure containing several \code{rocX} curves, \code{location} can be used to determine whether to add legends on specific location (e.g., legend=list(location=c(1,0,0,0))).
+
+For multiple sets of p-value (pval) and labels stored in the object of \code{SimResultsList}, \code{rocX} can plot ROC curves of average performance ('typeLine="ave"'), as a "shape" for defined interval ('typeLine="shape"') or both ('typeLine="b"') (see example 5).  
   
 }
 
-\value{Invisibly, an S4 object of class \code{\link{rocX-class}} or \code{\link{rocXList-class}}. 
+\value{Invisibly, an S4 object of class \code{\link{rocX-class}} or \code{\link{rocXList-class}}.  
 }
 
 \seealso{ \code{\link{SimResults}}, \code{\link{powerFDR}}
@@ -144,6 +146,15 @@ for(i in 1:4)
 roc6 <- rocXList(rl)
 par(mfrow=c(2,2))
 plot(roc6, lwd=list(1,2,3,4))
+
+## example5
+data(PickrellList)
+rel <- SimResultsList()
+for(i in 1:5)
+    rel[[i]] <- SimResults(pval=PickrellList[[i]]$pval, labels=PickrellList[[i]]$labels)
+rocX(rel)
+rocX(rel, typeLine="shape")
+rocX(rel, typeLine="ave")
 
 }  
 
