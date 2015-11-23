@@ -14,8 +14,8 @@ All plots show the augmented calibration information.}
 \usage{
 benchmarkR(object, pval, \ldots)	
 
-\S4method{benchmarkR}{SimResults,missing}(object, thresholdX=0.05, threshold=c(0.01,0.05,0.1), transformation="1-x", name.panel=c("a", "b", "c"), \ldots, cex.panel=1.5)
-\S4method{benchmarkR}{missing,ANY}(pval, padj=NULL, labels, thresholdX=0.05, threshold=c(0.01,0.05,0.1), transformation="1-x", name.panel=c("a", "b", "c"), \ldots, cex.panel=1.5)
+\S4method{benchmarkR}{SimResults,missing}(object, thresholdX=0.05, threshold=c(0.01,0.05,0.1), transformation="1-x", name.panel=c("a", "b", "c"), \ldots, cex.panel=1.5, legend=list("bottomright", "topleft", "bottomright"))
+\S4method{benchmarkR}{missing,ANY}(pval, padj=NULL, labels, thresholdX=0.05, threshold=c(0.01,0.05,0.1), transformation="1-x", name.panel=c("a", "b", "c"), \ldots, cex.panel=1.5, legend=list("bottomright", "topleft", "bottomright"))
 
 }
 
@@ -49,6 +49,10 @@ benchmarkR(object, pval, \ldots)
 	 
 	 
 \item{cex.panel}{A numerical value giving the amount by plotting sub-panel text.}
+
+
+\item{legend}{A list or NULL, is used to add legends to plots.}
+
 
 }
 

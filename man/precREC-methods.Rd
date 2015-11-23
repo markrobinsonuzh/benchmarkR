@@ -36,8 +36,6 @@ precREC(object, padj, \ldots)
 \details{
 The function \code{precREC} calculates the achieved precision (positive predictive value (PPV) or 1-FDR) and recall (true positive rate (TPR)) given a particular threshold, control precision. Several thresholds can be assessed simultaneously (e.g., \code{threshold=c(0.99,0.98,0.97,0.96,0.95)}).
 
-If input is an \code{\link{SimResultsList}} object, the average performance would be plotted. 
-
 
 Most of the graphical parameters such as \code{col}, \code{cex}, \code{pch} and etc from \code{\link{par}}, can be directly passed to \code{plot} for precision-recall values. \code{point.type}, letter indicating how precision-recall values should be plotted: "b" for both points and lines; "p" for points only; and "l" for lines only. \code{col.line} and \code{lwd.line}, \code{col} and \code{lwd} of line connecting precision-recall points, if \code{point.type} is either "b" or "l". \code{lwd.threshold}, \code{lty.threshold} and \code{col.threshold} are \code{lwd}, \code{lty} and \code{col} referred to the lines drawn for 'threshold'. 
  
@@ -47,6 +45,7 @@ To increase the flexibility of plots, you can use argument \code{add}. If \code{
 
 \code{legend} is a list including all the arguments from function \code{legend} (see help(legend)). If it is NULL, do not add legends to plots.
    
+If input is an \code{\link{SimResultsList}} object, the average performance would be plotted (see example 3). 
 }
 
 
@@ -72,5 +71,14 @@ data(calibration)
 padj <- calibration$padj
 labels <- calibration$labels
 precREC(padj=padj, labels=labels, xlim=c(0,.3))
+
+
+# example3
+data(PickrellList)
+rel <- SimResultsList()
+for(i in 1:5)
+    rel[[i]] <- SimResults(pval=PickrellList[[i]]$pval, labels=PickrellList[[i]]$labels)
+powerFDR(rel)
+
 }
 \keyword{precREC, SimResults}

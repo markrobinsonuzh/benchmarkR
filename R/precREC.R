@@ -238,3 +238,23 @@ setMethod(
     }
 )
 
+
+setMethod(
+##Define precREC for "SimResultsList"
+##Xiaobei Zhou
+##November 2015.  Last modified 20 November 2015.
+    "precREC",
+    signature(object="SimResultsList", padj="missing"),
+    function(object, threshold=c(0.99,0.95,0.9), transformation="1-x", plot=TRUE, ...)
+    {
+        pval_a <- do.call("rbind", (lapply(object, function(x) x@pval)))
+        padj_a <- do.call("rbind", (lapply(object, function(x) x@padj)))
+        labels_a <- unlist(lapply(object, function(x) x@labels))
+        re_a <- SimResults(pval=pval_a,padj=padj_a, labels=labels_a)
+            precREC(re_a, threshold=threshold,
+                 transformation="1-x", plot=plot, ...)
+            
+    }
+
+)
+
